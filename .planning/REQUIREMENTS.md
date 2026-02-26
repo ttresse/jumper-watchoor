@@ -11,7 +11,6 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **WALLET-01**: User can input an EVM wallet address (0x format)
 - [ ] **WALLET-02**: App validates address format before scanning
-- [ ] **WALLET-03**: User can input an ENS name and app resolves it to address
 
 ### Chain Scanning
 
@@ -45,6 +44,14 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **DASH-04**: Dashboard shows recommendations to reach next tier
 - [ ] **DASH-05**: User can view XP for previous months (monthly history)
 - [ ] **DASH-06**: UI is minimal, single-page, comprehensible in <5 seconds
+
+## v1.1 Requirements
+
+Deferred from v1. Will be addressed in next milestone.
+
+### Wallet Input (v1.1)
+
+- **WALLET-03**: User can input an ENS name and app resolves it to address
 
 ## v2 Requirements
 
@@ -85,36 +92,35 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| WALLET-01 | TBD | Pending |
-| WALLET-02 | TBD | Pending |
-| WALLET-03 | TBD | Pending |
-| SCAN-01 | TBD | Pending |
-| SCAN-02 | TBD | Pending |
-| SCAN-03 | TBD | Pending |
-| SCAN-04 | TBD | Pending |
-| SCAN-05 | TBD | Pending |
-| CLASS-01 | TBD | Pending |
-| CLASS-02 | TBD | Pending |
-| CLASS-03 | TBD | Pending |
-| CLASS-04 | TBD | Pending |
-| POINTS-01 | TBD | Pending |
-| POINTS-02 | TBD | Pending |
-| POINTS-03 | TBD | Pending |
-| POINTS-04 | TBD | Pending |
-| POINTS-05 | TBD | Pending |
-| POINTS-06 | TBD | Pending |
-| DASH-01 | TBD | Pending |
-| DASH-02 | TBD | Pending |
-| DASH-03 | TBD | Pending |
-| DASH-04 | TBD | Pending |
-| DASH-05 | TBD | Pending |
-| DASH-06 | TBD | Pending |
+| WALLET-01 | Phase 1 | Pending |
+| WALLET-02 | Phase 1 | Pending |
+| SCAN-01 | Phase 1 | Pending |
+| SCAN-02 | Phase 1 | Pending |
+| SCAN-03 | Phase 1 | Pending |
+| SCAN-04 | Phase 1 | Pending |
+| SCAN-05 | Phase 4 | Pending |
+| CLASS-01 | Phase 2 | Pending |
+| CLASS-02 | Phase 2 | Pending |
+| CLASS-03 | Phase 2 | Pending |
+| CLASS-04 | Phase 3 | Pending |
+| POINTS-01 | Phase 3 | Pending |
+| POINTS-02 | Phase 3 | Pending |
+| POINTS-03 | Phase 3 | Pending |
+| POINTS-04 | Phase 3 | Pending |
+| POINTS-05 | Phase 3 | Pending |
+| POINTS-06 | Phase 3 | Pending |
+| DASH-01 | Phase 4 | Pending |
+| DASH-02 | Phase 4 | Pending |
+| DASH-03 | Phase 5 | Pending |
+| DASH-04 | Phase 5 | Pending |
+| DASH-05 | Phase 4 | Pending |
+| DASH-06 | Phase 4 | Pending |
 
 **Coverage:**
-- v1 requirements: 24 total
-- Mapped to phases: 0
-- Unmapped: 24 ⚠️
+- v1 requirements: 23 total (WALLET-03 moved to v1.1)
+- Mapped to phases: 23
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-26*
-*Last updated: 2026-02-26 after initial definition*
+*Last updated: 2026-02-26 after roadmap creation*
