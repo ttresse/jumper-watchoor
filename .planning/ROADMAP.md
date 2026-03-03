@@ -29,12 +29,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. App scans 60+ chains in parallel with visible progress indicator per chain
   3. Scanning completes without rate limit errors (4 RPS respected)
   4. Raw LiFi transactions are fetched and filtered correctly
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
 - [ ] 01-01-PLAN.md — Project setup, types, chains config, address validation
 - [ ] 01-02-PLAN.md — Covalent adapter, Zustand store, useScanWallet hook
-- [ ] 01-03-PLAN.md — UI components (wallet input, progress, results, errors) and page integration
+- [ ] 01-03-PLAN.md — UI components (wallet input, progress, results, errors)
+- [ ] 01-04-PLAN.md — Page integration with progressive loading tests and verification
 
 ### Phase 2: Transaction Classification
 **Goal**: Users can see their LiFi transactions classified as bridges or swaps with monthly aggregation
@@ -102,7 +103,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Data Layer | 0/3 | Planning complete | - |
+| 1. Foundation & Data Layer | 0/4 | Planning complete | - |
 | 2. Transaction Classification | 0/2 | Not started | - |
 | 3. Points Calculation Engine | 0/2 | Not started | - |
 | 4. Dashboard & Visualization | 0/2 | Not started | - |
