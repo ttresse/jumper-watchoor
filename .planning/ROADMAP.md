@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Project setup, types, chains config, address validation
+- [x] 01-01-PLAN.md — Project setup, types, chains config, address validation
 - [ ] 01-02-PLAN.md — Covalent adapter, Zustand store, useScanWallet hook
 - [ ] 01-03-PLAN.md — UI components (wallet input, progress, results, errors)
 - [ ] 01-04-PLAN.md — Page integration with progressive loading tests and verification
@@ -103,7 +103,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Data Layer | 0/4 | Planning complete | - |
+| 1. Foundation & Data Layer | 1/4 | In Progress | - |
 | 2. Transaction Classification | 0/2 | Not started | - |
 | 3. Points Calculation Engine | 0/2 | Not started | - |
 | 4. Dashboard & Visualization | 0/2 | Not started | - |

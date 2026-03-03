@@ -9,8 +9,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Wallet Input
 
-- [ ] **WALLET-01**: User can input an EVM wallet address (0x format)
-- [ ] **WALLET-02**: App validates address format before scanning
+- [x] **WALLET-01**: User can input an EVM wallet address (0x format)
+- [x] **WALLET-02**: App validates address format before scanning
 
 ### Chain Scanning
 
@@ -92,8 +92,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| WALLET-01 | Phase 1 | Pending |
-| WALLET-02 | Phase 1 | Pending |
+| WALLET-01 | Phase 1 | Complete |
+| WALLET-02 | Phase 1 | Complete |
 | SCAN-01 | Phase 1 | Pending |
 | SCAN-02 | Phase 1 | Pending |
 | SCAN-03 | Phase 1 | Pending |
@@ -123,4 +123,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-26*
-*Last updated: 2026-02-26 after roadmap creation*
+*Last updated: 2026-03-03 after plan 01-01 completion*
