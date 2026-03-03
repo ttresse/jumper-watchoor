@@ -12,7 +12,7 @@ This roadmap transforms a wallet address into actionable Jumper points insights 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Data Layer** - API adapters with rate limiting, wallet input, multi-chain scanning infrastructure
+- [x] **Phase 1: Foundation & Data Layer** - API adapters with rate limiting, wallet input, multi-chain scanning infrastructure (completed 2026-03-03)
 - [ ] **Phase 2: Transaction Classification** - Bridge vs swap detection, transaction status verification, monthly aggregation
 - [ ] **Phase 3: Points Calculation Engine** - Historical prices, USD values, configurable tier rules, XP calculation
 - [ ] **Phase 4: Dashboard & Visualization** - Progressive loading UI, category breakdown, monthly history display
@@ -33,9 +33,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — Project setup, types, chains config, address validation
-- [ ] 01-02-PLAN.md — Covalent adapter, Zustand store, useScanWallet hook
-- [ ] 01-03-PLAN.md — UI components (wallet input, progress, results, errors)
-- [ ] 01-04-PLAN.md — Page integration with progressive loading tests and verification
+- [x] 01-02-PLAN.md — Covalent adapter, Zustand store, useScanWallet hook
+- [x] 01-03-PLAN.md — UI components (wallet input, progress, results, errors)
+- [x] 01-04-PLAN.md — Page integration with progressive loading tests and verification
 
 ### Phase 2: Transaction Classification
 **Goal**: Users can see their LiFi transactions classified as bridges or swaps with monthly aggregation
@@ -103,7 +103,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Data Layer | 2/4 | In Progress|  |
+| 1. Foundation & Data Layer | 4/4 | Complete   | 2026-03-03 |
 | 2. Transaction Classification | 0/2 | Not started | - |
 | 3. Points Calculation Engine | 0/2 | Not started | - |
 | 4. Dashboard & Visualization | 0/2 | Not started | - |
