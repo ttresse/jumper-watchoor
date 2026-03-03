@@ -28,7 +28,9 @@ export default function Home() {
 
   const handleCancel = () => {
     cancel();
-    // Keep partial results visible, just stop scanning
+    // Clear walletAddress to hide all scan-related UI
+    // WalletInput keeps its internal state, so address remains visible there
+    setWalletAddress(null);
   };
 
   const handleReset = () => {
