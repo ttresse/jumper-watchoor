@@ -25,11 +25,17 @@ export function useScanWallet(wallet: string | null): ScanProgress & {
   // Start scan when wallet changes
   useEffect(() => {
     if (wallet) {
+      // Reset all cached queries for this wallet to start fresh
+      SUPPORTED_CHAINS.forEach(chain => {
+        queryClient.resetQueries({
+          queryKey: ['transactions', wallet, chain.name]
+        });
+      });
       startScan(wallet);
     } else {
       reset();
     }
-  }, [wallet, startScan, reset]);
+  }, [wallet, startScan, reset, queryClient]);
 
   // Fire all chain queries in parallel
   const results = useQueries({
@@ -107,23 +113,18 @@ export function useScanWallet(wallet: string | null): ScanProgress & {
 
   // Retry specific chains - resets cache and forces refetch
   const retry = useCallback(async (chainNames: string[]) => {
-    // Resume scanning first (clears isCancelled flag so queries are enabled)
+    // Reset all chain queries first to show 0/XX progress
+    await Promise.all(
+      chainNames.map(chainName =>
+        queryClient.resetQueries({
+          queryKey: ['transactions', wallet, chainName]
+        })
+      )
+    );
+
+    // Resume scanning (clears isCancelled flag so queries are enabled)
+    // This will trigger refetch automatically since queries are now reset and enabled
     resumeScan();
-
-    // Reset and refetch each failed chain
-    // resetQueries clears the cached data, then refetchQueries forces a new fetch
-    for (const chainName of chainNames) {
-      await queryClient.resetQueries({
-        queryKey: ['transactions', wallet, chainName]
-      });
-    }
-
-    // Force refetch all the reset queries
-    chainNames.forEach(chainName => {
-      queryClient.refetchQueries({
-        queryKey: ['transactions', wallet, chainName]
-      });
-    });
   }, [wallet, queryClient, resumeScan]);
 
   return {
