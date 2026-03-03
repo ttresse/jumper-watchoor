@@ -14,9 +14,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Chain Scanning
 
-- [ ] **SCAN-01**: App scans all Jumper-supported chains (60+) for wallet transactions
-- [ ] **SCAN-02**: App filters transactions by LiFi Diamond contract (0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE)
-- [ ] **SCAN-03**: App fetches chains in parallel with rate limiting (max 4 req/s)
+- [x] **SCAN-01**: App scans all Jumper-supported chains (60+) for wallet transactions
+- [x] **SCAN-02**: App filters transactions by LiFi Diamond contract (0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE)
+- [x] **SCAN-03**: App fetches chains in parallel with rate limiting (max 4 req/s)
 - [ ] **SCAN-04**: UI shows progressive loading as each chain completes
 - [ ] **SCAN-05**: Results load in under 5 seconds for typical wallets
 
@@ -94,9 +94,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | WALLET-01 | Phase 1 | Complete |
 | WALLET-02 | Phase 1 | Complete |
-| SCAN-01 | Phase 1 | Pending |
-| SCAN-02 | Phase 1 | Pending |
-| SCAN-03 | Phase 1 | Pending |
+| SCAN-01 | Phase 1 | Complete |
+| SCAN-02 | Phase 1 | Complete |
+| SCAN-03 | Phase 1 | Complete |
 | SCAN-04 | Phase 1 | Pending |
 | SCAN-05 | Phase 4 | Pending |
 | CLASS-01 | Phase 2 | Pending |
