@@ -105,18 +105,25 @@ export function useScanWallet(wallet: string | null): ScanProgress & {
     });
   }, [wallet, queryClient, cancelScan]);
 
-  // Retry specific chains - invalidates cache and re-enables queries
-  const retry = useCallback((chainNames: string[]) => {
-    // First invalidate the queries to mark them as stale
-    // This ensures they will refetch when re-enabled
+  // Retry specific chains - resets cache and forces refetch
+  const retry = useCallback(async (chainNames: string[]) => {
+    // Resume scanning first (clears isCancelled flag so queries are enabled)
+    resumeScan();
+
+    // Reset and refetch each failed chain
+    // resetQueries clears the cached data, then refetchQueries forces a new fetch
+    for (const chainName of chainNames) {
+      await queryClient.resetQueries({
+        queryKey: ['transactions', wallet, chainName]
+      });
+    }
+
+    // Force refetch all the reset queries
     chainNames.forEach(chainName => {
-      queryClient.invalidateQueries({
+      queryClient.refetchQueries({
         queryKey: ['transactions', wallet, chainName]
       });
     });
-    // Resume scanning (clears isCancelled flag)
-    // The invalidated queries will auto-refetch because they're now stale
-    resumeScan();
   }, [wallet, queryClient, resumeScan]);
 
   return {
