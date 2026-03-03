@@ -18,7 +18,8 @@ export function useScanWallet(wallet: string | null): ScanProgress & {
     updateChainResult,
     cancelScan,
     isCancelled,
-    reset
+    reset,
+    resumeScan
   } = useScanStore();
 
   // Start scan when wallet changes
@@ -79,8 +80,9 @@ export function useScanWallet(wallet: string | null): ScanProgress & {
         totalChains: SUPPORTED_CHAINS.length,
         successfulChains: successful,
         failedChains: failed,
-        isLoading: queryResults.some(r => r.isPending),
-        isComplete: completed.length === SUPPORTED_CHAINS.length,
+        // When cancelled, we're not loading anymore
+        isLoading: !isCancelled && queryResults.some(r => r.isPending),
+        isComplete: isCancelled || completed.length === SUPPORTED_CHAINS.length,
       };
     },
   });
@@ -103,14 +105,17 @@ export function useScanWallet(wallet: string | null): ScanProgress & {
     });
   }, [wallet, queryClient, cancelScan]);
 
-  // Retry specific chains
+  // Retry specific chains - clears cancelled state and refetches
   const retry = useCallback((chainNames: string[]) => {
+    // Resume scanning (clears isCancelled flag)
+    resumeScan();
+    // Refetch the failed chains
     chainNames.forEach(chainName => {
-      queryClient.invalidateQueries({
+      queryClient.refetchQueries({
         queryKey: ['transactions', wallet, chainName]
       });
     });
-  }, [wallet, queryClient]);
+  }, [wallet, queryClient, resumeScan]);
 
   return {
     ...results,

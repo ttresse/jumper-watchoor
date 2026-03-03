@@ -17,6 +17,7 @@ interface ScanState {
   startScan: (wallet: string) => void;
   updateChainResult: (chainName: string, result: ChainResult) => void;
   cancelScan: () => void;
+  resumeScan: () => void;
   reset: () => void;
   clearLastWallet: () => void;
 }
@@ -51,6 +52,11 @@ export const useScanStore = create<ScanState>()(
       cancelScan: () => set({
         isScanning: false,
         isCancelled: true
+      }),
+
+      resumeScan: () => set({
+        isScanning: true,
+        isCancelled: false
       }),
 
       reset: () => set({
