@@ -3,21 +3,14 @@
 import { useState } from 'react';
 import { WalletInput } from '@/components/wallet-input';
 import { ScanProgress } from '@/components/scan-progress';
+import { XPDashboard } from '@/components/dashboard/xp-dashboard';
 import { useLiFiTransfers } from '@/hooks/useLiFiTransfers';
-import { Button } from '@/components/ui/button';
 
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
 
-  const {
-    transfers,
-    transactionCount,
-    isLoading,
-    isComplete,
-    error,
-    cancel,
-    retry
-  } = useLiFiTransfers(walletAddress);
+  const { transactionCount, isLoading, isComplete, error, cancel } =
+    useLiFiTransfers(walletAddress);
 
   const handleValidAddress = (address: string) => {
     setWalletAddress(address);
@@ -62,31 +55,22 @@ export default function Home() {
           />
         )}
 
+        {/* Dashboard or error state - XPDashboard handles error/empty states internally */}
+        {!isLoading && walletAddress && !error && (
+          <XPDashboard wallet={walletAddress} />
+        )}
+
         {/* Error state per CONTEXT.md: "Error message displayed in place of results area" */}
+        {/* Note: XPDashboard also shows error state, but we show it here during scan phase */}
         {error && !isLoading && (
-          <div className="text-center space-y-4">
-            <p className="text-red-500">{error}</p>
-            <Button onClick={retry}>Retry</Button>
-          </div>
-        )}
-
-        {/* Empty wallet per CONTEXT.md: "No LiFi transactions found for this wallet" */}
-        {isComplete && !error && transfers.length === 0 && (
           <div className="text-center">
-            <p className="text-muted-foreground">No LiFi transactions found for this wallet</p>
+            <p className="text-red-500">{error}</p>
           </div>
         )}
 
-        {/* Success state: show transaction count */}
-        {isComplete && !error && transfers.length > 0 && (
-          <div className="text-center space-y-4">
-            <div className="p-4 rounded-lg bg-muted">
-              <p className="text-lg font-medium">
-                Found {transfers.length} LiFi transaction{transfers.length !== 1 ? 's' : ''}
-              </p>
-            </div>
-
-            {/* Allow scanning a different wallet */}
+        {/* Allow scanning a different wallet after scan completes */}
+        {isComplete && !error && walletAddress && (
+          <div className="text-center">
             <button
               onClick={handleReset}
               className="text-sm text-muted-foreground hover:text-foreground underline"
