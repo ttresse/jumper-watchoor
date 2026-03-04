@@ -117,10 +117,16 @@ Recent decisions affecting current work:
 - [Phase 04-02]: Skeleton dimensions match actual content to prevent layout shift
 - [Phase 04-02]: Empty state shows friendly message instead of blank dashboard
 - [Quick-6]: Use formatUSD() for USD unit distances, toLocaleString() for count-based units
+- [Quick-7]: Use HTML entity &larr; for left arrow (consistent with web standards)
+- [Quick-7]: Keep bottom link for scroll-down users (two navigation points)
 
 ### Pending Todos
 
 None yet.
+
+### Roadmap Evolution
+
+- Phase 6 added: Lazy loading API - fetch current month only, prefetch 3 previous months, load on navigation, disable refresh for past months
 
 ### Blockers/Concerns
 
@@ -136,11 +142,12 @@ None yet.
 | 4 | Improve CategoryRow mobile layout with vertical stacking | 2026-03-04 | cfa0901 | [4-am-liorer-layout-mobile-des-category-row](./quick/4-am-liorer-layout-mobile-des-category-row/) |
 | 5 | Add How It Works page explaining XP calculation | 2026-03-04 | 49935bf | [5-ajoute-une-page-permettant-d-expliquer-l](./quick/5-ajoute-une-page-permettant-d-expliquer-l/) |
 | 6 | Harmonize dollar display using $ prefix | 2026-03-04 | cba86df | [6-harmoniser-affichage-dollar-utiliser-par](./quick/6-harmoniser-affichage-dollar-utiliser-par/) |
+| 7 | Detailed XP descriptions and top back button | 2026-03-04 | 3f0bdb7 | [7-d-taille-crit-res-xp-et-ajoute-bouton-re](./quick/7-d-taille-crit-res-xp-et-ajoute-bouton-re/) |
 
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed quick task 6 (Harmonize dollar display)
+Stopped at: Completed quick task 7 (Detailed XP descriptions and top back button)
 Resume file: N/A - Phase 4 complete
 
 ---
