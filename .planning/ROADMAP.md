@@ -44,16 +44,13 @@ Plans:
 **Requirements**: CLASS-01, CLASS-02, CLASS-03
 **Success Criteria** (what must be TRUE):
   1. Each transaction labeled as bridge (sending.chainId != receiving.chainId) or swap (same chainId)
-  2. Failed/reverted transactions (status != DONE) excluded from counts
+  2. Failed/reverted transactions (status != DONE) excluded from counts (handled by API filter in Phase 1)
   3. Transactions grouped by month (YYYY-MM format) using sending.timestamp
   4. Unique chains used per month are tracked
-**Plans**: TBD (needs replan for new API structure)
+**Plans**: 1 plan
 
 Plans:
-- [ ] 02-01-PLAN.md — TBD (needs replan)
-- [ ] 02-02-PLAN.md — TBD (needs replan)
-
-*Note: Previous plans assumed Covalent data structure. Run `/gsd:plan-phase 2` after Phase 1 to create new plans.*
+- [ ] 02-01-PLAN.md — Classification types, pure functions, and derived hook
 
 ### Phase 3: Points Calculation Engine
 **Goal**: Users can see their calculated XP per category
@@ -109,7 +106,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Data Layer | 3/3 | Complete | 2026-03-04 |
-| 2. Transaction Classification | 0/2 | Needs Replan | - |
+| 2. Transaction Classification | 0/1 | Ready | - |
 | 3. Points Calculation Engine | 0/2 | Not started | - |
 | 4. Dashboard & Visualization | 0/2 | Not started | - |
 | 5. Value-Add Features | 0/2 | Not started | - |
@@ -118,4 +115,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 *Roadmap created: 2026-02-26*
 *API Migration: 2026-03-04 (Covalent -> LiFi Analytics)*
 *Phase 1 Replanned: 2026-03-04*
+*Phase 2 Replanned: 2026-03-04*
 *Coverage: 23/23 v1 requirements mapped (WALLET-03 deferred to v1.1)*
