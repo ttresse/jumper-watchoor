@@ -79,7 +79,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Foundation utilities (format, next-tier, shadcn components)
+- [x] 04-01-PLAN.md — Foundation utilities (format, next-tier, shadcn components)
 - [ ] 04-02-PLAN.md — Dashboard components and page integration
 
 ### Phase 5: Value-Add Features
@@ -106,7 +106,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Foundation & Data Layer | 3/3 | Complete | 2026-03-04 |
 | 2. Transaction Classification | 1/1 | Complete | 2026-03-04 |
 | 3. Points Calculation Engine | 2/2 | Complete | 2026-03-04 |
-| 4. Dashboard & Visualization | 0/2 | Ready | - |
+| 4. Dashboard & Visualization | 1/2 | In Progress | - |
 | 5. Value-Add Features | 0/2 | Not started | - |
 
 ---

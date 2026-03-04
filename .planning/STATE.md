@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Show users exactly how many Jumper points they have and what actions will earn them more.
-**Current focus:** Phase 3 - Points Calculation Engine (Complete)
+**Current focus:** Phase 4 - Dashboard Visualization (In Progress)
 
 ## Current Position
 
-Phase: 3 of 5 (Points Calculation Engine) - COMPLETE
-Plan: 2 of 2 in current phase - COMPLETE
-Status: Ready for Phase 4
-Last activity: 2026-03-04 - Completed 03-02-PLAN.md (XP calculation functions and usePoints hook)
+Phase: 4 of 5 (Dashboard Visualization) - IN PROGRESS
+Plan: 1 of 2 in current phase - COMPLETE
+Status: Ready for 04-02-PLAN.md
+Last activity: 2026-03-04 - Completed 04-01-PLAN.md (foundation utilities)
 
-Progress: [####################] 100% (2/2 plans complete)
+Progress: [##########..........] 50% (1/2 plans complete)
 
 ## API Migration Notice (2026-03-04)
 
@@ -54,6 +54,7 @@ Progress: [####################] 100% (2/2 plans complete)
 | Phase 02 P01 | 2.2 | 3 tasks | 3 files |
 | Phase 03 P01 | 2.1 min | 3 tasks | 5 files |
 | Phase 03 P02 | 1.8 min | 3 tasks | 3 files |
+| Phase 04 P01 | 1.9 | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -97,6 +98,9 @@ Recent decisions affecting current work:
 - [Phase 03-02]: Tier lookup uses first-match-wins with descending threshold sort
 - [Phase 03-02]: usePoints derives from useClassifiedTransactions with useMemo
 - [Phase 03-02]: 0 XP returned explicitly when below minimum tier (not null)
+- [Phase 04-01]: Use Intl API for locale-aware formatting (no external deps)
+- [Phase 04-01]: Module-level formatter instances for performance (not created per call)
+- [Phase 04-01]: UTC timezone for month parsing to avoid timezone issues
 
 ### Pending Todos
 
@@ -115,9 +119,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 03-02-PLAN.md (XP calculation functions and usePoints hook)
-Resume file: N/A - Ready for Phase 4
+Stopped at: Completed 04-01-PLAN.md (foundation utilities)
+Resume file: N/A - Ready for 04-02-PLAN.md
 
 ---
-*Phase 03 (Points Calculation Engine) complete. XP calculation engine with 4-category tier matching and usePoints hook ready for Phase 4 dashboard.*
-*Next: Plan/Execute Phase 4 (Dashboard UI)*
+*Phase 04 Plan 01 complete. Foundation utilities (formatXP, formatUSD, formatMonthLabel, getNextTierInfo) and shadcn components (Skeleton, Badge) ready.*
+*Next: Execute 04-02-PLAN.md (dashboard components)*

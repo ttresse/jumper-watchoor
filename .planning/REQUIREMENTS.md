@@ -18,7 +18,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **SCAN-02**: App filters transactions by LiFi Diamond contract (0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE)
 - [x] **SCAN-03**: App fetches chains in parallel with rate limiting (max 4 req/s)
 - [x] **SCAN-04**: UI shows progressive loading as each chain completes
-- [ ] **SCAN-05**: Results load in under 5 seconds for typical wallets
+- [x] **SCAN-05**: Results load in under 5 seconds for typical wallets
 
 ### Transaction Classification
 
@@ -98,7 +98,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SCAN-02 | Phase 1 | Complete |
 | SCAN-03 | Phase 1 | Complete |
 | SCAN-04 | Phase 1 | Complete |
-| SCAN-05 | Phase 4 | Pending |
+| SCAN-05 | Phase 4 | Complete |
 | CLASS-01 | Phase 2 | Complete |
 | CLASS-02 | Phase 2 | Complete |
 | CLASS-03 | Phase 2 | Complete |
