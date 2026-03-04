@@ -17,8 +17,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation & Data Layer** - LiFi Analytics API integration, wallet input, transaction fetching
 - [x] **Phase 2: Transaction Classification** - Bridge vs swap detection using chainId comparison, monthly aggregation
 - [x] **Phase 3: Points Calculation Engine** - Configurable tier rules, XP calculation (USD values from API)
-- [ ] **Phase 4: Dashboard & Visualization** - Category breakdown, monthly history display
+- [x] **Phase 4: Dashboard & Visualization** - Category breakdown, monthly history display
 - [ ] **Phase 5: Value-Add Features** - Tier progress bars, recommendations engine, configuration editor
+- [ ] **Phase 6: Lazy Loading API** - Per-month fetching, background prefetch, immutable past months
 
 ## Phase Details
 
@@ -80,7 +81,7 @@ Plans:
 
 Plans:
 - [x] 04-01-PLAN.md — Foundation utilities (format, next-tier, shadcn components)
-- [ ] 04-02-PLAN.md — Dashboard components and page integration
+- [x] 04-02-PLAN.md — Dashboard components and page integration
 
 ### Phase 5: Value-Add Features
 **Goal**: Users can see tier progress and receive actionable recommendations
@@ -106,8 +107,26 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Foundation & Data Layer | 3/3 | Complete | 2026-03-04 |
 | 2. Transaction Classification | 1/1 | Complete | 2026-03-04 |
 | 3. Points Calculation Engine | 2/2 | Complete | 2026-03-04 |
-| 4. Dashboard & Visualization | 1/2 | In Progress | - |
+| 4. Dashboard & Visualization | 2/2 | Complete | 2026-03-04 |
 | 5. Value-Add Features | 0/2 | Not started | - |
+| 6. Lazy Loading API | 0/3 | Not started | - |
+
+### Phase 6: Lazy Loading API
+**Goal:** Optimize data fetching with initial 4-month load, background prefetch, on-demand navigation, and immutable past months
+**Depends on:** Phase 4
+**Requirements:** LAZY-01, LAZY-02, LAZY-03, LAZY-04, LAZY-05
+**Success Criteria** (what must be TRUE):
+  1. Initial load fetches current month + 3 previous months only (not all history)
+  2. Background prefetch loads remaining months in batches of 3
+  3. Navigation to unloaded month triggers immediate fetch with skeleton
+  4. Past months are immutable (staleTime: Infinity, no refetch)
+  5. Dashboard shows partial XP with "+" indicator while loading
+**Plans:** 3 plans in 3 waves
+
+Plans:
+- [ ] 06-01-PLAN.md — Month utilities and month-based adapter function
+- [ ] 06-02-PLAN.md — Per-month React Query hooks and prefetch manager
+- [ ] 06-03-PLAN.md — Dashboard integration with partial data display
 
 ---
 *Roadmap created: 2026-02-26*
