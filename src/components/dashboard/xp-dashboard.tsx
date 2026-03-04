@@ -260,7 +260,7 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
       />
 
       {/* Total XP hero section - show partial indicator when loading more months */}
-      <XPTotal totalXP={monthPoints.totalXP} isPartial={isPartialXP && isCurrentMonth} />
+      <XPTotal totalXP={monthPoints.totalXP} isPartial={isPartialXP} />
 
       {/* Category rows in fixed order - past months have muted styling */}
       <div
