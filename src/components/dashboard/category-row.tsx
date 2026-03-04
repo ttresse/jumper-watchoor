@@ -46,18 +46,20 @@ export function CategoryRow({
         </span>
       </div>
 
-      {/* Right side: volume/count and next tier info - stacked on mobile, inline on desktop */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
+      {/* Right side: volume/count and next tier info - always vertical stack */}
+      <div className="flex flex-col items-start sm:items-end gap-0.5">
         {/* Volume: USD for bridgoor/swapoor, count with unit for transactoor/chainoor */}
+        {/* Prominent styling: larger, bolder, full color */}
         {volume !== undefined && (
-          <span>
+          <span className="text-base font-semibold text-foreground tabular-nums">
             {volumeUnit ? formatCount(volume, volumeUnit) : formatUSD(volume)}
           </span>
         )}
 
         {/* Next tier distance - only shown for current month (past months are frozen) */}
+        {/* Muted styling: smaller, subdued color */}
         {isCurrentMonth && nextTierInfo && (
-          <span className="text-xs">
+          <span className="text-xs text-muted-foreground">
             {nextTierInfo.unit === 'USD'
               ? `${formatUSD(nextTierInfo.distance)} to next tier`
               : `${nextTierInfo.distance.toLocaleString()} ${nextTierInfo.unit} to next tier`}
