@@ -56,6 +56,11 @@ function buildTransfersUrl(wallet: string, cursor?: string | null): string {
   url.searchParams.set('wallet', wallet);
   url.searchParams.set('limit', '100');
   url.searchParams.set('status', 'DONE'); // Only completed transactions
+
+  // Filter to last 12 months to reduce memory pressure with high-volume wallets
+  const twelveMonthsAgo = Math.floor((Date.now() - (365 * 24 * 60 * 60 * 1000)) / 1000);
+  url.searchParams.set('fromTimestamp', twelveMonthsAgo.toString());
+
   if (cursor) {
     url.searchParams.set('next', cursor);
   }
