@@ -47,9 +47,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Lazy Loading
 
-- [ ] **LAZY-01**: Initial load fetches current month + 3 previous months only (not all history)
-- [ ] **LAZY-02**: Background prefetch loads remaining months after initial 4 complete
-- [ ] **LAZY-03**: Past months are immutable (staleTime: Infinity, no refetch)
+- [x] **LAZY-01**: Initial load fetches current month + 3 previous months only (not all history)
+- [x] **LAZY-02**: Background prefetch loads remaining months after initial 4 complete
+- [x] **LAZY-03**: Past months are immutable (staleTime: Infinity, no refetch)
 - [ ] **LAZY-04**: Navigation to unloaded month triggers immediate fetch with skeleton
 - [ ] **LAZY-05**: Dashboard shows partial XP with "+" indicator while loading
 
@@ -123,9 +123,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-04 | Phase 5 | Pending |
 | DASH-05 | Phase 4 | Complete |
 | DASH-06 | Phase 4 | Complete |
-| LAZY-01 | Phase 6 | Pending |
-| LAZY-02 | Phase 6 | Pending |
-| LAZY-03 | Phase 6 | Pending |
+| LAZY-01 | Phase 6 | Complete |
+| LAZY-02 | Phase 6 | Complete |
+| LAZY-03 | Phase 6 | Complete |
 | LAZY-04 | Phase 6 | Pending |
 | LAZY-05 | Phase 6 | Pending |
 
