@@ -68,8 +68,8 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
   // Initial load: fetch current + 3 previous months in parallel
   const { isInitialLoadComplete, loadedMonthKeys } = useInitialMonthLoad(wallet);
 
-  // Background prefetch: start after initial 4 months complete
-  const { prioritizeMonth } = usePrefetchManager(wallet, loadedMonthKeys);
+  // On-demand prefetch: only prefetch adjacent months when navigating
+  const { prioritizeMonth, prefetchAdjacent } = usePrefetchManager(wallet, loadedMonthKeys);
 
   // Month navigation state - default to last index (current month)
   // Per RESEARCH.md Pitfall 1: months[0] is oldest, months[length-1] is current
@@ -103,10 +103,10 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
     const newIndex = Math.max(0, monthIndex - 1);
     const newMonthKey = allMonthKeys[newIndex];
 
-    // If navigating to unloaded month, prioritize fetch
-    if (!loadedMonthKeys.has(newMonthKey)) {
-      prioritizeMonth(newMonthKey);
-    }
+    // Fetch this month if not loaded
+    prioritizeMonth(newMonthKey);
+    // Prefetch adjacent months for smooth navigation
+    prefetchAdjacent(newIndex);
 
     setMonthIndex(newIndex);
   };
@@ -115,10 +115,10 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
     const newIndex = Math.min(allMonthKeys.length - 1, monthIndex + 1);
     const newMonthKey = allMonthKeys[newIndex];
 
-    // If navigating to unloaded month, prioritize fetch
-    if (!loadedMonthKeys.has(newMonthKey)) {
-      prioritizeMonth(newMonthKey);
-    }
+    // Fetch this month if not loaded
+    prioritizeMonth(newMonthKey);
+    // Prefetch adjacent months for smooth navigation
+    prefetchAdjacent(newIndex);
 
     setMonthIndex(newIndex);
   };
@@ -129,8 +129,9 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
   // Past months are frozen (data cannot change) - only current month (last index) is actionable
   const isCurrentMonth = monthIndex === allMonthKeys.length - 1;
 
-  // Calculate if showing partial XP (not all months loaded yet)
-  const isPartialXP = loadedMonthKeys.size < allMonthKeys.length;
+  // No longer showing partial XP indicator since we don't prefetch all history
+  // XP shown is for the selected month only
+  const isPartialXP = false;
 
   // Refresh handler for current month only
   const handleRefresh = () => {
