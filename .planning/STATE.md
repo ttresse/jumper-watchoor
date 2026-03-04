@@ -92,7 +92,7 @@ Recent decisions affecting current work:
 - [Quick-1]: Added fromTimestamp parameter filtering LiFi API requests to last 12 months (365 days)
 - [Phase 03-01]: USD volumes aggregated from sending.amountUSD with parseFloat || 0 fallback
 - [Phase 03-01]: Tiers sorted descending by threshold for first-match-wins lookup
-- [Phase 03-01]: Placeholder tier values (real Jumper thresholds TBD)
+- [Phase 03-01]: Placeholder tier values (replaced by Quick-2 with official values)
 - [Phase 03-01]: Type assertion import for build-time JSON validation
 - [Phase 03-02]: USD values floored (Math.floor) before tier comparison
 - [Phase 03-02]: Tier lookup uses first-match-wins with descending threshold sort
@@ -101,6 +101,9 @@ Recent decisions affecting current work:
 - [Phase 04-01]: Use Intl API for locale-aware formatting (no external deps)
 - [Phase 04-01]: Module-level formatter instances for performance (not created per call)
 - [Phase 04-01]: UTC timezone for month parsing to avoid timezone issues
+- [Quick-2]: Removed tier names - official Jumper system no longer uses them
+- [Quick-2]: Chainoor has only 2 tiers (2 chains = 10xp, 9 chains = 30xp)
+- [Quick-2]: Next tier display shows "to next tier" instead of tier name
 
 ### Pending Todos
 
@@ -115,11 +118,12 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | Add fromTimestamp parameter to LiFi API call to search last 12 months by default | 2026-03-04 | 96a3563 | [1-add-fromtimestamp-parameter-to-lifi-api-](./quick/1-add-fromtimestamp-parameter-to-lifi-api-/) |
+| 2 | Update tiers.json to match official Jumper points table | 2026-03-04 | c8d36e3 | [2-update-tiers-json-to-match-official-jump](./quick/2-update-tiers-json-to-match-official-jump/) |
 
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 04-01-PLAN.md (foundation utilities)
+Stopped at: Completed Quick Task 2 (tiers.json official values)
 Resume file: N/A - Ready for 04-02-PLAN.md
 
 ---
