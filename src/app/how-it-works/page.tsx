@@ -60,6 +60,14 @@ export default function HowItWorksPage() {
   return (
     <main className="min-h-screen flex flex-col items-center p-8">
       <div className="w-full max-w-lg space-y-8">
+        {/* Top navigation */}
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        >
+          &larr; Back to tracker
+        </Link>
+
         {/* Header */}
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-bold">How XP Works</h1>
