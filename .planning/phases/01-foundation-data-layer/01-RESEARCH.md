@@ -1,68 +1,80 @@
 # Phase 1: Foundation & Data Layer - Research
 
-**Researched:** 2026-03-03
-**Domain:** Multi-chain wallet scanning with rate limiting, EVM address validation, progressive loading UI
+**Researched:** 2026-03-04
+**Domain:** LiFi Analytics API integration, cursor-based pagination, React data fetching
 **Confidence:** HIGH
 
 ## Summary
 
-Phase 1 establishes the foundation for scanning 60+ blockchain networks for LiFi transactions. The core challenge is fetching wallet transactions from multiple chains in parallel while respecting Covalent GoldRush's 4 RPS rate limit, providing real-time progress feedback as chains complete.
+This phase migrates from multi-chain Covalent scanning (60+ parallel API calls) to a single unified LiFi Analytics API endpoint (`li.quest/v2/analytics/transfers`). The API provides pre-processed transaction data including USD values, transaction classification (via `sending.chainId` vs `receiving.chainId`), and pagination via cursor tokens. This dramatically simplifies both the implementation and user experience.
 
-The architecture uses Covalent GoldRush SDK for multi-chain transaction data (only service covering 100+ chains with unified API), viem for address validation (lightweight, TypeScript-first), p-throttle for request rate limiting (queue-based, no discarded calls), and TanStack Query v5 for parallel queries with result combination. This stack is well-documented, production-proven, and specifically designed for the parallel API fetching pattern required.
+The key architectural change is moving from parallel chain queries with React Query's `useQueries` to sequential cursor-based pagination. The LiFi API handles all chain filtering internally, returning only LiFi transactions with complete metadata. No rate limiting is needed (single endpoint), no event decoding is required (classification data included), and no historical price lookups are necessary (`amountUSD` provided).
 
-**Primary recommendation:** Use p-throttle with `{ limit: 4, interval: 1000 }` to enforce the 4 RPS rate limit, fire all chain queries through TanStack Query's `useQueries` hook with the `combine` option to aggregate results and loading states, and show progressive results as each chain completes.
+**Primary recommendation:** Replace Covalent adapter with a simple LiFi adapter using fetch + while-loop pagination, update types to match LiFi response structure, and modify the progress display from "chains scanned" to "transactions found".
 
 <user_constraints>
+
 ## User Constraints (from CONTEXT.md)
 
 ### Locked Decisions
 
-#### Wallet Input UX
+**API Integration:**
+- Use LiFi Analytics API: `GET li.quest/v2/analytics/transfers?wallet={address}`
+- Handle cursor-based pagination via `next` token in response
+- No API key required (public endpoint)
+- Retry failed requests automatically 2-3 times before showing error
+- If pagination error occurs mid-load, retry that specific page
+
+**Wallet Input UX:**
 - Single input field that accepts paste or typed address
-- Auto-validate when input reaches 42 characters (full EVM address length)
-- Inline validation feedback displayed below the input field
-- Scan starts automatically when address is valid — no button click required
+- Validation feedback displayed inline below the input field
+- Scan requires explicit button click (not auto-triggered on valid input)
 - Remember last scanned wallet in localStorage, pre-fill on return visits
-- Pre-filled address requires user action (click/enter) to start scan — no auto-scan on page load
+- Pre-filled address requires user action (click button) to start scan - no auto-scan on page load
 
-#### Progress Display
-- Single progress bar with counter: "Scanning... 24/60 chains"
-- As chains with transactions are found, show per-chain results below progress bar: "Arbitrum: 3 txns", "Optimism: 7 txns"
-- Cancel button available during scan — user can abort and see partial results or start over
+**Progress Display:**
+- Show live counter during load: "Loading... 150 transactions found"
+- Counter increments as each pagination page is fetched
+- Cancel button available during load
+- If cancelled, discard all data (no partial results)
+- Results appear only after complete load (no streaming preview)
 
-#### Error Handling
-- Silent skip failed chains during scan, continue with remaining chains
-- Show collapsible warning banner at end: "3 chains failed" with expand to see which chains + retry button
-- Partial results are usable — user can view what was fetched and retry failed chains separately
-- If ALL chains fail (network down, API issue): full-screen error with clear explanation + prominent retry button
+**Error Handling:**
+- Automatic retry (2-3 attempts) before showing error to user
+- Error message displayed in place of results area (not toast/banner)
+- Clear "Retry" button in error state
+- If wallet has no LiFi transactions: simple text message "No LiFi transactions found for this wallet"
 
-#### Initial State
-- Minimal design: input field + brief tagline "Enter wallet to see your Jumper points"
-- No demo/example wallets — require user's own address
-- App name "Jumper Points Tracker" as text only — no heavy branding or logo
+**Initial State:**
+- Minimal design: input field + "Jumper Points Tracker" as text title
+- No logo, no heavy branding
+- No example/demo wallets
+- Interface in English
 
 ### Claude's Discretion
-- Exact progress bar styling and animation
-- Tagline wording refinement
+
+- Exact retry logic and timing
+- Loading spinner/animation alongside counter
 - Color palette and typography
 - Spacing and layout details
+- Input placeholder text wording
 
 ### Deferred Ideas (OUT OF SCOPE)
-None — discussion stayed within phase scope
+
+None - discussion stayed within phase scope
 
 </user_constraints>
 
 <phase_requirements>
+
 ## Phase Requirements
 
 | ID | Description | Research Support |
 |----|-------------|-----------------|
-| WALLET-01 | User can input an EVM wallet address (0x format) | viem `isAddress()` and `getAddress()` for validation |
-| WALLET-02 | App validates address format before scanning | viem strict checksum validation, 42-char length check |
-| SCAN-01 | App scans all Jumper-supported chains (60+) for wallet transactions | Covalent GoldRush SDK `TransactionService.getAllTransactionsForAddress()` |
-| SCAN-02 | App filters transactions by LiFi Diamond contract | Filter by `to` address = `0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE` |
-| SCAN-03 | App fetches chains in parallel with rate limiting (max 4 req/s) | p-throttle `{ limit: 4, interval: 1000 }` |
-| SCAN-04 | UI shows progressive loading as each chain completes | TanStack Query `useQueries` with `combine` option |
+| WALLET-01 | User can input an EVM wallet address (0x format) | Existing `WalletInput` component with viem validation remains valid |
+| WALLET-02 | App validates address format before scanning | Existing `validateWalletAddress()` using viem `isAddress` remains valid |
+| SCAN-01 | App scans all Jumper-supported chains for wallet transactions | LiFi API automatically scans all chains - single endpoint replaces 60+ chain queries |
+| SCAN-02 | App filters transactions by LiFi Diamond contract | LiFi API only returns LiFi transactions - no filtering needed |
 
 </phase_requirements>
 
@@ -72,37 +84,29 @@ None — discussion stayed within phase scope
 
 | Library | Version | Purpose | Why Standard |
 |---------|---------|---------|--------------|
-| @covalenthq/client-sdk | ^2.x | Multi-chain transaction data | Only service covering 100+ chains with unified API, 25k free credits/month, built-in pagination |
-| viem | ^2.46 | Address validation | TypeScript-first, 35kB bundle, `isAddress()` with strict checksum validation |
-| @tanstack/react-query | ^5.90 | Parallel queries + caching | `useQueries` with `combine` option for aggregating results from 60+ chain queries |
-| p-throttle | ^7.x | Rate limiting | Promise-based throttling at 4 RPS, queue-based (no discarded calls), strict algorithm |
-| zustand | ^5.x | Client state | UI state for scan progress, failed chains, localStorage persistence |
+| fetch | native | HTTP requests to LiFi API | Built into browsers and Node 18+, no dependencies needed |
+| @tanstack/react-query | ^5.90.21 | Data fetching state management | Already in project, handles caching, refetching, error states |
+| zustand | ^5.0.11 | Client state (wallet persistence) | Already in project, handles localStorage persistence |
+| viem | ^2.46.3 | Address validation | Already in project, `isAddress` and `getAddress` for wallet validation |
 
 ### Supporting
 
 | Library | Version | Purpose | When to Use |
 |---------|---------|---------|-------------|
-| shadcn/ui Progress | latest | Progress bar component | For "Scanning... 24/60 chains" display |
-| shadcn/ui Input | latest | Wallet address input | Single input field with validation feedback |
-| shadcn/ui Button | latest | Cancel/Retry actions | Cancel scan, retry failed chains |
-| shadcn/ui Alert | latest | Error/warning banners | Failed chains warning, full error display |
+| Next.js | 16.1.6 | Framework | Already in project |
+| TypeScript | ^5 | Type safety | LiFi response types need definition |
 
-### Alternatives Considered
+### Removed from Stack (Migration)
 
-| Instead of | Could Use | Tradeoff |
-|------------|-----------|----------|
-| p-throttle | p-limit | p-limit controls concurrency but not requests/second; p-throttle controls rate |
-| p-throttle | bottleneck | More features but heavier; p-throttle is simpler for our exact use case |
-| GoldRush SDK | Individual chain APIs | Would require 60+ API keys and different response formats |
-| viem | ethers.js | viem is 4x smaller, better TypeScript support |
+| Library | Reason for Removal |
+|---------|-------------------|
+| @covalenthq/client-sdk | No longer needed - LiFi API replaces Covalent |
+| p-throttle | No longer needed - single endpoint, no rate limiting required |
 
 **Installation:**
 ```bash
-# Core dependencies (in addition to existing Next.js setup from PROJECT.md)
-npm install @covalenthq/client-sdk viem @tanstack/react-query p-throttle zustand
-
-# UI components
-npx shadcn@latest add progress input button alert card skeleton
+# No new packages needed - all requirements met by existing dependencies
+# Can optionally remove: npm uninstall @covalenthq/client-sdk p-throttle
 ```
 
 ## Architecture Patterns
@@ -111,597 +115,316 @@ npx shadcn@latest add progress input button alert card skeleton
 
 ```
 src/
-├── adapters/           # External API wrappers
-│   └── covalent.adapter.ts     # GoldRush SDK wrapper
-├── services/           # Business logic
-│   └── scanner.service.ts      # Chain scanning orchestration
-├── hooks/              # React hooks
-│   └── useScanWallet.ts        # Main scanning hook
-├── stores/             # Zustand stores
-│   └── scan.store.ts           # Scan state management
-├── components/         # React components
-│   ├── wallet-input.tsx        # Address input with validation
-│   ├── scan-progress.tsx       # Progress bar + chain results
-│   └── error-banner.tsx        # Failed chains warning
-├── lib/                # Utilities
-│   └── throttle.ts             # Rate limiter setup
-└── app/                # Next.js App Router
-    └── page.tsx                # Main page
+├── adapters/
+│   └── lifi.adapter.ts        # NEW: LiFi API client (replaces covalent.adapter.ts)
+├── hooks/
+│   └── useLiFiTransfers.ts    # NEW: Hook for fetching transfers (replaces useScanWallet.ts)
+├── lib/
+│   └── types.ts               # UPDATE: Add LiFi-specific types
+├── stores/
+│   └── scan.store.ts          # UPDATE: Simplify state (no chain-level tracking)
+└── components/
+    ├── wallet-input.tsx       # UPDATE: Add explicit "Scan" button
+    └── scan-progress.tsx      # UPDATE: Show transaction count, not chain count
 ```
 
-### Pattern 1: Throttled Chain Scanner
+### Pattern 1: Cursor-Based Pagination with Accumulation
 
-**What:** Rate-limited parallel API calls that respect 4 RPS limit while maximizing throughput.
-
-**When to use:** Scanning all 60+ chains for a wallet's transactions.
-
+**What:** Fetch all pages before returning data, accumulating results in memory
+**When to use:** When all data must be loaded before display (per CONTEXT.md: "Results appear only after complete load")
 **Example:**
 ```typescript
-// lib/throttle.ts
-import pThrottle from 'p-throttle';
-
-// Covalent free tier: 4 requests/second
-export const throttle = pThrottle({
-  limit: 4,
-  interval: 1000,
-  strict: true  // Ensure no bursts exceed limit
-});
-
-// adapters/covalent.adapter.ts
-import { CovalentClient } from "@covalenthq/client-sdk";
-import { throttle } from '@/lib/throttle';
-
-const client = new CovalentClient(process.env.COVALENT_API_KEY!);
-
-const LIFI_DIAMOND = '0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE';
-
-export interface ChainTransaction {
-  hash: string;
-  timestamp: number;
-  chainId: string;
-  chainName: string;
-  value: bigint;
-  gasUsed: bigint;
+// Source: Verified against li.quest/v2/analytics/transfers API
+interface LiFiTransfersResponse {
+  data: LiFiTransfer[];
+  hasNext: boolean;
+  hasPrevious: boolean;
+  next: string | null;
+  previous: string | null;
 }
 
-// Throttled fetch function
-export const fetchChainTransactions = throttle(
-  async (wallet: string, chainName: string): Promise<ChainTransaction[]> => {
-    const transactions: ChainTransaction[] = [];
+async function fetchAllTransfers(
+  wallet: string,
+  onProgress?: (count: number) => void
+): Promise<LiFiTransfer[]> {
+  const transfers: LiFiTransfer[] = [];
+  let cursor: string | null = null;
 
+  do {
+    const url = new URL('https://li.quest/v2/analytics/transfers');
+    url.searchParams.set('wallet', wallet);
+    url.searchParams.set('limit', '100'); // Max allowed
+    url.searchParams.set('status', 'DONE'); // Only completed transactions
+    if (cursor) url.searchParams.set('next', cursor);
+
+    const response = await fetch(url.toString());
+    if (!response.ok) throw new Error(`API error: ${response.status}`);
+
+    const data: LiFiTransfersResponse = await response.json();
+    transfers.push(...data.data);
+    cursor = data.next;
+
+    onProgress?.(transfers.length);
+  } while (cursor);
+
+  return transfers;
+}
+```
+
+### Pattern 2: Retry with Exponential Backoff
+
+**What:** Automatic retry of failed requests with increasing delays
+**When to use:** For transient API errors (per CONTEXT.md: "Retry failed requests automatically 2-3 times")
+**Example:**
+```typescript
+async function fetchWithRetry<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3
+): Promise<T> {
+  let lastError: Error | undefined;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      for await (const tx of client.TransactionService.getAllTransactionsForAddress(
-        chainName,
-        wallet
-      )) {
-        // Filter for LiFi Diamond contract
-        if (tx.to_address?.toLowerCase() === LIFI_DIAMOND.toLowerCase()) {
-          transactions.push({
-            hash: tx.tx_hash,
-            timestamp: new Date(tx.block_signed_at).getTime(),
-            chainId: tx.chain_id,
-            chainName,
-            value: BigInt(tx.value || '0'),
-            gasUsed: BigInt(tx.gas_spent || '0'),
-          });
-        }
-      }
+      return await fn();
     } catch (error) {
-      // Return empty array on error - don't throw
-      console.error(`Chain ${chainName} failed:`, error);
-      throw error; // Re-throw to mark chain as failed
+      lastError = error as Error;
+      if (attempt < maxRetries - 1) {
+        // Exponential backoff: 1s, 2s, 4s
+        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempt)));
+      }
+    }
+  }
+
+  throw lastError;
+}
+```
+
+### Pattern 3: Cancellable Fetch with AbortController
+
+**What:** Allow user to cancel ongoing pagination loop
+**When to use:** Per CONTEXT.md: "Cancel button available during load" and "If cancelled, discard all data"
+**Example:**
+```typescript
+async function fetchAllTransfers(
+  wallet: string,
+  signal: AbortSignal,
+  onProgress?: (count: number) => void
+): Promise<LiFiTransfer[]> {
+  const transfers: LiFiTransfer[] = [];
+  let cursor: string | null = null;
+
+  do {
+    if (signal.aborted) {
+      return []; // Discard all data per CONTEXT.md
     }
 
-    return transactions;
-  }
-);
-```
+    const url = new URL('https://li.quest/v2/analytics/transfers');
+    url.searchParams.set('wallet', wallet);
+    if (cursor) url.searchParams.set('next', cursor);
 
-### Pattern 2: Progressive Loading with useQueries
+    const response = await fetch(url.toString(), { signal });
+    const data = await response.json();
+    transfers.push(...data.data);
+    cursor = data.next;
 
-**What:** Fire all chain queries in parallel, show results as each completes, aggregate loading states.
+    onProgress?.(transfers.length);
+  } while (cursor);
 
-**When to use:** Scanning multiple chains with real-time progress feedback.
-
-**Example:**
-```typescript
-// hooks/useScanWallet.ts
-import { useQueries } from '@tanstack/react-query';
-import { fetchChainTransactions, type ChainTransaction } from '@/adapters/covalent.adapter';
-import { SUPPORTED_CHAINS } from '@/lib/chains';
-
-interface ScanResult {
-  transactions: ChainTransaction[];
-  completedChains: number;
-  totalChains: number;
-  failedChains: string[];
-  isLoading: boolean;
-  isComplete: boolean;
+  return transfers;
 }
-
-export function useScanWallet(wallet: string | null): ScanResult {
-  const results = useQueries({
-    queries: wallet
-      ? SUPPORTED_CHAINS.map((chain) => ({
-          queryKey: ['transactions', wallet, chain.name] as const,
-          queryFn: () => fetchChainTransactions(wallet, chain.name),
-          staleTime: 5 * 60 * 1000,  // 5 minutes
-          gcTime: 30 * 60 * 1000,    // 30 minutes (formerly cacheTime)
-          retry: false,              // Don't retry - track as failed
-          enabled: !!wallet,
-        }))
-      : [],
-    combine: (results) => {
-      const completed = results.filter(r => !r.isPending);
-      const failed = results.filter(r => r.isError);
-      const successful = results.filter(r => r.isSuccess);
-
-      return {
-        transactions: successful.flatMap(r => r.data ?? []),
-        completedChains: completed.length,
-        totalChains: SUPPORTED_CHAINS.length,
-        failedChains: failed.map((_, i) => SUPPORTED_CHAINS[i].name),
-        isLoading: results.some(r => r.isPending),
-        isComplete: completed.length === SUPPORTED_CHAINS.length,
-      };
-    },
-  });
-
-  return results;
-}
-```
-
-### Pattern 3: Address Validation with viem
-
-**What:** Validate EVM addresses using viem's `isAddress()` and normalize with `getAddress()`.
-
-**When to use:** Before initiating any scan.
-
-**Example:**
-```typescript
-// lib/validation.ts
-import { isAddress, getAddress } from 'viem';
-
-export interface ValidationResult {
-  isValid: boolean;
-  normalizedAddress: string | null;
-  error: string | null;
-}
-
-export function validateWalletAddress(input: string): ValidationResult {
-  // Check length first (0x + 40 hex chars = 42)
-  if (input.length !== 42) {
-    return {
-      isValid: false,
-      normalizedAddress: null,
-      error: input.length < 42 ? null : 'Invalid address length',
-    };
-  }
-
-  // Check format (must start with 0x)
-  if (!input.startsWith('0x')) {
-    return {
-      isValid: false,
-      normalizedAddress: null,
-      error: 'Address must start with 0x',
-    };
-  }
-
-  // Validate with viem (strict checksum by default)
-  if (!isAddress(input, { strict: false })) {
-    return {
-      isValid: false,
-      normalizedAddress: null,
-      error: 'Invalid address format',
-    };
-  }
-
-  // Return checksummed version
-  try {
-    return {
-      isValid: true,
-      normalizedAddress: getAddress(input),
-      error: null,
-    };
-  } catch {
-    return {
-      isValid: false,
-      normalizedAddress: null,
-      error: 'Invalid address checksum',
-    };
-  }
-}
-```
-
-### Pattern 4: Scan State Management with Zustand
-
-**What:** Centralized state for scan progress, results, and localStorage persistence.
-
-**When to use:** Managing scan state across components.
-
-**Example:**
-```typescript
-// stores/scan.store.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-
-interface ChainResult {
-  chainName: string;
-  transactionCount: number;
-}
-
-interface ScanState {
-  // Persisted
-  lastWallet: string | null;
-
-  // Session
-  currentWallet: string | null;
-  isScanning: boolean;
-  chainResults: ChainResult[];
-  failedChains: string[];
-
-  // Actions
-  setLastWallet: (wallet: string) => void;
-  startScan: (wallet: string) => void;
-  updateChainResult: (chainName: string, count: number) => void;
-  markChainFailed: (chainName: string) => void;
-  cancelScan: () => void;
-  reset: () => void;
-}
-
-export const useScanStore = create<ScanState>()(
-  persist(
-    (set) => ({
-      lastWallet: null,
-      currentWallet: null,
-      isScanning: false,
-      chainResults: [],
-      failedChains: [],
-
-      setLastWallet: (wallet) => set({ lastWallet: wallet }),
-
-      startScan: (wallet) => set({
-        currentWallet: wallet,
-        isScanning: true,
-        chainResults: [],
-        failedChains: [],
-      }),
-
-      updateChainResult: (chainName, count) => set((state) => ({
-        chainResults: [...state.chainResults, { chainName, transactionCount: count }],
-      })),
-
-      markChainFailed: (chainName) => set((state) => ({
-        failedChains: [...state.failedChains, chainName],
-      })),
-
-      cancelScan: () => set({ isScanning: false }),
-
-      reset: () => set({
-        currentWallet: null,
-        isScanning: false,
-        chainResults: [],
-        failedChains: [],
-      }),
-    }),
-    {
-      name: 'jumper-scan-store',
-      partialize: (state) => ({ lastWallet: state.lastWallet }),
-    }
-  )
-);
 ```
 
 ### Anti-Patterns to Avoid
 
-- **Sequential chain fetching:** `for (chain of chains) await fetch(chain)` takes 60 chains * ~200ms = 12+ seconds. Use parallel with throttling instead.
+- **Using useInfiniteQuery:** The TanStack Query `useInfiniteQuery` hook is designed for infinite scroll UX where pages are displayed progressively. Our requirement is to fetch ALL data before displaying anything, making a simple `useQuery` with internal pagination loop more appropriate.
 
-- **Unthrottled parallel requests:** Firing all 60 requests at once will hit 429 rate limits immediately. Always use p-throttle.
+- **Streaming partial results:** Per CONTEXT.md, results should only appear after complete load. Don't update UI state until all pages are fetched.
 
-- **Failing entire scan on single chain error:** Use `Promise.allSettled` pattern - continue with remaining chains, track failures separately.
-
-- **Polling for updates:** Don't poll - TanStack Query's `useQueries` with `combine` gives reactive updates as each query completes.
-
-- **Hardcoded chain list in components:** Keep chain list in a config file, fetch from Covalent at startup if possible.
+- **Parallel page fetching:** Cursor pagination is inherently sequential - each page's cursor comes from the previous response. Don't attempt to parallelize.
 
 ## Don't Hand-Roll
 
 | Problem | Don't Build | Use Instead | Why |
 |---------|-------------|-------------|-----|
-| Rate limiting | Custom token bucket | p-throttle | Handles edge cases, queue management, strict mode |
-| Address validation | Regex patterns | viem `isAddress()` | Checksums, edge cases, EIP compliance |
-| Parallel query state | Manual Promise.all tracking | TanStack Query `useQueries` | Caching, deduplication, reactive updates |
-| Progress aggregation | Manual counter state | TanStack Query `combine` | Automatically recomputes on each query state change |
-| Local storage persistence | Manual localStorage calls | Zustand `persist` middleware | Handles serialization, hydration, SSR |
+| Address validation | Custom regex | `viem.isAddress()` | Already handles all edge cases, checksums, lowercase |
+| Retry logic | Simple try/catch | Exponential backoff utility | Prevents thundering herd, handles rate limits gracefully |
+| AbortController management | Manual ref cleanup | React Query's built-in cancel | Query cancellation is automatic on unmount/refetch |
 
-**Key insight:** Multi-chain scanning has many edge cases (rate limits, partial failures, progress tracking). The recommended libraries handle these specifically.
+**Key insight:** The LiFi API is simple enough that we don't need heavy abstractions. A straightforward adapter with fetch, retry logic, and abort support is sufficient.
 
 ## Common Pitfalls
 
-### Pitfall 1: Rate Limit Cascade Failure
+### Pitfall 1: Forgetting to URL-encode the cursor
 
-**What goes wrong:** Firing 60+ requests triggers 429 errors. Retry logic creates more requests, causing cascade failure.
+**What goes wrong:** The `next` cursor may contain special characters that break URL parsing
+**Why it happens:** Cursors are often base64 or contain `+`, `/`, `=` characters
+**How to avoid:** Use `URLSearchParams.set()` which auto-encodes, or explicitly `encodeURIComponent(cursor)`
+**Warning signs:** 400 errors from API, truncated or corrupted responses
 
-**Why it happens:** Covalent free tier is 4 RPS. Without throttling, initial burst exceeds this instantly.
+### Pitfall 2: Not handling empty wallet case
 
-**How to avoid:**
-- Use p-throttle with `{ limit: 4, interval: 1000, strict: true }`
-- Disable automatic retries in TanStack Query (`retry: false`)
-- Track failed chains separately for manual retry
+**What goes wrong:** Treating "no transactions" as an error instead of valid empty state
+**Why it happens:** API returns `{ data: [], hasNext: false }` for wallets with no LiFi history
+**How to avoid:** Check `data.length === 0 && cursor === null` and show "No LiFi transactions found" message
+**Warning signs:** Error states for valid wallets that simply haven't used LiFi
 
-**Warning signs:** Multiple 429 responses in console, scan takes much longer than expected.
+### Pitfall 3: Infinite loop on pagination errors
 
-### Pitfall 2: Missing LiFi Contract Filter
+**What goes wrong:** If a page fails and retry succeeds with same cursor, loop continues forever
+**Why it happens:** Not tracking which pages have been fetched
+**How to avoid:** Either track fetched cursors, or let retry exhaust attempts then throw
+**Warning signs:** Network tab shows same request repeating indefinitely
 
-**What goes wrong:** Returning ALL wallet transactions instead of just LiFi/Jumper ones. Results in massive data and wrong transaction counts.
+### Pitfall 4: Memory pressure with large wallets
 
-**Why it happens:** Forgetting to filter by `to` address = `0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE`.
+**What goes wrong:** Accumulating thousands of transfers in memory before render
+**Why it happens:** Power users may have hundreds or thousands of transactions
+**How to avoid:** Consider adding `fromTimestamp` filter to limit to recent transactions, or implement chunked processing
+**Warning signs:** Slow performance, browser tab becomes unresponsive
 
-**How to avoid:** Filter in the adapter layer, not in components. Add unit test that verifies filter is applied.
+### Pitfall 5: Race conditions on wallet change
 
-**Warning signs:** Transaction counts in hundreds/thousands for typical wallets (should be tens).
-
-### Pitfall 3: Progress Display Not Updating
-
-**What goes wrong:** Progress bar shows "0/60" then jumps to "60/60" - no incremental updates.
-
-**Why it happens:** Not using TanStack Query's `combine` option, or using a stale closure in the combine function.
-
-**How to avoid:**
-- Use `useQueries` with `combine` option
-- Extract combine function if it has no dependencies (avoid re-renders)
-- Verify each query has unique `queryKey`
-
-**Warning signs:** No UI updates during scan, then sudden complete.
-
-### Pitfall 4: Checksum Validation Breaking Valid Addresses
-
-**What goes wrong:** Valid addresses rejected because checksum doesn't match.
-
-**Why it happens:** viem's `isAddress()` uses strict checksum by default. User-pasted lowercase addresses fail.
-
-**How to avoid:** Use `isAddress(input, { strict: false })` for validation, then normalize with `getAddress()`.
-
-**Warning signs:** "Invalid address" errors for addresses that work on Etherscan.
-
-### Pitfall 5: Scan Continues After Component Unmount
-
-**What goes wrong:** Memory leaks and state updates on unmounted components.
-
-**Why it happens:** TanStack Query continues fetching after navigation away.
-
-**How to avoid:**
-- Use `enabled: !!wallet` to disable queries when not needed
-- Implement cancel functionality using `queryClient.cancelQueries()`
-- AbortController in fetch functions
-
-**Warning signs:** Console warnings about state updates on unmounted components.
+**What goes wrong:** User enters new wallet while previous scan is in progress, results get mixed
+**Why it happens:** AbortController not properly managed, or state update from old request
+**How to avoid:** Abort previous request immediately on new wallet input, verify wallet matches before state update
+**Warning signs:** Incorrect transaction counts, transactions from wrong wallet appearing
 
 ## Code Examples
 
-### Wallet Input Component
+Verified patterns from official LiFi API documentation and testing:
+
+### LiFi Transfer Type Definition
 
 ```typescript
-// components/wallet-input.tsx
-'use client';
+// Source: https://docs.li.fi/api-reference/get-a-paginated-list-of-filtered-transfers
+// Verified via direct API testing 2026-03-04
 
-import { useState, useEffect } from 'react';
-import { Input } from '@/components/ui/input';
-import { validateWalletAddress } from '@/lib/validation';
-import { useScanStore } from '@/stores/scan.store';
-
-export function WalletInput({ onValidAddress }: { onValidAddress: (addr: string) => void }) {
-  const [input, setInput] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const { lastWallet, setLastWallet } = useScanStore();
-
-  // Pre-fill last wallet on mount
-  useEffect(() => {
-    if (lastWallet) {
-      setInput(lastWallet);
-    }
-  }, [lastWallet]);
-
-  const handleChange = (value: string) => {
-    setInput(value);
-    setError(null);
-
-    // Auto-validate at 42 characters
-    if (value.length === 42) {
-      const result = validateWalletAddress(value);
-      if (result.isValid && result.normalizedAddress) {
-        setLastWallet(result.normalizedAddress);
-        onValidAddress(result.normalizedAddress);
-      } else {
-        setError(result.error);
-      }
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    // Allow manual trigger for pre-filled addresses
-    if (e.key === 'Enter' && input === lastWallet) {
-      const result = validateWalletAddress(input);
-      if (result.isValid && result.normalizedAddress) {
-        onValidAddress(result.normalizedAddress);
-      }
-    }
-  };
-
-  return (
-    <div className="w-full max-w-md">
-      <Input
-        value={input}
-        onChange={(e) => handleChange(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="0x..."
-        className="font-mono"
-      />
-      {error && (
-        <p className="mt-2 text-sm text-red-500">{error}</p>
-      )}
-    </div>
-  );
-}
-```
-
-### Scan Progress Component
-
-```typescript
-// components/scan-progress.tsx
-'use client';
-
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
-import { useScanWallet } from '@/hooks/useScanWallet';
-
-interface ScanProgressProps {
-  wallet: string;
-  onCancel: () => void;
-}
-
-export function ScanProgress({ wallet, onCancel }: ScanProgressProps) {
-  const { completedChains, totalChains, transactions, failedChains, isLoading } = useScanWallet(wallet);
-
-  const progress = (completedChains / totalChains) * 100;
-
-  // Group transactions by chain for display
-  const chainResults = transactions.reduce((acc, tx) => {
-    acc[tx.chainName] = (acc[tx.chainName] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-
-  return (
-    <div className="w-full max-w-md space-y-4">
-      <div className="flex items-center justify-between">
-        <span className="text-sm text-muted-foreground">
-          Scanning... {completedChains}/{totalChains} chains
-        </span>
-        <Button variant="outline" size="sm" onClick={onCancel}>
-          Cancel
-        </Button>
-      </div>
-
-      <Progress value={progress} />
-
-      {/* Show chains with transactions */}
-      {Object.entries(chainResults).length > 0 && (
-        <div className="space-y-1">
-          {Object.entries(chainResults).map(([chain, count]) => (
-            <div key={chain} className="text-sm">
-              {chain}: {count} txns
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Show failed chains warning after completion */}
-      {!isLoading && failedChains.length > 0 && (
-        <div className="rounded-md bg-yellow-50 p-3">
-          <p className="text-sm text-yellow-800">
-            {failedChains.length} chains failed
-          </p>
-        </div>
-      )}
-    </div>
-  );
-}
-```
-
-### Supported Chains Configuration
-
-```typescript
-// lib/chains.ts
-export interface Chain {
-  name: string;
+interface LiFiToken {
+  address: string;
   chainId: number;
-  displayName: string;
+  symbol: string;
+  decimals: number;
+  name: string;
+  priceUSD: string;
+  logoURI: string;
 }
 
-// Subset of Covalent-supported chains where LiFi operates
-// Full list should be fetched from Covalent API or maintained in config
-export const SUPPORTED_CHAINS: Chain[] = [
-  { name: 'eth-mainnet', chainId: 1, displayName: 'Ethereum' },
-  { name: 'matic-mainnet', chainId: 137, displayName: 'Polygon' },
-  { name: 'arbitrum-mainnet', chainId: 42161, displayName: 'Arbitrum' },
-  { name: 'optimism-mainnet', chainId: 10, displayName: 'Optimism' },
-  { name: 'bsc-mainnet', chainId: 56, displayName: 'BNB Chain' },
-  { name: 'base-mainnet', chainId: 8453, displayName: 'Base' },
-  { name: 'avalanche-mainnet', chainId: 43114, displayName: 'Avalanche' },
-  { name: 'fantom-mainnet', chainId: 250, displayName: 'Fantom' },
-  { name: 'gnosis-mainnet', chainId: 100, displayName: 'Gnosis' },
-  { name: 'moonbeam-mainnet', chainId: 1284, displayName: 'Moonbeam' },
-  { name: 'moonriver-mainnet', chainId: 1285, displayName: 'Moonriver' },
-  { name: 'celo-mainnet', chainId: 42220, displayName: 'Celo' },
-  { name: 'aurora-mainnet', chainId: 1313161554, displayName: 'Aurora' },
-  { name: 'cronos-mainnet', chainId: 25, displayName: 'Cronos' },
-  { name: 'zksync-mainnet', chainId: 324, displayName: 'zkSync Era' },
-  { name: 'linea-mainnet', chainId: 59144, displayName: 'Linea' },
-  { name: 'scroll-mainnet', chainId: 534352, displayName: 'Scroll' },
-  { name: 'mantle-mainnet', chainId: 5000, displayName: 'Mantle' },
-  { name: 'polygon-zkevm-mainnet', chainId: 1101, displayName: 'Polygon zkEVM' },
-  { name: 'metis-mainnet', chainId: 1088, displayName: 'Metis' },
-  // ... Add remaining 40+ chains
-];
+interface LiFiTransactionDetails {
+  txHash: string;
+  txLink: string;
+  amount: string;
+  amountUSD: string;
+  token: LiFiToken;
+  chainId: number;
+  gasAmount: string;
+  gasAmountUSD: string;
+  timestamp: number;
+}
+
+interface LiFiTransfer {
+  transactionId: string;
+  sending: LiFiTransactionDetails;
+  receiving: LiFiTransactionDetails;
+  fromAddress: string;
+  toAddress: string;
+  tool: string;
+  status: 'DONE' | 'PENDING' | 'FAILED' | 'NOT_FOUND' | 'INVALID';
+  substatus: 'COMPLETED' | 'PENDING' | 'REFUNDED' | string;
+  substatusMessage: string;
+  lifiExplorerLink: string;
+  metadata?: {
+    integrator?: string;
+  };
+}
+
+interface LiFiTransfersResponse {
+  data: LiFiTransfer[];
+  hasNext: boolean;
+  hasPrevious: boolean;
+  next: string | null;
+  previous: string | null;
+}
+```
+
+### Classifying Bridge vs Swap
+
+```typescript
+// Classification is trivial with LiFi data - no event decoding needed
+function classifyTransfer(transfer: LiFiTransfer): 'bridge' | 'swap' {
+  return transfer.sending.chainId === transfer.receiving.chainId
+    ? 'swap'
+    : 'bridge';
+}
+```
+
+### API URL Construction
+
+```typescript
+// Base endpoint (no API key required)
+const API_BASE = 'https://li.quest/v2/analytics/transfers';
+
+function buildTransfersUrl(wallet: string, cursor?: string | null): string {
+  const url = new URL(API_BASE);
+  url.searchParams.set('wallet', wallet);
+  url.searchParams.set('limit', '100');
+  url.searchParams.set('status', 'DONE'); // Only completed transactions
+  if (cursor) {
+    url.searchParams.set('next', cursor);
+  }
+  return url.toString();
+}
 ```
 
 ## State of the Art
 
 | Old Approach | Current Approach | When Changed | Impact |
 |--------------|------------------|--------------|--------|
-| ethers.js for address validation | viem `isAddress()` / `getAddress()` | 2024 | 4x smaller bundle, better TypeScript |
-| Manual Promise.all + state | TanStack Query v5 `useQueries` + `combine` | 2024 | Built-in caching, reactive updates |
-| Custom rate limiting | p-throttle | N/A | Queue-based, strict mode, no discarded calls |
-| Redux for client state | Zustand with persist | 2024 | Simpler API, built-in persistence |
-| react-query v4 | @tanstack/react-query v5 | 2024 | `combine` option, better TypeScript |
+| Covalent multi-chain scanning | LiFi Analytics API | 2026-03-04 | Single endpoint, no rate limiting, pre-processed data |
+| Event log decoding for classification | `sending.chainId` vs `receiving.chainId` | N/A (API provides) | No ABI needed, no viem decoding |
+| Historical price lookups | `amountUSD` in response | N/A (API provides) | No DefiLlama integration needed |
+| Chain-by-chain progress | Transaction count progress | This migration | "Loading... 150 transactions" vs "24/60 chains" |
 
 **Deprecated/outdated:**
-- `cacheTime` in TanStack Query v5: renamed to `gcTime` (garbage collection time)
-- ethers.js for new projects: viem is the 2025/2026 standard
-- Manual retry logic: p-throttle handles queue management
+- `covalent.adapter.ts`: No longer needed - LiFi API replaces all functionality
+- `p-throttle` usage: No rate limiting needed for single endpoint
+- Chain-level progress tracking: API scans all chains internally
 
 ## Open Questions
 
-1. **Full chain list source**
-   - What we know: LiFi supports 67 chains, Covalent supports 100+, intersection is what we need
-   - What's unclear: No published list of exact intersection
-   - Recommendation: Start with known high-volume chains, expand based on LiFi's `/v1/chains` endpoint
+1. **Rate limits on LiFi Analytics API?**
+   - What we know: No API key required, public endpoint
+   - What's unclear: Undocumented rate limits may exist
+   - Recommendation: Add retry logic with exponential backoff; monitor for 429 responses
 
-2. **Pagination handling for heavy users**
-   - What we know: Covalent SDK handles pagination via async generators
-   - What's unclear: Performance impact for users with 1000+ transactions per chain
-   - Recommendation: Monitor in testing, add date range filter if needed (last 12 months for points)
+2. **Maximum transactions returnable?**
+   - What we know: Pagination suggests no hard limit
+   - What's unclear: Is there a maximum total count before API refuses?
+   - Recommendation: Test with known high-volume wallets; add `fromTimestamp` filter as fallback
 
-3. **Cancel scan implementation**
-   - What we know: TanStack Query supports `queryClient.cancelQueries()`
-   - What's unclear: Best UX for showing partial results after cancel
-   - Recommendation: Stop new queries, keep completed results, show "Scan cancelled" state
+3. **Cursor expiration?**
+   - What we know: Cursors work across multiple requests
+   - What's unclear: Do cursors expire after some time?
+   - Recommendation: Complete pagination in single user session; if error on cursor, restart from beginning
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- [GoldRush SDK Guide](https://goldrush.dev/guides/getting-started-with-the-covalent-sdk/) - SDK initialization, TransactionService usage
-- [viem getAddress](https://viem.sh/docs/utilities/getAddress) - Address normalization
-- [viem isAddress](https://v1.viem.sh/docs/utilities/isAddress.html) - Address validation with strict mode
-- [TanStack Query Parallel Queries](https://tanstack.com/query/latest/docs/framework/react/guides/parallel-queries) - useQueries pattern
-- [TanStack Query useQueries Reference](https://tanstack.com/query/v5/docs/framework/react/reference/useQueries) - combine option
-- [p-throttle GitHub](https://github.com/sindresorhus/p-throttle) - Rate limiting API
-- [shadcn/ui Progress](https://ui.shadcn.com/docs/components/progress) - Progress component
+- [LiFi API Documentation](https://docs.li.fi/api-reference/get-a-paginated-list-of-filtered-transfers) - Endpoint specification, parameters, response structure
+- Direct API testing (2026-03-04) - Verified response structure with real wallets
 
 ### Secondary (MEDIUM confidence)
-- [p-throttle npm](https://www.npmjs.com/package/p-throttle) - Version 7.x, queue-based throttling
-- [Next.js Server/Client Components](https://nextjs.org/docs/app/getting-started/server-and-client-components) - Component architecture
-- [Parallel Queries in React Query 5](https://medium.com/@bobjunior542/how-to-run-parallel-queries-in-react-query-5-for-better-performance-with-usequeries-73abbb593bcc) - useQueries patterns
+- [TanStack Query v5 Docs](https://tanstack.com/query/v5/docs/react/reference/useInfiniteQuery) - Pagination patterns (though we'll use simple useQuery)
+- [Handle Cursor-Based Pagination with React](https://blog.api-fiddle.com/posts/handle-cursor-pagination-with-react) - General cursor pagination patterns
 
 ### Tertiary (LOW confidence)
-- Chain list completeness: needs verification against LiFi's actual supported chains
+- Rate limits - Not documented, inferred from public endpoint behavior
 
 ## Metadata
 
 **Confidence breakdown:**
-- Standard stack: HIGH - All libraries verified via official docs and npm
-- Architecture patterns: HIGH - Based on TanStack Query official patterns and verified examples
-- Pitfalls: HIGH - Documented in existing project research, verified with multiple sources
+- Standard stack: HIGH - Using existing project dependencies, no new libraries
+- Architecture: HIGH - LiFi API structure verified via direct testing
+- Pitfalls: MEDIUM - Based on general cursor pagination experience, not LiFi-specific
 
-**Research date:** 2026-03-03
-**Valid until:** 2026-04-03 (30 days - stable libraries)
+**Research date:** 2026-03-04
+**Valid until:** 2026-04-04 (30 days - API is stable, documented)
