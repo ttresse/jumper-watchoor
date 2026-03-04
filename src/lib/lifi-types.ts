@@ -109,3 +109,30 @@ export interface LiFiTransfersResponse {
   /** Cursor for previous page, null if at start */
   previous: string | null;
 }
+
+// ============================================
+// Month-based caching types for lazy loading
+// ============================================
+
+/**
+ * Loading state for a month's transfer data.
+ */
+export type MonthLoadState = 'idle' | 'loading' | 'loaded' | 'error';
+
+/**
+ * Cache entry for a single month's transfers.
+ *
+ * Used by React Query hooks to track per-month loading state.
+ */
+export interface MonthCacheEntry {
+  /** Month identifier in YYYY-MM format */
+  monthKey: string;
+  /** Current loading state */
+  state: MonthLoadState;
+  /** Array of transfers for this month */
+  transfers: LiFiTransfer[];
+  /** Error message if state is 'error' */
+  error?: string;
+  /** Unix timestamp (seconds) when data was fetched */
+  fetchedAt?: number;
+}
