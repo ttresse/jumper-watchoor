@@ -14,7 +14,7 @@ This roadmap transforms a wallet address into actionable Jumper points insights 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Data Layer** - LiFi Analytics API integration, wallet input, transaction fetching
+- [x] **Phase 1: Foundation & Data Layer** - LiFi Analytics API integration, wallet input, transaction fetching
 - [ ] **Phase 2: Transaction Classification** - Bridge vs swap detection using chainId comparison, monthly aggregation
 - [ ] **Phase 3: Points Calculation Engine** - Configurable tier rules, XP calculation (USD values from API)
 - [ ] **Phase 4: Dashboard & Visualization** - Category breakdown, monthly history display
@@ -36,7 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01-PLAN.md — Core data layer (LiFi types, adapter, store)
 - [x] 01-02-PLAN.md — Hook and UI integration
-- [ ] 01-03-PLAN.md — Cleanup deprecated Covalent code
+- [x] 01-03-PLAN.md — Cleanup deprecated Covalent code
 
 ### Phase 2: Transaction Classification
 **Goal**: Users can see their LiFi transactions classified as bridges or swaps with monthly aggregation
@@ -108,7 +108,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Data Layer | 2/3 | In Progress | - |
+| 1. Foundation & Data Layer | 3/3 | Complete | 2026-03-04 |
 | 2. Transaction Classification | 0/2 | Needs Replan | - |
 | 3. Points Calculation Engine | 0/2 | Not started | - |
 | 4. Dashboard & Visualization | 0/2 | Not started | - |
