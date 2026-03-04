@@ -7,10 +7,9 @@
 
 /**
  * Single tier level within a category.
+ * Note: tier names removed from official Jumper system.
  */
 export interface TierLevel {
-  /** Tier display name (e.g., "Grand Degen") */
-  name: string;
   /** Minimum threshold to qualify for this tier */
   threshold: number;
   /** Fixed XP awarded for reaching this tier */

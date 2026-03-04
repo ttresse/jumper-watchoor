@@ -11,8 +11,6 @@ import type { CategoryId } from './tiers-types';
  * Information about the next tier a user can achieve.
  */
 export interface NextTierInfo {
-  /** Name of the next tier (e.g., "Grand Degen") */
-  tierName: string;
   /** Distance to reach next tier (e.g., 500 for "$500 to go") */
   distance: number;
   /** Unit of measurement (e.g., "USD", "transactions") */
@@ -48,7 +46,6 @@ export function getNextTierInfo(
   }
 
   return {
-    tierName: nextTier.name,
     distance: nextTier.threshold - currentValue,
     unit: config.unit,
   };

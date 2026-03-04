@@ -8,8 +8,6 @@ export interface CategoryPoints {
   categoryId: CategoryId;
   /** XP earned this month for this category */
   xp: number;
-  /** Tier name achieved (null if below minimum tier) */
-  tierName: string | null;
 }
 
 /**

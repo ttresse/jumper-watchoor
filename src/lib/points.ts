@@ -30,11 +30,10 @@ export function findQualifyingTier(
 export function calculateTierXP(
   value: number,
   tiers: TierLevel[]
-): { xp: number; tierName: string | null } {
+): { xp: number } {
   const tier = findQualifyingTier(value, tiers);
   return {
     xp: tier?.xp ?? 0,
-    tierName: tier?.name ?? null,
   };
 }
 
@@ -47,7 +46,7 @@ function calculateCategoryXP(
 ): CategoryPoints {
   const config = getCategoryConfig(categoryId);
   if (!config) {
-    return { categoryId, xp: 0, tierName: null };
+    return { categoryId, xp: 0 };
   }
 
   // Get the metric value based on category
@@ -72,7 +71,6 @@ function calculateCategoryXP(
   return {
     categoryId,
     xp: result.xp,
-    tierName: result.tierName,
   };
 }
 
