@@ -110,6 +110,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 4. Dashboard & Visualization | 2/2 | Complete | 2026-03-04 |
 | 5. Value-Add Features | 0/2 | Not started | - |
 | 6. Lazy Loading API | 3/3 | Complete | 2026-03-04 |
+| 7. Deployment (GitHub + Vercel) | 0/1 | In progress | - |
 
 ### Phase 6: Lazy Loading API
 **Goal:** Optimize data fetching with initial 4-month load, background prefetch, on-demand navigation, and immutable past months
@@ -128,14 +129,18 @@ Plans:
 - [x] 06-02-PLAN.md — Per-month React Query hooks and prefetch manager
 - [x] 06-03-PLAN.md — Dashboard integration with partial data display
 
-### Phase 7: déploiement de l'application sur github puis vercel (ne pas leaker de secrets sur le repo qui sera publique + ne pas envoyer mes configurations claude code / .next / .planning sur github
-
-**Goal:** [To be planned]
+### Phase 7: Deployment (GitHub + Vercel)
+**Goal:** Deploy app to public GitHub repo and Vercel with automatic deployments, ensuring no sensitive files leaked
 **Depends on:** Phase 6
-**Plans:** 0 plans
+**Requirements:** (deployment phase - no functional requirements)
+**Success Criteria** (what must be TRUE):
+  1. App is accessible at *.vercel.app URL
+  2. No .claude/ or .planning/ visible in GitHub repo
+  3. Pushing to main auto-deploys to Vercel
+**Plans:** 1 plan
 
 Plans:
-- [ ] TBD (run /gsd:plan-phase 7 to break down)
+- [ ] 07-01-PLAN.md — Update .gitignore, push to GitHub, connect Vercel
 
 ---
 *Roadmap created: 2026-02-26*
@@ -144,4 +149,5 @@ Plans:
 *Phase 2 Replanned: 2026-03-04*
 *Phase 3 Planned: 2026-03-04*
 *Phase 4 Planned: 2026-03-04*
+*Phase 7 Planned: 2026-03-04*
 *Coverage: 23/23 v1 requirements mapped (WALLET-03 deferred to v1.1)*
