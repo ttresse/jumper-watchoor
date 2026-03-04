@@ -128,6 +128,15 @@ Plans:
 - [x] 06-02-PLAN.md — Per-month React Query hooks and prefetch manager
 - [x] 06-03-PLAN.md — Dashboard integration with partial data display
 
+### Phase 7: déploiement de l'application sur github puis vercel (ne pas leaker de secrets sur le repo qui sera publique + ne pas envoyer mes configurations claude code / .next / .planning sur github
+
+**Goal:** [To be planned]
+**Depends on:** Phase 6
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd:plan-phase 7 to break down)
+
 ---
 *Roadmap created: 2026-02-26*
 *API Migration: 2026-03-04 (Covalent -> LiFi Analytics)*

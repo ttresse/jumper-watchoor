@@ -153,6 +153,7 @@ None yet.
 ### Roadmap Evolution
 
 - Phase 6 added: Lazy loading API - fetch current month only, prefetch 3 previous months, load on navigation, disable refresh for past months
+- Phase 7 added: déploiement de l'application sur github puis vercel (ne pas leaker de secrets sur le repo qui sera publique + ne pas envoyer mes configurations claude code / .next / .planning sur github
 
 ### Blockers/Concerns
 
