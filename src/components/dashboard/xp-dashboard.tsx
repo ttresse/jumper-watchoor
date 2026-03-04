@@ -71,6 +71,9 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
   const canGoPrev = monthIndex > 0;
   const canGoNext = monthIndex < 11;
 
+  // Past months are frozen (data cannot change) - only current month (index 11) is actionable
+  const isCurrentMonth = monthIndex === 11;
+
   // Compute volume and next tier info for each category
   const categoryData = useMemo(() => {
     if (!currentMonth || !currentMonthAggregate) return null;
@@ -160,8 +163,12 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
       {/* Total XP hero section */}
       <XPTotal totalXP={currentMonth.totalXP} />
 
-      {/* Category rows in fixed order */}
-      <div className="border border-border rounded-lg px-4">
+      {/* Category rows in fixed order - past months have muted styling */}
+      <div
+        className={`border border-border rounded-lg px-4 ${
+          !isCurrentMonth ? 'opacity-60' : ''
+        }`}
+      >
         {categoryData.map((data) =>
           data ? (
             <CategoryRow
@@ -170,6 +177,7 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
               volume={data.volume}
               volumeUnit={data.volumeUnit ?? undefined}
               nextTierInfo={data.nextTierInfo}
+              isCurrentMonth={isCurrentMonth}
             />
           ) : null
         )}

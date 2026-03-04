@@ -18,6 +18,8 @@ interface CategoryRowProps {
   volumeUnit?: string;
   /** Next tier info for progress display */
   nextTierInfo: NextTierInfo | null;
+  /** Whether this is the current month (default true for backwards compatibility) */
+  isCurrentMonth?: boolean;
 }
 
 /**
@@ -30,6 +32,7 @@ export function CategoryRow({
   volume,
   volumeUnit,
   nextTierInfo,
+  isCurrentMonth = true,
 }: CategoryRowProps) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-border last:border-b-0 gap-1 sm:gap-4">
@@ -52,8 +55,8 @@ export function CategoryRow({
           </span>
         )}
 
-        {/* Next tier distance */}
-        {nextTierInfo && (
+        {/* Next tier distance - only shown for current month (past months are frozen) */}
+        {isCurrentMonth && nextTierInfo && (
           <span className="text-xs">
             {nextTierInfo.distance.toLocaleString()} {nextTierInfo.unit} to next
             tier
