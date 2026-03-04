@@ -31,11 +31,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. App fetches all LiFi transactions via Analytics API with visible progress counter
   3. Pagination handled correctly for wallets with many transactions
   4. Transaction data includes chainIds, USD values, and status for downstream processing
-**Plans**: 2 plans
+**Plans**: 3 plans (gap closure mode)
 
 Plans:
 - [ ] 01-01-PLAN.md — Core data layer (LiFi types, adapter, store)
 - [ ] 01-02-PLAN.md — Hook and UI integration
+- [ ] 01-03-PLAN.md — Cleanup deprecated Covalent code
 
 ### Phase 2: Transaction Classification
 **Goal**: Users can see their LiFi transactions classified as bridges or swaps with monthly aggregation
@@ -107,7 +108,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Data Layer | 0/2 | Planned | - |
+| 1. Foundation & Data Layer | 0/3 | Gap Closure | - |
 | 2. Transaction Classification | 0/2 | Needs Replan | - |
 | 3. Points Calculation Engine | 0/2 | Not started | - |
 | 4. Dashboard & Visualization | 0/2 | Not started | - |
