@@ -35,7 +35,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md — Core data layer (LiFi types, adapter, store)
-- [ ] 01-02-PLAN.md — Hook and UI integration
+- [x] 01-02-PLAN.md — Hook and UI integration
 - [ ] 01-03-PLAN.md — Cleanup deprecated Covalent code
 
 ### Phase 2: Transaction Classification
@@ -108,7 +108,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Data Layer | 1/3 | In Progress | - |
+| 1. Foundation & Data Layer | 2/3 | In Progress | - |
 | 2. Transaction Classification | 0/2 | Needs Replan | - |
 | 3. Points Calculation Engine | 0/2 | Not started | - |
 | 4. Dashboard & Visualization | 0/2 | Not started | - |

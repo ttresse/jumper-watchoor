@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-26)
 ## Current Position
 
 Phase: 1 of 5 (Foundation & Data Layer)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: Executing
-Last activity: 2026-03-04 - Completed 01-01-PLAN.md (LiFi Data Layer Foundation)
+Last activity: 2026-03-04 - Completed 01-02-PLAN.md (Hook and UI Integration)
 
-Progress: [######░░░░░░░░░░░░░░] 33% (1/3 plans complete)
+Progress: [#############░░░░░░░] 67% (2/3 plans complete)
 
 ## API Migration Notice (2026-03-04)
 
@@ -46,6 +46,7 @@ Progress: [######░░░░░░░░░░░░░░] 33% (1/3 plans comp
 - Trend: Clean execution, LiFi API migration started
 
 | Phase 01-foundation-data-layer P01 | 2 min | 3 tasks | 3 files |
+| Phase 01-foundation-data-layer P02 | 3 min | 3 tasks | 4 files |
 
 *Updated after each plan completion*
 
@@ -74,6 +75,9 @@ Recent decisions affecting current work:
 - [02-02]: Fill all 12 months including empty ones for consistent UI rendering
 - [02-02]: Count source chain only for uniqueChains (per CONTEXT.md)
 - [Phase 01-01]: Added deprecated stubs for old useScanWallet hook compatibility until Plan 02 replaces it
+- [Phase 01-02]: Used useQuery (not useInfiniteQuery) per RESEARCH.md - fetch all before display
+- [Phase 01-02]: Removed all auto-scan triggers per user decision - explicit Scan button only
+- [Phase 01-02]: Progress shows transaction count not chain count
 
 ### Pending Todos
 
@@ -86,8 +90,8 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 01-01-PLAN.md
-Resume file: .planning/phases/01-foundation-data-layer/01-02-PLAN.md
+Stopped at: Completed 01-02-PLAN.md
+Resume file: .planning/phases/01-foundation-data-layer/01-03-PLAN.md
 
 ---
-*Next: Execute 01-02-PLAN.md (Hook and UI Integration)*
+*Next: Execute 01-03-PLAN.md (Cleanup deprecated Covalent code)*

@@ -1,150 +1,115 @@
 ---
 phase: 01-foundation-data-layer
 plan: 02
-subsystem: api
-tags: [covalent, goldrush, zustand, react-query, rate-limiting]
+subsystem: ui
+tags: [react-query, zustand, react, hooks]
 
 # Dependency graph
 requires:
   - phase: 01-01
-    provides: Core types, chains config, throttle wrapper, QueryClient
+    provides: LiFi adapter (fetchAllTransfers), scan store, LiFi types
 provides:
-  - Covalent adapter with rate-limited transaction fetching
-  - Zustand store for scan state persistence
-  - useScanWallet hook with parallel chain queries
-affects: [01-03, 01-04]
+  - useLiFiTransfers React hook for data fetching
+  - WalletInput with explicit Scan button
+  - ScanProgress with transaction count display
+  - Main page with all state handling
+affects: [01-03, phase-02]
 
 # Tech tracking
 tech-stack:
   added: []
-  patterns: [async-iterator-pagination, zustand-persist-partialize, useQueries-combine]
+  patterns:
+    - React Query useQuery with internal cursor pagination
+    - AbortController for cancellable fetch operations
+    - Zustand store integration for progress tracking
 
 key-files:
   created:
-    - src/adapters/covalent.adapter.ts
-    - src/stores/scan.store.ts
-    - src/hooks/useScanWallet.ts
-    - .env.local.example
+    - src/hooks/useLiFiTransfers.ts
   modified:
-    - .gitignore
+    - src/components/wallet-input.tsx
+    - src/components/scan-progress.tsx
+    - src/app/page.tsx
 
 key-decisions:
-  - "Used GoldRushClient (not CovalentClient) as SDK export name changed"
-  - "Filter transactions by LIFI_DIAMOND to_address for swap/bridge detection"
-  - "Zustand partialize to only persist lastWallet, keep session state ephemeral"
+  - "Used useQuery (not useInfiniteQuery) per RESEARCH.md - fetch all before display"
+  - "Removed all auto-scan triggers per user decision - explicit Scan button only"
+  - "Progress shows transaction count not chain count"
 
 patterns-established:
-  - "Covalent pagination: async iterator yields pages with items array"
-  - "Zustand persist with custom storage and partialize for selective persistence"
-  - "useQueries combine for progressive loading with aggregated results"
+  - "Hook returns transfers only after complete load (not streaming)"
+  - "Cancel discards all accumulated data per CONTEXT.md"
+  - "Error state in place of results area with Retry button"
 
-requirements-completed: [SCAN-01, SCAN-02, SCAN-03]
+requirements-completed: [WALLET-01, WALLET-02]
 
 # Metrics
-duration: 4min
-completed: 2026-03-03
+duration: 3min
+completed: 2026-03-04
 ---
 
-# Phase 01 Plan 02: Data Fetching Layer Summary
+# Phase 01 Plan 02: Hook and UI Integration Summary
 
-**Covalent GoldRush adapter with 4 RPS throttling, Zustand scan state with localStorage persistence, and useScanWallet hook orchestrating parallel chain queries with progressive results**
+**useLiFiTransfers hook with React Query, explicit Scan button UX, and transaction-count progress display**
 
 ## Performance
 
-- **Duration:** 4 min
-- **Started:** 2026-03-03T13:10:18Z
-- **Completed:** 2026-03-03T13:14:40Z
+- **Duration:** 3 min
+- **Started:** 2026-03-04T12:01:05Z
+- **Completed:** 2026-03-04T12:04:00Z
 - **Tasks:** 3
-- **Files modified:** 4 created, 1 modified
+- **Files modified:** 4
 
 ## Accomplishments
-
-- Built Covalent adapter using GoldRush SDK with automatic pagination handling
-- Rate-limited API calls to 4 RPS using p-throttle wrapper from Plan 01
-- Filters transactions by LiFi Diamond contract address
-- Created Zustand store persisting lastWallet to localStorage for return visits
-- Implemented useScanWallet hook firing 35 chain queries in parallel
-- Progressive results via TanStack Query combine option
+- Created useLiFiTransfers hook with React Query, AbortController cancellation, and store integration
+- Updated WalletInput with explicit Scan button (no auto-trigger on 42 chars or paste)
+- Updated ScanProgress to show "Loading... N transactions found" instead of chain progress bar
+- Updated main page to handle loading, error, empty, and success states
 
 ## Task Commits
 
 Each task was committed atomically:
 
-1. **Task 1: Create Covalent adapter with rate-limited transaction fetching** - `a394593` (feat)
-2. **Task 2: Create Zustand store for scan state management** - `40e5d24` (feat)
-3. **Task 3: Create useScanWallet hook with parallel queries** - `f9324d9` (feat)
+1. **Task 1: Create useLiFiTransfers hook** - `91c065d` (feat)
+2. **Task 2: Update UI components for transaction-based flow** - `9f2a06a` (feat)
+3. **Task 3: Update main page to use new hook and handle states** - `6dd9a42` (feat)
+
+**Plan metadata:** `36ffac4` (docs: complete plan)
 
 ## Files Created/Modified
-
-- `src/adapters/covalent.adapter.ts` - GoldRush client with throttled fetchChainTransactions
-- `src/stores/scan.store.ts` - Zustand store with lastWallet persistence
-- `src/hooks/useScanWallet.ts` - Parallel query hook with cancel/retry
-- `.env.local.example` - Covalent API key template
-- `.gitignore` - Updated to allow .env*.example files
+- `src/hooks/useLiFiTransfers.ts` - React hook for fetching LiFi transfers with pagination and cancellation
+- `src/components/wallet-input.tsx` - Updated with explicit Scan button, removed auto-scan triggers
+- `src/components/scan-progress.tsx` - Changed from chain count to transaction count display
+- `src/app/page.tsx` - Uses new hook, handles all states per CONTEXT.md
 
 ## Decisions Made
-
-- **GoldRushClient vs CovalentClient:** SDK v3 exports GoldRushClient, not CovalentClient as plan specified - updated import
-- **noLogs: true for performance:** Skip log events in API calls since we only need basic transaction data
-- **transactions in return type:** Added transactions array to hook return for direct access without going through store
+- Used useQuery with internal pagination loop (not useInfiniteQuery) per RESEARCH.md anti-patterns
+- Removed Enter key handler per prior user decision (scan requires explicit button click only)
+- Transfers returned only after complete load (stored in Zustand until query succeeds)
+- Error displayed in results area with Retry button per CONTEXT.md
 
 ## Deviations from Plan
 
-### Auto-fixed Issues
-
-**1. [Rule 1 - Bug] Fixed SDK export name**
-- **Found during:** Task 1 (Covalent adapter creation)
-- **Issue:** Plan specified CovalentClient but SDK v3 exports GoldRushClient
-- **Fix:** Changed import from CovalentClient to GoldRushClient
-- **Files modified:** src/adapters/covalent.adapter.ts
-- **Verification:** TypeScript check passes
-- **Committed in:** a394593 (Task 1 commit)
-
-**2. [Rule 1 - Bug] Fixed async iterator handling**
-- **Found during:** Task 1 (Covalent adapter creation)
-- **Issue:** Plan treated getAllTransactionsForAddress as returning individual transactions, but it returns pages
-- **Fix:** Updated to iterate over pages and process items array within each page
-- **Files modified:** src/adapters/covalent.adapter.ts
-- **Verification:** TypeScript check passes, build succeeds
-- **Committed in:** a394593 (Task 1 commit)
-
-**3. [Rule 3 - Blocking] Updated .gitignore for .env.example**
-- **Found during:** Task 1 (Creating .env.local.example)
-- **Issue:** .gitignore had `.env*` which excluded .env.local.example
-- **Fix:** Added `!.env*.example` to allow example files
-- **Files modified:** .gitignore
-- **Verification:** git status shows .env.local.example as untracked
-- **Committed in:** a394593 (Task 1 commit)
-
----
-
-**Total deviations:** 3 auto-fixed (2 bugs, 1 blocking)
-**Impact on plan:** All auto-fixes necessary for correctness. SDK API differences required adaptation but no scope creep.
+None - plan executed exactly as written.
 
 ## Issues Encountered
-
-None - after fixing SDK API differences, all tasks completed successfully.
+None - build passes, TypeScript compiles successfully.
 
 ## User Setup Required
-
-**External services require manual configuration.** The Covalent API key needs to be set:
-
-1. Get API key from https://www.covalenthq.com/platform/
-2. Copy `.env.local.example` to `.env.local`
-3. Replace `your_covalent_api_key_here` with your actual API key
+None - no external service configuration required.
 
 ## Next Phase Readiness
-
-- Data fetching layer complete: adapter, store, hook all operational
-- Plan 03 can build the wallet input UI with validation
-- Plan 04 can build the scanning progress display
-- Covalent API key required before runtime testing
-
----
-*Phase: 01-foundation-data-layer*
-*Completed: 2026-03-03*
+- Hook and UI integration complete
+- Ready for 01-03 (remaining UI polish or verification)
+- LiFi data fetching end-to-end flow functional
 
 ## Self-Check: PASSED
 
-- All created files exist
-- All commits verified: a394593, 40e5d24, f9324d9
+- [x] src/hooks/useLiFiTransfers.ts exists
+- [x] Commit 91c065d found
+- [x] Commit 9f2a06a found
+- [x] Commit 6dd9a42 found
+
+---
+*Phase: 01-foundation-data-layer*
+*Completed: 2026-03-04*
