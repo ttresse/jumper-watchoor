@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-26)
 ## Current Position
 
 Phase: 6 of 6 (Lazy Loading API)
-Plan: 1 of 3 in current phase - COMPLETE
-Status: Phase 6 plan 01 complete, continuing to plan 02
-Last activity: 2026-03-04 - Completed 06-01-PLAN.md (month utility infrastructure)
+Plan: 2 of 3 in current phase - COMPLETE
+Status: Phase 6 plan 02 complete, continuing to plan 03
+Last activity: 2026-03-04 - Completed 06-02-PLAN.md (React Query hooks)
 
-Progress: [######______________] 33% (1/3 plans complete)
+Progress: [############________] 67% (2/3 plans complete)
 
 ## API Migration Notice (2026-03-04)
 
@@ -57,6 +57,7 @@ Progress: [######______________] 33% (1/3 plans complete)
 | Phase 04 P01 | 1.9 | 3 tasks | 4 files |
 | Phase 04 P02 | 3 | 3 tasks | 6 files |
 | Phase 06 P01 | 2 | 3 tasks | 3 files |
+| Phase 06 P02 | 3 | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -132,6 +133,12 @@ Recent decisions affecting current work:
 - [Phase 06-01]: Timestamps in seconds (not milliseconds) for LiFi API compatibility
 - [Phase 06-01]: Month keys use YYYY-MM format for consistency
 - [Phase 06-01]: getAllAvailableMonthKeys starts from Jan 2022 (LiFi launch)
+- [Phase 06-02]: Past months use staleTime: Infinity (immutable per CONTEXT.md)
+- [Phase 06-02]: Current month uses 5 minute staleTime
+- [Phase 06-02]: Prefetch batches of 3 months in parallel after initial 4 complete
+- [Phase 06-02]: prioritizeMonth uses ensureQueryData for immediate user navigation
+- [Phase 06-02]: Background prefetch continues even when priority request made
+- [Phase 06-02]: useClassifiedTransactions marked @deprecated - useMonthClassification is new pattern
 
 ### Pending Todos
 
@@ -163,9 +170,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 06-01-PLAN.md (month utility infrastructure)
-Resume file: N/A - continuing to Plan 02
+Stopped at: Completed 06-02-PLAN.md (React Query hooks)
+Resume file: N/A - continuing to Plan 03
 
 ---
-*Phase 06 in progress. Month utility infrastructure complete.*
-*Next: 06-02-PLAN.md (React Query hooks for lazy loading)*
+*Phase 06 in progress. React Query hooks complete.*
+*Next: 06-03-PLAN.md (UI integration and final wiring)*
