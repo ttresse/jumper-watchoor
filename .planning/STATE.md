@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Show users exactly how many Jumper points they have and what actions will earn them more.
-**Current focus:** Phase 1 - Foundation & Data Layer (API Migration)
+**Current focus:** Phase 2 - Transaction Classification (Complete)
 
 ## Current Position
 
-Phase: 1 of 5 (Foundation & Data Layer) - COMPLETE
-Plan: 3 of 3 in current phase
+Phase: 2 of 5 (Transaction Classification)
+Plan: 1 of 1 in current phase - COMPLETE
 Status: Phase Complete
-Last activity: 2026-03-04 - Completed 01-03-PLAN.md (Cleanup deprecated Covalent code)
+Last activity: 2026-03-04 - Completed 02-01-PLAN.md (Classification types and functions)
 
-Progress: [####################] 100% (3/3 plans complete)
+Progress: [####################] 100% (1/1 plans complete)
 
 ## API Migration Notice (2026-03-04)
 
@@ -30,26 +30,27 @@ Progress: [####################] 100% (3/3 plans complete)
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 5.2 min
-- Total execution time: 31 min
+- Total plans completed: 7
+- Average duration: 4.7 min
+- Total execution time: 33.2 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation-data-layer | 4 | 26 min | 6.5 min |
-| 02-transaction-classification | 2 | 5 min | 2.5 min |
+| 01-foundation-data-layer | 3 | 9 min | 3.0 min |
+| 02-transaction-classification | 1 | 2.2 min | 2.2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-03 (2 min), 01-04 (15 min), 02-01 (2 min), 02-02 (3 min), 01-01 (2 min)
-- Trend: Clean execution, LiFi API migration started
+- Last 5 plans: 01-01 (2 min), 01-02 (3 min), 01-03 (4 min), 02-01 (2.2 min)
+- Trend: Clean execution, Phase 02 complete
 
 | Phase 01-foundation-data-layer P01 | 2 min | 3 tasks | 3 files |
 | Phase 01-foundation-data-layer P02 | 3 min | 3 tasks | 4 files |
 | Phase 01-foundation-data-layer P03 | 4 min | 3 tasks | 15 files |
 
 *Updated after each plan completion*
+| Phase 02 P01 | 2.2 | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,9 @@ Recent decisions affecting current work:
 - [Phase 01-02]: Progress shows transaction count not chain count
 - [Phase 01-03]: Deleted all orphaned files that depended on removed Covalent code
 - [Phase 01-03]: Removed types.ts entirely as all types were Covalent-specific
+- [Phase 02-01]: Use UTC dates for month formatting (getUTCFullYear/getUTCMonth)
+- [Phase 02-01]: Track source chain only for uniqueChains (per CONTEXT.md)
+- [Phase 02-01]: Return null from useClassifiedTransactions until isComplete (no partial classification)
 
 ### Pending Todos
 
@@ -93,9 +97,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 01-03-PLAN.md (Phase 01 complete)
-Resume file: N/A - Ready for Phase 02
+Stopped at: Completed 02-01-PLAN.md (Classification types and functions)
+Resume file: N/A - Ready for Phase 03
 
 ---
-*Phase 01 (Foundation & Data Layer) complete. LiFi API integration finished, all Covalent code removed.*
-*Next: Plan Phase 02 (Transaction Classification using LiFi data)*
+*Phase 02 (Transaction Classification) complete. Classification types, pure functions, and React hook implemented.*
+*Next: Plan Phase 03 (XP Calculation using classified data)*
