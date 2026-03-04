@@ -1,129 +1,129 @@
 ---
 phase: 02-transaction-classification
-verified: 2026-03-04T10:15:00Z
-status: passed
-score: 10/10 must-haves verified
+verified: 2026-03-04T14:30:00Z
+status: gaps_found
+score: 3/4 must-haves verified
+gaps:
+  - truth: "Users can see their LiFi transactions classified as bridges or swaps with monthly aggregation"
+    status: failed
+    reason: "Classification logic exists and is correct, but hook is not integrated into UI - users cannot actually see classified data"
+    artifacts:
+      - path: "src/hooks/useClassifiedTransactions.ts"
+        issue: "Exists and correct but not imported/used in any component"
+      - path: "src/app/page.tsx"
+        issue: "Uses useLiFiTransfers directly instead of useClassifiedTransactions"
+    missing:
+      - "Import useClassifiedTransactions in page.tsx instead of useLiFiTransfers"
+      - "Display classified data (bridge count, swap count, monthly breakdown)"
+      - "Component to render ClassifiedData.monthsArray"
+human_verification:
+  - test: "Verify bridge vs swap classification accuracy"
+    expected: "Transactions with different sending/receiving chainIds are bridges, same chainIds are swaps"
+    why_human: "Need to manually inspect sample transactions to verify chainId comparison logic produces correct labels"
+  - test: "Verify monthly aggregation correctness"
+    expected: "Transactions grouped correctly by YYYY-MM format, all 12 months shown including empty ones"
+    why_human: "Need to visually inspect UI to confirm monthly breakdown displays correctly"
 ---
 
-# Phase 02: Transaction Classification Verification Report
+# Phase 2: Transaction Classification Verification Report
 
 **Phase Goal:** Users can see their LiFi transactions classified as bridges or swaps with monthly aggregation
-**Verified:** 2026-03-04T10:15:00Z
-**Status:** passed
-**Re-verification:** No — initial verification
+**Verified:** 2026-03-04T14:30:00Z
+**Status:** gaps_found
+**Re-verification:** No - initial verification
 
 ## Goal Achievement
 
 ### Observable Truths
 
-| # | Truth | Status | Evidence |
-|---|-------|--------|----------|
-| 1 | Each transaction is correctly labeled as bridge (cross-chain) or swap (same-chain) | ✓ VERIFIED | classifyTransaction decodes LiFiTransferStarted events, compares destinationChainId to sourceChainId (line 69 transaction.classifier.ts) |
-| 2 | Failed/reverted transactions are excluded from counts | ✓ VERIFIED | classifyAllTransactions filters !tx.successful (line 130), monthly aggregates count only tx.successful (line 99 aggregation.ts) |
-| 3 | Transactions are grouped by month (YYYY-MM format) | ✓ VERIFIED | formatUTCMonth returns YYYY-MM using UTC dates (line 36-39 aggregation.ts), groupByMonth creates monthly aggregates (line 73-112) |
-| 4 | Unique chains used per month are tracked | ✓ VERIFIED | MonthlyAggregate.uniqueChains Set<number> tracks source chainIds (line 25 aggregation.ts), aggregate.uniqueChains.add(tx.chainId) at line 108 |
-| 5 | Each LiFi transaction is classified as bridge or swap | ✓ VERIFIED | classifyTransaction returns type: 'bridge' or 'swap' based on event decoding (lines 32-111 transaction.classifier.ts) |
-| 6 | Bridge detection uses destination chain ID from event logs | ✓ VERIFIED | Decodes LiFiTransferStarted event, extracts args.bridgeData.destinationChainId (line 58), compares to sourceChainId (line 69) |
-| 7 | Missing destination chain ID defaults to swap (conservative) | ✓ VERIFIED | If no LiFi events decoded, returns type: 'swap' (lines 97-110 transaction.classifier.ts) |
-| 8 | Monthly aggregates include bridge count, swap count, and unique chains | ✓ VERIFIED | MonthlyAggregate interface has bridgeCount, swapCount, uniqueChains fields (lines 20-25 aggregation.ts), populated in groupByMonth |
-| 9 | Current month is marked as partial/in-progress | ✓ VERIFIED | isPartial set to true when month === currentMonth (line 86, 135 aggregation.ts) |
-| 10 | All months in 12-month window shown, including zero-activity months | ✓ VERIFIED | fillEmptyMonths generates all 12 months via generateLast12Months (line 126), creates empty aggregates for missing months (lines 140-148) |
+| #   | Truth   | Status     | Evidence       |
+| --- | ------- | ---------- | -------------- |
+| 1   | Each transaction is labeled as bridge (different chainIds) or swap (same chainId) | ✓ VERIFIED | `classifyTransfer` function in classification.ts compares `transfer.sending.chainId !== transfer.receiving.chainId` (line 23-24) |
+| 2   | Transactions are grouped by month (YYYY-MM format) | ✓ VERIFIED | `getMonthKey` function uses UTC dates with `getUTCFullYear()` and `getUTCMonth()` (line 36-37), `aggregateByMonth` groups by month (line 76) |
+| 3   | Unique chains per month are tracked using sending.chainId | ✓ VERIFIED | `aggregateByMonth` adds `transfer.sending.chainId` to `Set<number>` (line 89), comment explicitly states "source only per CONTEXT.md" |
+| 4   | All 12 months are shown including months with zero activity | ✓ VERIFIED | `fillMonthRange` generates 12 months via loop `for (let i = 11; i >= 0; i--)` (line 122), creates empty months for missing data (line 133) |
+| 5   | Users can **see** their classified transactions | ✗ FAILED | Hook exists but not used in UI - page.tsx uses useLiFiTransfers directly (line 6), no component displays ClassifiedData |
 
-**Score:** 10/10 truths verified
+**Score:** 3/4 truths verified (classification logic correct, UI integration missing)
 
 ### Required Artifacts
 
-| Artifact | Expected | Status | Details |
-|----------|----------|--------|---------|
-| `src/lib/lifi-abi.ts` | LiFi event ABI definitions | ✓ VERIFIED | 66 lines, exports LIFI_EVENTS_ABI with LiFiTransferStarted, LiFiTransferCompleted, LiFiGenericSwapCompleted (min 30 lines: PASS) |
-| `src/lib/types.ts` | Extended transaction types with logs and classification | ✓ VERIFIED | Contains LogEvent, ChainTransactionWithLogs, ClassifiedTransaction, ClassificationResult types (lines 80-138) |
-| `src/classifiers/transaction.classifier.ts` | Transaction classification logic | ✓ VERIFIED | 144 lines, exports classifyTransaction and classifyAllTransactions (min 50 lines: PASS) |
-| `src/lib/aggregation.ts` | Monthly aggregation functions | ✓ VERIFIED | 150 lines, exports groupByMonth, fillEmptyMonths, generateLast12Months, formatUTCMonth, MonthlyAggregate type (min 60 lines: PASS) |
-| `src/adapters/covalent.adapter.ts` | Updated adapter fetching logs | ✓ VERIFIED | Contains noLogs: false at line 31, returns ChainTransactionWithLogs with successful field and logEvents array |
-| `src/hooks/useClassifiedTransactions.ts` | React hook for classified and aggregated data | ✓ VERIFIED | 118 lines, exports useClassifiedTransactions and ClassificationState interface (min 40 lines: PASS) |
+| Artifact | Expected    | Status | Details |
+| -------- | ----------- | ------ | ------- |
+| `src/lib/classification-types.ts` | TransactionType, MonthlyAggregate, ClassifiedData types | ✓ VERIFIED | Exports all 3 types (lines 12, 17, 33), substantive with 44 lines, type-checks with no errors |
+| `src/lib/classification.ts` | Pure classification and aggregation functions | ✓ VERIFIED | Exports classifyTransfer, getMonthKey, aggregateByMonth, fillMonthRange (lines 22, 34, 69, 112), substantive with 139 lines, correct UTC date handling, source chain tracking |
+| `src/hooks/useClassifiedTransactions.ts` | React hook deriving classified data from useLiFiTransfers | ⚠️ ORPHANED | Exists (83 lines), exports hook and result type, type-checks, BUT not imported/used in any component - no usage in src/app or src/components |
 
 ### Key Link Verification
 
-| From | To | Via | Status | Details |
-|------|-----|-----|--------|---------|
-| transaction.classifier.ts | lifi-abi.ts | LIFI_EVENTS_ABI import | ✓ WIRED | Import found at line 15, used in decodeEventLog at line 45 |
-| transaction.classifier.ts | viem | decodeEventLog | ✓ WIRED | Import at line 14, called at line 44 with LIFI_EVENTS_ABI |
-| useClassifiedTransactions.ts | transaction.classifier.ts | classifyAllTransactions import | ✓ WIRED | Import at line 14, called at line 70 when scan completes |
-| useClassifiedTransactions.ts | aggregation.ts | groupByMonth import | ✓ WIRED | Import at line 15, called at line 76 with classification.classified |
-| useClassifiedTransactions.ts | useScanWallet.ts | useScanWallet dependency | ✓ WIRED | Import at line 13, called at line 63, scanResult used throughout hook |
+| From | To  | Via | Status | Details |
+| ---- | --- | --- | ------ | ------- |
+| useClassifiedTransactions.ts | useLiFiTransfers.ts | imports useLiFiTransfers hook | ✓ WIRED | Import at line 11, called at line 46 with wallet parameter |
+| useClassifiedTransactions.ts | classification.ts | imports aggregateByMonth, fillMonthRange | ✓ WIRED | Import at line 12, aggregateByMonth called at line 53, fillMonthRange called at line 56 |
+| classification.ts | lifi-types.ts | uses LiFiTransfer type | ✓ WIRED | Import at line 10, type used in classifyTransfer (line 22) and aggregateByMonth (line 70) |
+| **UI component** | useClassifiedTransactions.ts | should import and use hook | ✗ NOT_WIRED | No component imports useClassifiedTransactions - page.tsx uses useLiFiTransfers directly instead |
 
 ### Requirements Coverage
 
 | Requirement | Source Plan | Description | Status | Evidence |
-|-------------|-------------|-------------|--------|----------|
-| CLASS-01 | 02-01-PLAN.md | App classifies transactions as bridge (cross-chain) or swap (same-chain) | ✓ SATISFIED | classifyTransaction function decodes LiFi events and determines type based on destinationChainId vs sourceChainId; LiFiTransferStarted with different chain = bridge, same chain or LiFiGenericSwapCompleted = swap |
-| CLASS-02 | 02-02-PLAN.md | App counts total LiFi transactions per month | ✓ SATISFIED | MonthlyAggregate tracks bridgeCount and swapCount per month; groupByMonth aggregates transactions by formatUTCMonth(timestamp) and increments counts for successful transactions |
-| CLASS-03 | 02-02-PLAN.md | App tracks unique chains used per month | ✓ SATISFIED | MonthlyAggregate.uniqueChains Set<number> tracks source chain IDs per month; aggregate.uniqueChains.add(tx.chainId) at line 108 aggregation.ts |
+| ----------- | ---------- | ----------- | ------ | -------- |
+| CLASS-01 | 02-01-PLAN.md | App classifies transactions as bridge (cross-chain) or swap (same-chain) | ✓ SATISFIED | classifyTransfer function implements chainId comparison (src/lib/classification.ts line 23-24) |
+| CLASS-02 | 02-01-PLAN.md | App counts total LiFi transactions per month | ✓ SATISFIED | aggregateByMonth tracks transactionCount per month (src/lib/classification.ts line 86) |
+| CLASS-03 | 02-01-PLAN.md | App tracks unique chains used per month | ✓ SATISFIED | aggregateByMonth adds sending.chainId to Set per month (src/lib/classification.ts line 89) |
 
-**Orphaned requirements:** None. All Phase 02 requirements (CLASS-01, CLASS-02, CLASS-03) claimed by plans and satisfied.
+**Traceability:** All 3 requirements from Phase 2 have implementation evidence. Requirements map correctly to REQUIREMENTS.md (lines 25-27).
 
 ### Anti-Patterns Found
 
 | File | Line | Pattern | Severity | Impact |
-|------|------|---------|----------|--------|
-| - | - | None found | - | - |
+| ---- | ---- | ------- | -------- | ------ |
+| useClassifiedTransactions.ts | 50 | `return null` | ℹ️ Info | Intentional - waits for isComplete, not a stub |
 
-**Anti-pattern scan results:**
-- No TODO/FIXME/PLACEHOLDER comments in phase files
-- No empty implementations (return null/{}/ [])
-- No console.log-only implementations
-- All functions have substantive logic
-- All artifacts properly wired and used
+**Anti-pattern summary:** No blocker or warning anti-patterns found. The `return null` is intentional (documented in comment: "Don't compute until fetch is complete").
 
 ### Human Verification Required
 
-No human verification needed. All observable truths can be verified programmatically through:
-- Type checking (TypeScript compilation passes)
-- Code inspection (classification logic visible in source)
-- Wiring verification (imports and usage confirmed)
+#### 1. Bridge vs Swap Classification Accuracy
 
-The classification logic is deterministic and testable:
-- Bridge detection: destinationChainId !== sourceChainId
-- Event decoding: viem's decodeEventLog with LIFI_EVENTS_ABI
-- Monthly grouping: formatUTCMonth(new Date(tx.timestamp))
-- Failed transaction filtering: !tx.successful check
+**Test:** Manually inspect 5-10 sample transactions from a real wallet scan
+**Expected:** Transactions with different sending/receiving chainIds labeled as "bridge", same chainIds labeled as "swap"
+**Why human:** Need to verify chainId comparison logic produces correct labels against real transaction data
 
-### Phase-Specific Verification
+#### 2. Monthly Aggregation Correctness
 
-**Success Criteria (from ROADMAP.md):**
+**Test:** After UI integration, scan a wallet with transactions across multiple months and verify the monthly breakdown
+**Expected:**
+- Transactions grouped correctly by YYYY-MM format
+- All 12 months shown (current month minus 11 previous months)
+- Empty months display with zero counts
+- Month keys use UTC dates consistently
 
-1. **Each transaction is correctly labeled as bridge (cross-chain) or swap (same-chain)**
-   - ✓ VERIFIED: classifyTransaction examines LiFiTransferStarted.destinationChainId and compares to source chain
-   - Bridge: destinationChainId !== sourceChainId (line 69)
-   - Swap: destinationChainId === sourceChainId OR LiFiGenericSwapCompleted OR no LiFi events (conservative default line 97)
+**Why human:** Need to visually inspect UI to confirm monthly breakdown displays correctly, especially edge cases like timezone boundaries and empty months
 
-2. **Failed/reverted transactions are excluded from counts**
-   - ✓ VERIFIED: classifyAllTransactions filters !tx.successful before classification (line 130)
-   - ✓ VERIFIED: Monthly aggregates only increment counts for tx.successful (line 99 aggregation.ts)
-   - Failed transactions never reach bridge/swap counts
+### Gaps Summary
 
-3. **Transactions are grouped by month (YYYY-MM format)**
-   - ✓ VERIFIED: formatUTCMonth generates YYYY-MM strings using UTC dates (lines 36-39)
-   - ✓ VERIFIED: groupByMonth uses formatUTCMonth(new Date(tx.timestamp)) as map key (line 80)
-   - ✓ VERIFIED: generateLast12Months creates array of 12 month strings (lines 49-61)
+Phase 2 successfully implements the classification and aggregation logic with correct types, pure functions, and a React hook. All four technical truths are verified:
 
-4. **Unique chains used per month are tracked**
-   - ✓ VERIFIED: MonthlyAggregate.uniqueChains is Set<number> of source chain IDs (line 25)
-   - ✓ VERIFIED: aggregate.uniqueChains.add(tx.chainId) for each transaction (line 108)
-   - Per CONTEXT.md: only source chain tracked, not destination (confirmed in code)
+1. ✓ Bridge/swap classification based on chainId comparison
+2. ✓ Monthly grouping in YYYY-MM UTC format
+3. ✓ Source chain tracking per month
+4. ✓ 12-month range including empty months
 
-**Build Verification:**
-- `npm run build` passes with no TypeScript errors
-- All imports resolve correctly
-- Next.js production build successful (1275.6ms compile time)
+**However, the phase goal "Users can see their classified transactions" is NOT achieved** because the hook is not integrated into the UI:
 
-**Commit Verification:**
-- Plan 02-01 commits: b756f2c, 1c99397, 3ccdc8d (all verified in git log)
-- Plan 02-02 commits: 9e7d52f, f3fb13a, d10ccdf (all verified in git log)
-- All commits atomic with clear descriptions
-- Commit messages follow convention: feat(XX-YY): description
+- `useClassifiedTransactions` exists but is **orphaned** - no component imports it
+- `page.tsx` uses `useLiFiTransfers` directly instead of `useClassifiedTransactions`
+- No component renders the classified data (bridge count, swap count, monthly breakdown)
+
+This is a **wiring gap**, not an implementation gap. The logic is correct and complete, but the final connection to the UI layer is missing. Phase 3 may integrate this hook when building XP calculations, but the current phase goal requires users to **see** the classified data, which is not currently possible.
+
+**Recommendation:** Add a simple component in page.tsx that uses useClassifiedTransactions and displays:
+- Total bridges vs swaps
+- Monthly breakdown (at minimum, a list of months with counts)
+
+This would close the gap and achieve the phase goal.
 
 ---
 
-_Verified: 2026-03-04T10:15:00Z_
+_Verified: 2026-03-04T14:30:00Z_
 _Verifier: Claude (gsd-verifier)_
