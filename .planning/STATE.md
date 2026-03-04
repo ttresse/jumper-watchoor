@@ -10,29 +10,29 @@ See: .planning/PROJECT.md (updated 2026-02-26)
 ## Current Position
 
 Phase: 2 of 5 (Transaction Classification)
-Plan: 1 of 2 in current phase
-Status: In Progress
-Last activity: 2026-03-04 - Completed 02-01-PLAN.md
+Plan: 2 of 2 in current phase (COMPLETE)
+Status: Phase Complete
+Last activity: 2026-03-04 - Completed 02-02-PLAN.md
 
-Progress: [████████░░] 25%
+Progress: [████████████░░░░░░░░] 30%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 5.6 min
-- Total execution time: 28 min
+- Total plans completed: 6
+- Average duration: 5.2 min
+- Total execution time: 31 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation-data-layer | 4 | 26 min | 6.5 min |
-| 02-transaction-classification | 1 | 2 min | 2 min |
+| 02-transaction-classification | 2 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (4 min), 01-03 (2 min), 01-04 (15 min), 02-01 (2 min)
-- Trend: Clean execution, classifier plan completed quickly
+- Last 5 plans: 01-03 (2 min), 01-04 (15 min), 02-01 (2 min), 02-02 (3 min)
+- Trend: Clean execution, Phase 02 complete
 
 *Updated after each plan completion*
 
@@ -57,6 +57,9 @@ Recent decisions affecting current work:
 - [01-04]: Progress counter resets on both new wallet scan and retry
 - [02-01]: Default to swap when no LiFi events found (conservative approach)
 - [02-01]: Use viem decodeEventLog with strict: false for resilient parsing
+- [02-02]: UTC dates for month formatting to avoid timezone inconsistencies
+- [02-02]: Fill all 12 months including empty ones for consistent UI rendering
+- [02-02]: Count source chain only for uniqueChains (per CONTEXT.md)
 
 ### Pending Todos
 
@@ -69,8 +72,8 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 02-01-PLAN.md (Transaction classifier)
+Stopped at: Completed 02-02-PLAN.md (Monthly aggregation) - Phase 02 Complete
 Resume file: None
 
 ---
-*Next: Execute 02-02-PLAN.md (Monthly aggregation)*
+*Next: Begin Phase 03 - XP Calculation*
