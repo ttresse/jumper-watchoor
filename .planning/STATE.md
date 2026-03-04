@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Show users exactly how many Jumper points they have and what actions will earn them more.
-**Current focus:** Phase 3 - Points Calculation Engine (In Progress)
+**Current focus:** Phase 3 - Points Calculation Engine (Complete)
 
 ## Current Position
 
-Phase: 3 of 5 (Points Calculation Engine)
-Plan: 1 of 2 in current phase - COMPLETE
-Status: In Progress
-Last activity: 2026-03-04 - Completed 03-01-PLAN.md (USD volume tracking and tier configuration)
+Phase: 3 of 5 (Points Calculation Engine) - COMPLETE
+Plan: 2 of 2 in current phase - COMPLETE
+Status: Ready for Phase 4
+Last activity: 2026-03-04 - Completed 03-02-PLAN.md (XP calculation functions and usePoints hook)
 
-Progress: [##########..........] 50% (1/2 plans complete)
+Progress: [####################] 100% (2/2 plans complete)
 
 ## API Migration Notice (2026-03-04)
 
@@ -30,9 +30,9 @@ Progress: [##########..........] 50% (1/2 plans complete)
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 4.4 min
-- Total execution time: 35.3 min
+- Total plans completed: 9
+- Average duration: 4.1 min
+- Total execution time: 37.1 min
 
 **By Phase:**
 
@@ -40,11 +40,11 @@ Progress: [##########..........] 50% (1/2 plans complete)
 |-------|-------|-------|----------|
 | 01-foundation-data-layer | 3 | 9 min | 3.0 min |
 | 02-transaction-classification | 1 | 2.2 min | 2.2 min |
-| 03-points-calculation-engine | 1 | 2.1 min | 2.1 min |
+| 03-points-calculation-engine | 2 | 3.9 min | 2.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (3 min), 01-03 (4 min), 02-01 (2.2 min), 03-01 (2.1 min)
-- Trend: Clean execution, Phase 03 in progress
+- Last 5 plans: 01-03 (4 min), 02-01 (2.2 min), 03-01 (2.1 min), 03-02 (1.8 min)
+- Trend: Clean execution, Phase 03 complete
 
 | Phase 01-foundation-data-layer P01 | 2 min | 3 tasks | 3 files |
 | Phase 01-foundation-data-layer P02 | 3 min | 3 tasks | 4 files |
@@ -53,6 +53,7 @@ Progress: [##########..........] 50% (1/2 plans complete)
 *Updated after each plan completion*
 | Phase 02 P01 | 2.2 | 3 tasks | 3 files |
 | Phase 03 P01 | 2.1 min | 3 tasks | 5 files |
+| Phase 03 P02 | 1.8 min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -92,6 +93,10 @@ Recent decisions affecting current work:
 - [Phase 03-01]: Tiers sorted descending by threshold for first-match-wins lookup
 - [Phase 03-01]: Placeholder tier values (real Jumper thresholds TBD)
 - [Phase 03-01]: Type assertion import for build-time JSON validation
+- [Phase 03-02]: USD values floored (Math.floor) before tier comparison
+- [Phase 03-02]: Tier lookup uses first-match-wins with descending threshold sort
+- [Phase 03-02]: usePoints derives from useClassifiedTransactions with useMemo
+- [Phase 03-02]: 0 XP returned explicitly when below minimum tier (not null)
 
 ### Pending Todos
 
@@ -110,9 +115,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 03-01-PLAN.md (USD volume tracking and tier configuration)
-Resume file: N/A - Ready for 03-02-PLAN.md
+Stopped at: Completed 03-02-PLAN.md (XP calculation functions and usePoints hook)
+Resume file: N/A - Ready for Phase 4
 
 ---
-*Phase 03 (Points Calculation Engine) in progress. Plan 01 complete: USD volume fields added to MonthlyAggregate, tier configuration JSON created.*
-*Next: Execute 03-02-PLAN.md (XP calculation functions and usePoints hook)*
+*Phase 03 (Points Calculation Engine) complete. XP calculation engine with 4-category tier matching and usePoints hook ready for Phase 4 dashboard.*
+*Next: Plan/Execute Phase 4 (Dashboard UI)*

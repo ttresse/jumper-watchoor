@@ -29,11 +29,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Points Calculation
 
-- [ ] **POINTS-01**: App calculates TRANSACTOOR XP based on transaction count tiers
-- [ ] **POINTS-02**: App calculates BRIDGOOR XP based on USD volume bridged
-- [ ] **POINTS-03**: App calculates SWAPOOR XP based on USD volume swapped
-- [ ] **POINTS-04**: App calculates CHAINOOR XP based on unique chains used
-- [ ] **POINTS-05**: Points are bucketed by month (YYYY-MM)
+- [x] **POINTS-01**: App calculates TRANSACTOOR XP based on transaction count tiers
+- [x] **POINTS-02**: App calculates BRIDGOOR XP based on USD volume bridged
+- [x] **POINTS-03**: App calculates SWAPOOR XP based on USD volume swapped
+- [x] **POINTS-04**: App calculates CHAINOOR XP based on unique chains used
+- [x] **POINTS-05**: Points are bucketed by month (YYYY-MM)
 - [x] **POINTS-06**: Tier rules are configurable (not hardcoded)
 
 ### Dashboard
@@ -103,11 +103,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CLASS-02 | Phase 2 | Complete |
 | CLASS-03 | Phase 2 | Complete |
 | CLASS-04 | Phase 3 | Complete |
-| POINTS-01 | Phase 3 | Pending |
-| POINTS-02 | Phase 3 | Pending |
-| POINTS-03 | Phase 3 | Pending |
-| POINTS-04 | Phase 3 | Pending |
-| POINTS-05 | Phase 3 | Pending |
+| POINTS-01 | Phase 3 | Complete |
+| POINTS-02 | Phase 3 | Complete |
+| POINTS-03 | Phase 3 | Complete |
+| POINTS-04 | Phase 3 | Complete |
+| POINTS-05 | Phase 3 | Complete |
 | POINTS-06 | Phase 3 | Complete |
 | DASH-01 | Phase 4 | Pending |
 | DASH-02 | Phase 4 | Pending |
