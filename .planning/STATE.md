@@ -85,6 +85,7 @@ Recent decisions affecting current work:
 - [Phase 02-01]: Use UTC dates for month formatting (getUTCFullYear/getUTCMonth)
 - [Phase 02-01]: Track source chain only for uniqueChains (per CONTEXT.md)
 - [Phase 02-01]: Return null from useClassifiedTransactions until isComplete (no partial classification)
+- [Quick-1]: Added fromTimestamp parameter filtering LiFi API requests to last 12 months (365 days)
 
 ### Pending Todos
 
@@ -97,9 +98,10 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 02-01-PLAN.md (Classification types and functions)
+Stopped at: Completed quick-1 (Add fromTimestamp parameter to LiFi API)
 Resume file: N/A - Ready for Phase 03
 
 ---
 *Phase 02 (Transaction Classification) complete. Classification types, pure functions, and React hook implemented.*
+*Quick task 1 complete: Added 12-month lookback window to LiFi API requests.*
 *Next: Plan Phase 03 (XP Calculation using classified data)*
