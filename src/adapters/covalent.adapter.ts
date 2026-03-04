@@ -1,7 +1,7 @@
 import { GoldRushClient, type ChainName } from "@covalenthq/client-sdk";
 import { throttle } from '@/lib/throttle';
 import { LIFI_DIAMOND } from '@/lib/chains';
-import type { ChainTransaction } from '@/lib/types';
+import type { ChainTransactionWithLogs } from '@/lib/types';
 
 // Client is lazily initialized to allow env var reading at runtime
 let client: GoldRushClient | null = null;
@@ -19,16 +19,16 @@ function getClient(): GoldRushClient {
 
 // Throttled fetch function - wraps the actual API call
 const throttledFetch = throttle(
-  async (wallet: string, chainName: string): Promise<ChainTransaction[]> => {
+  async (wallet: string, chainName: string): Promise<ChainTransactionWithLogs[]> => {
     const covalent = getClient();
-    const transactions: ChainTransaction[] = [];
+    const transactions: ChainTransactionWithLogs[] = [];
 
     // Use getAllTransactionsForAddress which returns an async iterator over pages
     // Each page is a GoldRushResponse containing items (transactions)
     for await (const response of covalent.TransactionService.getAllTransactionsForAddress(
       chainName as ChainName,
       wallet,
-      { noLogs: true } // Skip log events for performance
+      { noLogs: false } // Fetch log events for classification
     )) {
       // Check for error responses
       if (response.error) {
@@ -55,6 +55,12 @@ const throttledFetch = throttle(
             gasUsed: tx.gas_spent?.toString() ?? '0',
             toAddress: tx.to_address ?? '',
             fromAddress: tx.from_address ?? '',
+            successful: tx.successful ?? true,
+            logEvents: (tx.log_events ?? []).map(log => ({
+              raw_log_data: log.raw_log_data ?? '',
+              raw_log_topics: log.raw_log_topics ?? [],
+              sender_address: log.sender_address ?? '',
+            })),
           });
         }
       }
@@ -70,12 +76,12 @@ const throttledFetch = throttle(
  *
  * @param wallet - The wallet address to scan
  * @param chainName - Covalent chain name (e.g., 'eth-mainnet')
- * @returns Array of ChainTransaction objects
+ * @returns Array of ChainTransactionWithLogs objects (includes log events for classification)
  * @throws Error if API call fails (caller should handle)
  */
 export async function fetchChainTransactions(
   wallet: string,
   chainName: string
-): Promise<ChainTransaction[]> {
+): Promise<ChainTransactionWithLogs[]> {
   return throttledFetch(wallet, chainName);
 }

@@ -68,7 +68,7 @@ describe('Progressive Loading (SCAN-04)', () => {
 
   test('progressively updates completedChains as queries resolve', async () => {
     // Create delayed responses to simulate staggered completion
-    const resolvers: Array<(value: unknown) => void> = [];
+    const resolvers: Array<(value: ReturnType<typeof fetchChainTransactions> extends Promise<infer T> ? T : never) => void> = [];
 
     mockFetch.mockImplementation(() => {
       return new Promise((resolve) => {
@@ -88,7 +88,7 @@ describe('Progressive Loading (SCAN-04)', () => {
 
     // Resolve first chain
     await act(async () => {
-      resolvers[0]?.([{ hash: '0x123', timestamp: Date.now(), chainId: 1, chainName: 'eth-mainnet', value: '0', gasUsed: '0', toAddress: '', fromAddress: '' }]);
+      resolvers[0]?.([{ hash: '0x123', timestamp: Date.now(), chainId: 1, chainName: 'eth-mainnet', value: '0', gasUsed: '0', toAddress: '', fromAddress: '', successful: true, logEvents: [] }]);
     });
 
     await waitFor(() => {
@@ -121,7 +121,7 @@ describe('Progressive Loading (SCAN-04)', () => {
   });
 
   test('successfulChains updates as queries complete with transactions', async () => {
-    const resolvers: Array<(value: unknown) => void> = [];
+    const resolvers: Array<(value: ReturnType<typeof fetchChainTransactions> extends Promise<infer T> ? T : never) => void> = [];
 
     mockFetch.mockImplementation(() => {
       return new Promise((resolve) => {
@@ -140,8 +140,8 @@ describe('Progressive Loading (SCAN-04)', () => {
     // Resolve with transactions
     await act(async () => {
       resolvers[0]?.([
-        { hash: '0x123', timestamp: Date.now(), chainId: 1, chainName: 'eth-mainnet', value: '1000000000', gasUsed: '21000', toAddress: '0xabc', fromAddress: '0xdef' },
-        { hash: '0x456', timestamp: Date.now(), chainId: 1, chainName: 'eth-mainnet', value: '2000000000', gasUsed: '21000', toAddress: '0xabc', fromAddress: '0xdef' },
+        { hash: '0x123', timestamp: Date.now(), chainId: 1, chainName: 'eth-mainnet', value: '1000000000', gasUsed: '21000', toAddress: '0xabc', fromAddress: '0xdef', successful: true, logEvents: [] },
+        { hash: '0x456', timestamp: Date.now(), chainId: 1, chainName: 'eth-mainnet', value: '2000000000', gasUsed: '21000', toAddress: '0xabc', fromAddress: '0xdef', successful: true, logEvents: [] },
       ]);
     });
 
@@ -174,7 +174,7 @@ describe('Progressive Loading (SCAN-04)', () => {
   });
 
   test('progress counter shows correct format N/M', async () => {
-    const resolvers: Array<(value: unknown) => void> = [];
+    const resolvers: Array<(value: ReturnType<typeof fetchChainTransactions> extends Promise<infer T> ? T : never) => void> = [];
 
     mockFetch.mockImplementation(() => {
       return new Promise((resolve) => {
