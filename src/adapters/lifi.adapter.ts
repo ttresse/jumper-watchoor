@@ -12,6 +12,7 @@ import type {
   LiFiTransfer,
   LiFiTransfersResponse,
 } from '@/lib/lifi-types';
+import { getMonthBoundaries } from '@/lib/month-utils';
 
 const API_BASE = 'https://li.quest/v2/analytics/transfers';
 
@@ -111,6 +112,81 @@ export async function fetchAllTransfers(
 
     // Report progress after each page
     onProgress?.(transfers.length);
+  } while (cursor);
+
+  return transfers;
+}
+
+/**
+ * Build the URL for month-specific transfers endpoint.
+ *
+ * @param wallet - Wallet address to query
+ * @param monthKey - Month in YYYY-MM format
+ * @param cursor - Pagination cursor (optional)
+ * @returns Fully constructed URL string
+ */
+function buildMonthTransfersUrl(
+  wallet: string,
+  monthKey: string,
+  cursor?: string | null
+): string {
+  const url = new URL(API_BASE);
+  url.searchParams.set('wallet', wallet);
+  url.searchParams.set('limit', '100');
+  url.searchParams.set('status', 'DONE'); // Only completed transactions
+
+  // Set month boundaries
+  const { from, to } = getMonthBoundaries(monthKey);
+  url.searchParams.set('fromTimestamp', from.toString());
+  url.searchParams.set('toTimestamp', to.toString());
+
+  if (cursor) {
+    url.searchParams.set('next', cursor);
+  }
+  return url.toString();
+}
+
+/**
+ * Fetch LiFi transfers for a specific month.
+ *
+ * Fetches only transfers within the given month's boundaries.
+ * Accumulates results across all pagination pages before returning.
+ * Supports cancellation via AbortSignal.
+ *
+ * @param wallet - Wallet address to query
+ * @param monthKey - Month in YYYY-MM format
+ * @param signal - AbortSignal for cancellation support (optional)
+ * @returns Array of transfers for the month, or empty array if cancelled/none found
+ * @throws Error if API request fails after retries
+ */
+export async function fetchMonthTransfers(
+  wallet: string,
+  monthKey: string,
+  signal?: AbortSignal
+): Promise<LiFiTransfer[]> {
+  const transfers: LiFiTransfer[] = [];
+  let cursor: string | null = null;
+
+  do {
+    // Check if cancelled before each request
+    if (signal?.aborted) {
+      return [];
+    }
+
+    const url = buildMonthTransfersUrl(wallet, monthKey, cursor);
+
+    const data = await fetchWithRetry(async () => {
+      const response = await fetch(url, { signal });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      return response.json() as Promise<LiFiTransfersResponse>;
+    });
+
+    transfers.push(...data.data);
+    cursor = data.next;
   } while (cursor);
 
   return transfers;
