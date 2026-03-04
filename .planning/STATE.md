@@ -110,6 +110,8 @@ Recent decisions affecting current work:
 - [Quick-3]: Only current month (index 11) shows "X to next tier" info
 - [Quick-4]: Use flex-col sm:flex-row for mobile-first vertical stacking in CategoryRow
 - [Quick-4]: Increase gap and padding for better mobile breathing room
+- [Quick-5]: Static page (no 'use client') for better performance
+- [Quick-5]: Import tiers.json directly for accurate tier values
 - [Phase 04-02]: Month index defaults to 11 (current month) and resets on wallet change
 - [Phase 04-02]: Category rows always show all four in fixed order: transactoor, bridgoor, swapoor, chainoor
 - [Phase 04-02]: Skeleton dimensions match actual content to prevent layout shift
@@ -131,11 +133,12 @@ None yet.
 | 2 | Update tiers.json to match official Jumper points table | 2026-03-04 | c8d36e3 | [2-update-tiers-json-to-match-official-jump](./quick/2-update-tiers-json-to-match-official-jump/) |
 | 3 | Hide next tier info and add muted styling for past months | 2026-03-04 | 3e250d5 | [3-sur-les-mois-pass-s-masquer-next-tier-in](./quick/3-sur-les-mois-pass-s-masquer-next-tier-in/) |
 | 4 | Improve CategoryRow mobile layout with vertical stacking | 2026-03-04 | cfa0901 | [4-am-liorer-layout-mobile-des-category-row](./quick/4-am-liorer-layout-mobile-des-category-row/) |
+| 5 | Add How It Works page explaining XP calculation | 2026-03-04 | 49935bf | [5-ajoute-une-page-permettant-d-expliquer-l](./quick/5-ajoute-une-page-permettant-d-expliquer-l/) |
 
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed quick task 4 (CategoryRow mobile layout)
+Stopped at: Completed quick task 5 (How It Works page)
 Resume file: N/A - Phase 4 complete
 
 ---
