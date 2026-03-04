@@ -4,7 +4,7 @@
     {
       "id": "transactoor",
       "displayName": "Transactoor",
-      "description": "Transaction count",
+      "description": "Total number of transactions made through Jumper each month",
       "icon": "activity",
       "unit": "transactions",
       "tiers": [
@@ -19,7 +19,7 @@
     {
       "id": "bridgoor",
       "displayName": "Bridgoor",
-      "description": "Bridge volume in USD",
+      "description": "Total USD value of cross-chain bridges via Jumper each month",
       "icon": "bridge",
       "unit": "USD",
       "tiers": [
@@ -34,7 +34,7 @@
     {
       "id": "swapoor",
       "displayName": "Swapoor",
-      "description": "Swap volume in USD",
+      "description": "Total USD value of token swaps via Jumper each month",
       "icon": "swap",
       "unit": "USD",
       "tiers": [
@@ -49,7 +49,7 @@
     {
       "id": "chainoor",
       "displayName": "Chainoor",
-      "description": "Unique chains used",
+      "description": "Number of unique source chains used for transactions each month",
       "icon": "chains",
       "unit": "chains",
       "tiers": [
