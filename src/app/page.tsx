@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { WalletInput } from '@/components/wallet-input';
 import { ScanProgress } from '@/components/scan-progress';
 import { XPDashboard } from '@/components/dashboard/xp-dashboard';
@@ -35,9 +36,17 @@ export default function Home() {
           <h1 className="text-2xl font-bold">Jumper Points Tracker</h1>
           {/* Tagline per CONTEXT.md */}
           {!walletAddress && (
-            <p className="text-muted-foreground">
-              Enter wallet to see your Jumper points
-            </p>
+            <>
+              <p className="text-muted-foreground">
+                Enter wallet to see your Jumper points
+              </p>
+              <Link
+                href="/how-it-works"
+                className="text-sm text-muted-foreground hover:text-foreground underline"
+              >
+                How does XP work?
+              </Link>
+            </>
           )}
         </div>
 
