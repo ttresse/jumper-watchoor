@@ -71,3 +71,68 @@ export interface ScanProgress {
   /** Whether all chains have been processed */
   isComplete: boolean;
 }
+
+// ============================================================================
+// Transaction Classification Types
+// ============================================================================
+
+/**
+ * Raw log event data from Covalent API.
+ */
+export interface LogEvent {
+  /** Raw hex-encoded log data */
+  raw_log_data: string;
+  /** Array of hex-encoded log topics */
+  raw_log_topics: string[];
+  /** Address that emitted the event */
+  sender_address: string;
+}
+
+/**
+ * Transaction with log events for classification.
+ * Extends ChainTransaction with logs needed for LiFi event decoding.
+ */
+export interface ChainTransactionWithLogs extends ChainTransaction {
+  /** Whether the transaction succeeded (from Covalent tx.successful field) */
+  successful: boolean;
+  /** Log events emitted by the transaction */
+  logEvents: LogEvent[];
+}
+
+/**
+ * Transaction after classification as bridge or swap.
+ */
+export interface ClassifiedTransaction {
+  /** Transaction hash */
+  hash: string;
+  /** Unix timestamp (seconds) */
+  timestamp: number;
+  /** EVM chain ID */
+  chainId: number;
+  /** Covalent chain name */
+  chainName: string;
+  /** Transaction value as string */
+  value: string;
+  /** Gas used as string */
+  gasUsed: string;
+  /** Recipient address */
+  toAddress: string;
+  /** Sender address */
+  fromAddress: string;
+  /** Classification: bridge (cross-chain) or swap (same-chain) */
+  type: 'bridge' | 'swap';
+  /** Destination chain ID for bridges, null for swaps */
+  destinationChainId: number | null;
+  /** Whether the transaction succeeded */
+  successful: boolean;
+}
+
+/**
+ * Result of classifying a batch of transactions.
+ */
+export interface ClassificationResult {
+  /** Successfully classified transactions */
+  classified: ClassifiedTransaction[];
+  /** Transactions that couldn't be parsed (kept for debugging) */
+  errors: ChainTransactionWithLogs[];
+}
