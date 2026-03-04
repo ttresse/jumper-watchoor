@@ -145,6 +145,7 @@ Recent decisions affecting current work:
 - [Phase 06-03]: Refresh button only visible for current month (index 11)
 - [Phase 06-03]: Navigation to unloaded month calls prioritizeMonth for immediate fetch
 - [Phase 06-03]: Old usePoints and useClassifiedTransactions marked @deprecated
+- [Quick-11]: Empty months return MonthlyAggregate with zeros (not null) to show 0 XP dashboard
 
 ### Pending Todos
 
@@ -173,6 +174,7 @@ None yet.
 | 8 | Add footer with LiFi API and unofficial app disclaimers | 2026-03-04 | e52b0f9 | [8-ajouter-footer-disclaimer-donn-es-lifi-a](./quick/8-ajouter-footer-disclaimer-donn-es-lifi-a/) |
 | 9 | Refonte layout CategoryRow - emphasize current value | 2026-03-04 | a870d2a | [9-refonte-layout-categoryrow-current-value](./quick/9-refonte-layout-categoryrow-current-value/) |
 | 10 | Add explanatory tooltips on category names | 2026-03-04 | 06fbef4 | [10-ajouter-tooltips-explicatifs-sur-les-4-c](./quick/10-ajouter-tooltips-explicatifs-sur-les-4-c/) |
+| 11 | Fix empty months showing "no transactions" instead of 0 XP | 2026-03-04 | d97cf20 | [11-quand-je-remonte-novembre-les-donn-es-ne](./quick/11-quand-je-remonte-novembre-les-donn-es-ne/) |
 
 ## Session Continuity
 
