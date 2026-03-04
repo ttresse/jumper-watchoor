@@ -124,6 +124,9 @@ Recent decisions affecting current work:
 - [Quick-9]: Current value uses text-base font-semibold text-foreground (prominent)
 - [Quick-9]: Next tier info uses text-xs text-muted-foreground (discrete)
 - [Quick-9]: Vertical stacking on all screen sizes for value section
+- [Quick-10]: 100ms delayDuration for quick tooltip response (not default 300ms)
+- [Quick-10]: cursor-help and dotted underline for visual affordance
+- [Quick-10]: TooltipProvider per tooltip (not global) for simplicity
 
 ### Pending Todos
 
@@ -150,11 +153,12 @@ None yet.
 | 7 | Detailed XP descriptions and top back button | 2026-03-04 | 3f0bdb7 | [7-d-taille-crit-res-xp-et-ajoute-bouton-re](./quick/7-d-taille-crit-res-xp-et-ajoute-bouton-re/) |
 | 8 | Add footer with LiFi API and unofficial app disclaimers | 2026-03-04 | e52b0f9 | [8-ajouter-footer-disclaimer-donn-es-lifi-a](./quick/8-ajouter-footer-disclaimer-donn-es-lifi-a/) |
 | 9 | Refonte layout CategoryRow - emphasize current value | 2026-03-04 | a870d2a | [9-refonte-layout-categoryrow-current-value](./quick/9-refonte-layout-categoryrow-current-value/) |
+| 10 | Add explanatory tooltips on category names | 2026-03-04 | 06fbef4 | [10-ajouter-tooltips-explicatifs-sur-les-4-c](./quick/10-ajouter-tooltips-explicatifs-sur-les-4-c/) |
 
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed quick task 9 (CategoryRow visual hierarchy)
+Stopped at: Completed quick task 10 (Add tooltips to category names)
 Resume file: N/A - Phase 4 complete
 
 ---
