@@ -33,7 +33,7 @@ export default function Home() {
       <div className="w-full max-w-lg space-y-8">
         {/* Header per CONTEXT.md: minimal, text only */}
         <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold">Jumper Points Tracker</h1>
+          <h1 className="text-2xl font-bold">JumperWatchoor</h1>
           {/* Tagline per CONTEXT.md */}
           {!walletAddress && (
             <>
