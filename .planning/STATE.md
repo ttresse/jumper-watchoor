@@ -108,6 +108,8 @@ Recent decisions affecting current work:
 - [Quick-3]: Past months use opacity-60 muted styling (frozen historical data)
 - [Quick-3]: isCurrentMonth prop defaults true for backwards compatibility
 - [Quick-3]: Only current month (index 11) shows "X to next tier" info
+- [Quick-4]: Use flex-col sm:flex-row for mobile-first vertical stacking in CategoryRow
+- [Quick-4]: Increase gap and padding for better mobile breathing room
 - [Phase 04-02]: Month index defaults to 11 (current month) and resets on wallet change
 - [Phase 04-02]: Category rows always show all four in fixed order: transactoor, bridgoor, swapoor, chainoor
 - [Phase 04-02]: Skeleton dimensions match actual content to prevent layout shift
