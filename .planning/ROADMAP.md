@@ -46,11 +46,11 @@ Plans:
   2. Failed/reverted transactions are excluded from counts
   3. Transactions are grouped by month (YYYY-MM format)
   4. Unique chains used per month are tracked
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md — LiFi ABI definitions, extended types, transaction classifier function
+- [ ] 02-02-PLAN.md — Monthly aggregation, Covalent adapter logs, useClassifiedTransactions hook
 
 ### Phase 3: Points Calculation Engine
 **Goal**: Users can see their calculated XP per category using historical USD values
@@ -104,7 +104,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Data Layer | 4/4 | Complete   | 2026-03-03 |
-| 2. Transaction Classification | 0/2 | Not started | - |
+| 2. Transaction Classification | 0/2 | Planned | - |
 | 3. Points Calculation Engine | 0/2 | Not started | - |
 | 4. Dashboard & Visualization | 0/2 | Not started | - |
 | 5. Value-Add Features | 0/2 | Not started | - |
