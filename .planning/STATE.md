@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-26)
 Phase: 4 of 5 (Dashboard Visualization) - IN PROGRESS
 Plan: 1 of 2 in current phase - COMPLETE
 Status: Ready for 04-02-PLAN.md
-Last activity: 2026-03-04 - Completed quick task 2: Update tiers.json to match official Jumper points system
+Last activity: 2026-03-04 - Completed quick task 3: Hide next tier info on past months
 
 Progress: [##########..........] 50% (1/2 plans complete)
 
@@ -104,6 +104,9 @@ Recent decisions affecting current work:
 - [Quick-2]: Removed tier names - official Jumper system no longer uses them
 - [Quick-2]: Chainoor has only 2 tiers (2 chains = 10xp, 9 chains = 30xp)
 - [Quick-2]: Next tier display shows "to next tier" instead of tier name
+- [Quick-3]: Past months use opacity-60 muted styling (frozen historical data)
+- [Quick-3]: isCurrentMonth prop defaults true for backwards compatibility
+- [Quick-3]: Only current month (index 11) shows "X to next tier" info
 
 ### Pending Todos
 
@@ -119,11 +122,12 @@ None yet.
 |---|-------------|------|--------|-----------|
 | 1 | Add fromTimestamp parameter to LiFi API call to search last 12 months by default | 2026-03-04 | 96a3563 | [1-add-fromtimestamp-parameter-to-lifi-api-](./quick/1-add-fromtimestamp-parameter-to-lifi-api-/) |
 | 2 | Update tiers.json to match official Jumper points table | 2026-03-04 | c8d36e3 | [2-update-tiers-json-to-match-official-jump](./quick/2-update-tiers-json-to-match-official-jump/) |
+| 3 | Hide next tier info and add muted styling for past months | 2026-03-04 | 3e250d5 | [3-sur-les-mois-pass-s-masquer-next-tier-in](./quick/3-sur-les-mois-pass-s-masquer-next-tier-in/) |
 
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed Quick Task 2 (tiers.json official values)
+Stopped at: Completed Quick Task 3 (hide next tier on past months)
 Resume file: N/A - Ready for 04-02-PLAN.md
 
 ---
