@@ -35,10 +35,10 @@ export function CategoryRow({
   isCurrentMonth = true,
 }: CategoryRowProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-border last:border-b-0 gap-1 sm:gap-4">
-      {/* Left side: category name and XP */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <span className="font-semibold uppercase text-sm tracking-wide min-w-[100px]">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4 border-b border-border last:border-b-0 gap-2 sm:gap-4">
+      {/* Left side: category name and XP - stacked on mobile, inline on desktop */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+        <span className="font-semibold uppercase text-sm tracking-wide sm:min-w-[100px]">
           {category.categoryId}
         </span>
         <span className="text-lg font-bold tabular-nums">
@@ -46,8 +46,8 @@ export function CategoryRow({
         </span>
       </div>
 
-      {/* Right side: volume/count and next tier info */}
-      <div className="flex items-center gap-3 text-sm text-muted-foreground">
+      {/* Right side: volume/count and next tier info - stacked on mobile, inline on desktop */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
         {/* Volume: USD for bridgoor/swapoor, count with unit for transactoor/chainoor */}
         {volume !== undefined && (
           <span>
