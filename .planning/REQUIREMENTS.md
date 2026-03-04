@@ -45,6 +45,14 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **DASH-05**: User can view XP for previous months (monthly history)
 - [x] **DASH-06**: UI is minimal, single-page, comprehensible in <5 seconds
 
+### Lazy Loading
+
+- [ ] **LAZY-01**: Initial load fetches current month + 3 previous months only (not all history)
+- [ ] **LAZY-02**: Background prefetch loads remaining months after initial 4 complete
+- [ ] **LAZY-03**: Past months are immutable (staleTime: Infinity, no refetch)
+- [ ] **LAZY-04**: Navigation to unloaded month triggers immediate fetch with skeleton
+- [ ] **LAZY-05**: Dashboard shows partial XP with "+" indicator while loading
+
 ## v1.1 Requirements
 
 Deferred from v1. Will be addressed in next milestone.
@@ -115,10 +123,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-04 | Phase 5 | Pending |
 | DASH-05 | Phase 4 | Complete |
 | DASH-06 | Phase 4 | Complete |
+| LAZY-01 | Phase 6 | Pending |
+| LAZY-02 | Phase 6 | Pending |
+| LAZY-03 | Phase 6 | Pending |
+| LAZY-04 | Phase 6 | Pending |
+| LAZY-05 | Phase 6 | Pending |
 
 **Coverage:**
-- v1 requirements: 23 total (WALLET-03 moved to v1.1)
-- Mapped to phases: 23
+- v1 requirements: 28 total (WALLET-03 moved to v1.1)
+- Mapped to phases: 28
 - Unmapped: 0
 
 ---
