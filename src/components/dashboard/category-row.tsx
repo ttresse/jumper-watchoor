@@ -8,6 +8,23 @@
 import { formatXP, formatUSD, formatCount } from '@/lib/format';
 import type { CategoryPoints } from '@/lib/points-types';
 import type { NextTierInfo } from '@/lib/next-tier';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
+/**
+ * Category descriptions explaining what each category measures.
+ * Displayed as tooltips on hover/tap.
+ */
+const CATEGORY_DESCRIPTIONS: Record<string, string> = {
+  transactoor: 'Number of transactions via Jumper',
+  bridgoor: 'USD volume bridged across chains',
+  swapoor: 'USD volume swapped',
+  chainoor: 'Number of unique chains used',
+};
 
 interface CategoryRowProps {
   /** Category points data */
@@ -38,9 +55,18 @@ export function CategoryRow({
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-4 border-b border-border last:border-b-0 gap-2 sm:gap-4">
       {/* Left side: category name and XP - stacked on mobile, inline on desktop */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-        <span className="font-semibold uppercase text-sm tracking-wide sm:min-w-[100px]">
-          {category.categoryId}
-        </span>
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="font-semibold uppercase text-sm tracking-wide sm:min-w-[100px] cursor-help border-b border-dotted border-muted-foreground/50">
+                {category.categoryId}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{CATEGORY_DESCRIPTIONS[category.categoryId]}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <span className="text-lg font-bold tabular-nums">
           {formatXP(category.xp)}
         </span>
