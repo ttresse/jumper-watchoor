@@ -13,7 +13,7 @@
 import { useMemo } from 'react';
 import { useLiFiTransfers } from './useLiFiTransfers';
 import { useMonthTransfer } from './useMonthTransfers';
-import { aggregateByMonth, fillMonthRange } from '@/lib/classification';
+import { aggregateByMonth, fillMonthRange, createEmptyMonth } from '@/lib/classification';
 import type { ClassifiedData, MonthlyAggregate } from '@/lib/classification-types';
 import type { LiFiTransfer } from '@/lib/lifi-types';
 
@@ -59,8 +59,14 @@ export function useMonthClassification(
   );
 
   const monthData = useMemo<MonthlyAggregate | null>(() => {
-    // Don't compute while loading
-    if (isLoading || transfers.length === 0) return null;
+    // Still return null while loading
+    if (isLoading) return null;
+
+    // For empty months, return empty aggregate (not null)
+    // This allows UI to show 0 XP instead of "no transactions" message
+    if (transfers.length === 0) {
+      return createEmptyMonth(monthKey);
+    }
 
     // Aggregate this month's transfers
     const monthMap = aggregateByMonth(transfers);
