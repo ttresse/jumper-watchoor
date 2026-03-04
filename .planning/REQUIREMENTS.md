@@ -38,12 +38,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Dashboard
 
-- [ ] **DASH-01**: Dashboard shows total XP for current month
-- [ ] **DASH-02**: Dashboard shows XP breakdown by category (TRANSACTOOR, BRIDGOOR, SWAPOOR, CHAINOOR)
+- [x] **DASH-01**: Dashboard shows total XP for current month
+- [x] **DASH-02**: Dashboard shows XP breakdown by category (TRANSACTOOR, BRIDGOOR, SWAPOOR, CHAINOOR)
 - [ ] **DASH-03**: Dashboard shows tier progress bars for each category
 - [ ] **DASH-04**: Dashboard shows recommendations to reach next tier
-- [ ] **DASH-05**: User can view XP for previous months (monthly history)
-- [ ] **DASH-06**: UI is minimal, single-page, comprehensible in <5 seconds
+- [x] **DASH-05**: User can view XP for previous months (monthly history)
+- [x] **DASH-06**: UI is minimal, single-page, comprehensible in <5 seconds
 
 ## v1.1 Requirements
 
@@ -109,12 +109,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | POINTS-04 | Phase 3 | Complete |
 | POINTS-05 | Phase 3 | Complete |
 | POINTS-06 | Phase 3 | Complete |
-| DASH-01 | Phase 4 | Pending |
-| DASH-02 | Phase 4 | Pending |
+| DASH-01 | Phase 4 | Complete |
+| DASH-02 | Phase 4 | Complete |
 | DASH-03 | Phase 5 | Pending |
 | DASH-04 | Phase 5 | Pending |
-| DASH-05 | Phase 4 | Pending |
-| DASH-06 | Phase 4 | Pending |
+| DASH-05 | Phase 4 | Complete |
+| DASH-06 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 23 total (WALLET-03 moved to v1.1)

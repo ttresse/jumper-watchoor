@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-02-26)
 
 ## Current Position
 
-Phase: 4 of 5 (Dashboard Visualization) - IN PROGRESS
-Plan: 1 of 2 in current phase - COMPLETE
-Status: Ready for 04-02-PLAN.md
-Last activity: 2026-03-04 - Completed quick task 3: Hide next tier info on past months
+Phase: 4 of 5 (Dashboard Visualization) - COMPLETE
+Plan: 2 of 2 in current phase - COMPLETE
+Status: Phase 4 complete, ready for Phase 5
+Last activity: 2026-03-04 - Completed 04-02-PLAN.md (dashboard components)
 
-Progress: [##########..........] 50% (1/2 plans complete)
+Progress: [####################] 100% (2/2 plans complete)
 
 ## API Migration Notice (2026-03-04)
 
@@ -55,6 +55,7 @@ Progress: [##########..........] 50% (1/2 plans complete)
 | Phase 03 P01 | 2.1 min | 3 tasks | 5 files |
 | Phase 03 P02 | 1.8 min | 3 tasks | 3 files |
 | Phase 04 P01 | 1.9 | 3 tasks | 4 files |
+| Phase 04 P02 | 3 | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -107,6 +108,10 @@ Recent decisions affecting current work:
 - [Quick-3]: Past months use opacity-60 muted styling (frozen historical data)
 - [Quick-3]: isCurrentMonth prop defaults true for backwards compatibility
 - [Quick-3]: Only current month (index 11) shows "X to next tier" info
+- [Phase 04-02]: Month index defaults to 11 (current month) and resets on wallet change
+- [Phase 04-02]: Category rows always show all four in fixed order: transactoor, bridgoor, swapoor, chainoor
+- [Phase 04-02]: Skeleton dimensions match actual content to prevent layout shift
+- [Phase 04-02]: Empty state shows friendly message instead of blank dashboard
 
 ### Pending Todos
 
@@ -123,13 +128,14 @@ None yet.
 | 1 | Add fromTimestamp parameter to LiFi API call to search last 12 months by default | 2026-03-04 | 96a3563 | [1-add-fromtimestamp-parameter-to-lifi-api-](./quick/1-add-fromtimestamp-parameter-to-lifi-api-/) |
 | 2 | Update tiers.json to match official Jumper points table | 2026-03-04 | c8d36e3 | [2-update-tiers-json-to-match-official-jump](./quick/2-update-tiers-json-to-match-official-jump/) |
 | 3 | Hide next tier info and add muted styling for past months | 2026-03-04 | 3e250d5 | [3-sur-les-mois-pass-s-masquer-next-tier-in](./quick/3-sur-les-mois-pass-s-masquer-next-tier-in/) |
+| 4 | Improve CategoryRow mobile layout with vertical stacking | 2026-03-04 | cfa0901 | [4-am-liorer-layout-mobile-des-category-row](./quick/4-am-liorer-layout-mobile-des-category-row/) |
 
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed Quick Task 3 (hide next tier on past months)
-Resume file: N/A - Ready for 04-02-PLAN.md
+Stopped at: Completed quick task 4 (CategoryRow mobile layout)
+Resume file: N/A - Phase 4 complete
 
 ---
-*Phase 04 Plan 01 complete. Foundation utilities (formatXP, formatUSD, formatMonthLabel, getNextTierInfo) and shadcn components (Skeleton, Badge) ready.*
-*Next: Execute 04-02-PLAN.md (dashboard components)*
+*Phase 04 complete. XP dashboard with total display, category breakdown, month navigation, and loading states fully implemented.*
+*Next: Phase 5 (Mobile Polish) or production deployment*
