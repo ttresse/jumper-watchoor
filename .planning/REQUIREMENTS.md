@@ -22,7 +22,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Transaction Classification
 
-- [ ] **CLASS-01**: App classifies transactions as bridge (cross-chain) or swap (same-chain)
+- [x] **CLASS-01**: App classifies transactions as bridge (cross-chain) or swap (same-chain)
 - [ ] **CLASS-02**: App counts total LiFi transactions per month
 - [ ] **CLASS-03**: App tracks unique chains used per month
 - [ ] **CLASS-04**: App calculates USD value at transaction time using historical prices
@@ -99,7 +99,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SCAN-03 | Phase 1 | Complete |
 | SCAN-04 | Phase 1 | Complete |
 | SCAN-05 | Phase 4 | Pending |
-| CLASS-01 | Phase 2 | Pending |
+| CLASS-01 | Phase 2 | Complete |
 | CLASS-02 | Phase 2 | Pending |
 | CLASS-03 | Phase 2 | Pending |
 | CLASS-04 | Phase 3 | Pending |

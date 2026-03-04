@@ -5,33 +5,34 @@
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Show users exactly how many Jumper points they have and what actions will earn them more.
-**Current focus:** Phase 1 - Foundation & Data Layer
+**Current focus:** Phase 2 - Transaction Classification
 
 ## Current Position
 
-Phase: 1 of 5 (Foundation & Data Layer)
-Plan: 4 of 4 in current phase (COMPLETE)
-Status: Phase Complete
-Last activity: 2026-03-03 - Completed 01-04-PLAN.md
+Phase: 2 of 5 (Transaction Classification)
+Plan: 1 of 2 in current phase
+Status: In Progress
+Last activity: 2026-03-04 - Completed 02-01-PLAN.md
 
-Progress: [████████░░] 20%
+Progress: [████████░░] 25%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 6.5 min
-- Total execution time: 26 min
+- Total plans completed: 5
+- Average duration: 5.6 min
+- Total execution time: 28 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation-data-layer | 4 | 26 min | 6.5 min |
+| 02-transaction-classification | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-02 (4 min), 01-03 (2 min), 01-04 (15 min)
-- Trend: Plan 04 took longer due to checkpoint verification and bug fixes
+- Last 5 plans: 01-02 (4 min), 01-03 (2 min), 01-04 (15 min), 02-01 (2 min)
+- Trend: Clean execution, classifier plan completed quickly
 
 *Updated after each plan completion*
 
@@ -54,6 +55,8 @@ Recent decisions affecting current work:
 - [01-04]: Cancel hides scan UI but preserves wallet in input for easy retry
 - [01-04]: Retry resets progress counter to 0/N and invalidates queries before refetching
 - [01-04]: Progress counter resets on both new wallet scan and retry
+- [02-01]: Default to swap when no LiFi events found (conservative approach)
+- [02-01]: Use viem decodeEventLog with strict: false for resilient parsing
 
 ### Pending Todos
 
@@ -65,9 +68,9 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-03
-Stopped at: Completed 01-04-PLAN.md (Page integration) - Phase 1 Complete
+Last session: 2026-03-04
+Stopped at: Completed 02-01-PLAN.md (Transaction classifier)
 Resume file: None
 
 ---
-*Next: Execute Phase 2 (Transaction Classification)*
+*Next: Execute 02-02-PLAN.md (Monthly aggregation)*
