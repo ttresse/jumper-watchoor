@@ -44,7 +44,7 @@ export function getMonthKey(unixSeconds: number): string {
  * @param monthKey - Month identifier in YYYY-MM format
  * @returns Empty MonthlyAggregate with new Set instance
  */
-function createEmptyMonth(monthKey: string): MonthlyAggregate {
+export function createEmptyMonth(monthKey: string): MonthlyAggregate {
   return {
     month: monthKey,
     transactionCount: 0,
