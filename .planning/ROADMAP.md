@@ -61,13 +61,11 @@ Plans:
   2. TRANSACTOOR, BRIDGOOR, SWAPOOR, CHAINOOR XP calculated per tier rules
   3. XP bucketed by month with correct tier thresholds applied
   4. Tier rules can be modified without code changes (configurable JSON)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
-
-*Note: Simplified from original - LiFi API provides amountUSD directly.*
+- [ ] 03-01-PLAN.md — Extend classification with USD volumes, create tier configuration
+- [ ] 03-02-PLAN.md — XP calculation functions and usePoints hook
 
 ### Phase 4: Dashboard & Visualization
 **Goal**: Users can view their complete XP breakdown in a minimal, fast-loading dashboard
@@ -106,8 +104,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Data Layer | 3/3 | Complete | 2026-03-04 |
-| 2. Transaction Classification | 0/1 | Ready | - |
-| 3. Points Calculation Engine | 0/2 | Not started | - |
+| 2. Transaction Classification | 1/1 | Complete | 2026-03-04 |
+| 3. Points Calculation Engine | 0/2 | Ready | - |
 | 4. Dashboard & Visualization | 0/2 | Not started | - |
 | 5. Value-Add Features | 0/2 | Not started | - |
 
@@ -116,4 +114,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 *API Migration: 2026-03-04 (Covalent -> LiFi Analytics)*
 *Phase 1 Replanned: 2026-03-04*
 *Phase 2 Replanned: 2026-03-04*
+*Phase 3 Planned: 2026-03-04*
 *Coverage: 23/23 v1 requirements mapped (WALLET-03 deferred to v1.1)*
