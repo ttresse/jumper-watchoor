@@ -58,8 +58,9 @@ export function CategoryRow({
         {/* Next tier distance - only shown for current month (past months are frozen) */}
         {isCurrentMonth && nextTierInfo && (
           <span className="text-xs">
-            {nextTierInfo.distance.toLocaleString()} {nextTierInfo.unit} to next
-            tier
+            {nextTierInfo.unit === 'USD'
+              ? `${formatUSD(nextTierInfo.distance)} to next tier`
+              : `${nextTierInfo.distance.toLocaleString()} ${nextTierInfo.unit} to next tier`}
           </span>
         )}
       </div>
