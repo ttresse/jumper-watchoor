@@ -146,6 +146,8 @@ Recent decisions affecting current work:
 - [Phase 06-03]: Navigation to unloaded month calls prioritizeMonth for immediate fetch
 - [Phase 06-03]: Old usePoints and useClassifiedTransactions marked @deprecated
 - [Quick-11]: Empty months return MonthlyAggregate with zeros (not null) to show 0 XP dashboard
+- [Quick-12]: Use allMonthKeys.length - 1 instead of hardcoded 11 for all index checks
+- [Quick-12]: Add allMonthKeys.length to useEffect dependencies for wallet reset
 
 ### Pending Todos
 
@@ -175,12 +177,13 @@ None yet.
 | 9 | Refonte layout CategoryRow - emphasize current value | 2026-03-04 | a870d2a | [9-refonte-layout-categoryrow-current-value](./quick/9-refonte-layout-categoryrow-current-value/) |
 | 10 | Add explanatory tooltips on category names | 2026-03-04 | 06fbef4 | [10-ajouter-tooltips-explicatifs-sur-les-4-c](./quick/10-ajouter-tooltips-explicatifs-sur-les-4-c/) |
 | 11 | Fix empty months showing "no transactions" instead of 0 XP | 2026-03-04 | d97cf20 | [11-quand-je-remonte-novembre-les-donn-es-ne](./quick/11-quand-je-remonte-novembre-les-donn-es-ne/) |
+| 12 | Extend month navigation to all months since Jan 2022 | 2026-03-04 | ddb4eba | [12-fais-en-sorte-qu-on-puisse-remonter-plus](./quick/12-fais-en-sorte-qu-on-puisse-remonter-plus/) |
 
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 06-03-PLAN.md (UI integration)
-Resume file: N/A - Phase 6 complete
+Stopped at: Completed quick-12 (extend month navigation)
+Resume file: N/A - Quick task complete
 
 ---
 *Phase 06 complete. All lazy loading patterns implemented.*
