@@ -23,13 +23,6 @@ interface ScanState {
   cancelScan: () => void;
   reset: () => void;
   clearLastWallet: () => void;
-
-  // Deprecated: kept for backward compatibility with old useScanWallet hook
-  // Will be removed when useLiFiTransfers replaces useScanWallet in Plan 02
-  /** @deprecated Use updateProgress instead */
-  updateChainResult: (chainName: string, result: unknown) => void;
-  /** @deprecated No longer needed with LiFi API */
-  resumeScan: () => void;
 }
 
 export const useScanStore = create<ScanState>()(
@@ -86,11 +79,6 @@ export const useScanStore = create<ScanState>()(
       }),
 
       clearLastWallet: () => set({ lastWallet: null }),
-
-      // Deprecated: kept for backward compatibility with old useScanWallet hook
-      // These will be removed when useLiFiTransfers replaces useScanWallet in Plan 02
-      updateChainResult: () => {},
-      resumeScan: () => set({ isScanning: true, isCancelled: false }),
     }),
     {
       name: 'jumper-scan-store',
