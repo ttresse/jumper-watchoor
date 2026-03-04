@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation & Data Layer** - LiFi Analytics API integration, wallet input, transaction fetching
 - [x] **Phase 2: Transaction Classification** - Bridge vs swap detection using chainId comparison, monthly aggregation
-- [ ] **Phase 3: Points Calculation Engine** - Configurable tier rules, XP calculation (USD values from API)
+- [x] **Phase 3: Points Calculation Engine** - Configurable tier rules, XP calculation (USD values from API)
 - [ ] **Phase 4: Dashboard & Visualization** - Category breakdown, monthly history display
 - [ ] **Phase 5: Value-Add Features** - Tier progress bars, recommendations engine, configuration editor
 
@@ -64,8 +64,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Extend classification with USD volumes, create tier configuration
-- [ ] 03-02-PLAN.md — XP calculation functions and usePoints hook
+- [x] 03-01-PLAN.md — Extend classification with USD volumes, create tier configuration
+- [x] 03-02-PLAN.md — XP calculation functions and usePoints hook
 
 ### Phase 4: Dashboard & Visualization
 **Goal**: Users can view their complete XP breakdown in a minimal, fast-loading dashboard
@@ -76,11 +76,11 @@ Plans:
   2. User can view XP for any previous month (monthly history)
   3. Results load in under 5 seconds for typical wallets
   4. UI is comprehensible within 5 seconds (minimal, single-page)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
+- [ ] 04-01-PLAN.md — Foundation utilities (format, next-tier, shadcn components)
+- [ ] 04-02-PLAN.md — Dashboard components and page integration
 
 ### Phase 5: Value-Add Features
 **Goal**: Users can see tier progress and receive actionable recommendations
@@ -105,8 +105,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Foundation & Data Layer | 3/3 | Complete | 2026-03-04 |
 | 2. Transaction Classification | 1/1 | Complete | 2026-03-04 |
-| 3. Points Calculation Engine | 0/2 | Ready | - |
-| 4. Dashboard & Visualization | 0/2 | Not started | - |
+| 3. Points Calculation Engine | 2/2 | Complete | 2026-03-04 |
+| 4. Dashboard & Visualization | 0/2 | Ready | - |
 | 5. Value-Add Features | 0/2 | Not started | - |
 
 ---
@@ -115,4 +115,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 *Phase 1 Replanned: 2026-03-04*
 *Phase 2 Replanned: 2026-03-04*
 *Phase 3 Planned: 2026-03-04*
+*Phase 4 Planned: 2026-03-04*
 *Coverage: 23/23 v1 requirements mapped (WALLET-03 deferred to v1.1)*
