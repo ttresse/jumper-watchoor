@@ -5,7 +5,6 @@
  * Shows all four categories always in fixed order (not sorted by XP value).
  */
 
-import { Badge } from '@/components/ui/badge';
 import { formatXP, formatUSD, formatCount } from '@/lib/format';
 import type { CategoryPoints } from '@/lib/points-types';
 import type { NextTierInfo } from '@/lib/next-tier';
@@ -34,7 +33,7 @@ export function CategoryRow({
 }: CategoryRowProps) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 border-b border-border last:border-b-0 gap-1 sm:gap-4">
-      {/* Left side: category name, XP, tier badge */}
+      {/* Left side: category name and XP */}
       <div className="flex items-center gap-3 flex-wrap">
         <span className="font-semibold uppercase text-sm tracking-wide min-w-[100px]">
           {category.categoryId}
@@ -42,9 +41,6 @@ export function CategoryRow({
         <span className="text-lg font-bold tabular-nums">
           {formatXP(category.xp)}
         </span>
-        {category.tierName && (
-          <Badge variant="secondary">{category.tierName}</Badge>
-        )}
       </div>
 
       {/* Right side: volume/count and next tier info */}
@@ -59,8 +55,8 @@ export function CategoryRow({
         {/* Next tier distance */}
         {nextTierInfo && (
           <span className="text-xs">
-            {nextTierInfo.distance.toLocaleString()} {nextTierInfo.unit} to{' '}
-            {nextTierInfo.tierName}
+            {nextTierInfo.distance.toLocaleString()} {nextTierInfo.unit} to next
+            tier
           </span>
         )}
       </div>
