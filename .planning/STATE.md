@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Show users exactly how many Jumper points they have and what actions will earn them more.
-**Current focus:** Phase 2 - Transaction Classification (Complete)
+**Current focus:** Phase 3 - Points Calculation Engine (In Progress)
 
 ## Current Position
 
-Phase: 2 of 5 (Transaction Classification)
-Plan: 1 of 1 in current phase - COMPLETE
-Status: Phase Complete
-Last activity: 2026-03-04 - Completed 02-01-PLAN.md (Classification types and functions)
+Phase: 3 of 5 (Points Calculation Engine)
+Plan: 1 of 2 in current phase - COMPLETE
+Status: In Progress
+Last activity: 2026-03-04 - Completed 03-01-PLAN.md (USD volume tracking and tier configuration)
 
-Progress: [####################] 100% (1/1 plans complete)
+Progress: [##########..........] 50% (1/2 plans complete)
 
 ## API Migration Notice (2026-03-04)
 
@@ -30,9 +30,9 @@ Progress: [####################] 100% (1/1 plans complete)
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: 4.7 min
-- Total execution time: 33.2 min
+- Total plans completed: 8
+- Average duration: 4.4 min
+- Total execution time: 35.3 min
 
 **By Phase:**
 
@@ -40,10 +40,11 @@ Progress: [####################] 100% (1/1 plans complete)
 |-------|-------|-------|----------|
 | 01-foundation-data-layer | 3 | 9 min | 3.0 min |
 | 02-transaction-classification | 1 | 2.2 min | 2.2 min |
+| 03-points-calculation-engine | 1 | 2.1 min | 2.1 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2 min), 01-02 (3 min), 01-03 (4 min), 02-01 (2.2 min)
-- Trend: Clean execution, Phase 02 complete
+- Last 5 plans: 01-02 (3 min), 01-03 (4 min), 02-01 (2.2 min), 03-01 (2.1 min)
+- Trend: Clean execution, Phase 03 in progress
 
 | Phase 01-foundation-data-layer P01 | 2 min | 3 tasks | 3 files |
 | Phase 01-foundation-data-layer P02 | 3 min | 3 tasks | 4 files |
@@ -51,6 +52,7 @@ Progress: [####################] 100% (1/1 plans complete)
 
 *Updated after each plan completion*
 | Phase 02 P01 | 2.2 | 3 tasks | 3 files |
+| Phase 03 P01 | 2.1 min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -86,6 +88,10 @@ Recent decisions affecting current work:
 - [Phase 02-01]: Track source chain only for uniqueChains (per CONTEXT.md)
 - [Phase 02-01]: Return null from useClassifiedTransactions until isComplete (no partial classification)
 - [Quick-1]: Added fromTimestamp parameter filtering LiFi API requests to last 12 months (365 days)
+- [Phase 03-01]: USD volumes aggregated from sending.amountUSD with parseFloat || 0 fallback
+- [Phase 03-01]: Tiers sorted descending by threshold for first-match-wins lookup
+- [Phase 03-01]: Placeholder tier values (real Jumper thresholds TBD)
+- [Phase 03-01]: Type assertion import for build-time JSON validation
 
 ### Pending Todos
 
@@ -104,10 +110,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed quick-1 (Add fromTimestamp parameter to LiFi API)
-Resume file: N/A - Ready for Phase 03
+Stopped at: Completed 03-01-PLAN.md (USD volume tracking and tier configuration)
+Resume file: N/A - Ready for 03-02-PLAN.md
 
 ---
-*Phase 02 (Transaction Classification) complete. Classification types, pure functions, and React hook implemented.*
-*Quick task 1 complete: Added 12-month lookback window to LiFi API requests.*
-*Next: Plan Phase 03 (XP Calculation using classified data)*
+*Phase 03 (Points Calculation Engine) in progress. Plan 01 complete: USD volume fields added to MonthlyAggregate, tier configuration JSON created.*
+*Next: Execute 03-02-PLAN.md (XP calculation functions and usePoints hook)*

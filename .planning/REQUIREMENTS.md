@@ -25,7 +25,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **CLASS-01**: App classifies transactions as bridge (cross-chain) or swap (same-chain)
 - [x] **CLASS-02**: App counts total LiFi transactions per month
 - [x] **CLASS-03**: App tracks unique chains used per month
-- [ ] **CLASS-04**: App calculates USD value at transaction time using historical prices
+- [x] **CLASS-04**: App calculates USD value at transaction time using historical prices
 
 ### Points Calculation
 
@@ -34,7 +34,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **POINTS-03**: App calculates SWAPOOR XP based on USD volume swapped
 - [ ] **POINTS-04**: App calculates CHAINOOR XP based on unique chains used
 - [ ] **POINTS-05**: Points are bucketed by month (YYYY-MM)
-- [ ] **POINTS-06**: Tier rules are configurable (not hardcoded)
+- [x] **POINTS-06**: Tier rules are configurable (not hardcoded)
 
 ### Dashboard
 
@@ -102,13 +102,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CLASS-01 | Phase 2 | Complete |
 | CLASS-02 | Phase 2 | Complete |
 | CLASS-03 | Phase 2 | Complete |
-| CLASS-04 | Phase 3 | Pending |
+| CLASS-04 | Phase 3 | Complete |
 | POINTS-01 | Phase 3 | Pending |
 | POINTS-02 | Phase 3 | Pending |
 | POINTS-03 | Phase 3 | Pending |
 | POINTS-04 | Phase 3 | Pending |
 | POINTS-05 | Phase 3 | Pending |
-| POINTS-06 | Phase 3 | Pending |
+| POINTS-06 | Phase 3 | Complete |
 | DASH-01 | Phase 4 | Pending |
 | DASH-02 | Phase 4 | Pending |
 | DASH-03 | Phase 5 | Pending |
