@@ -14,7 +14,7 @@ This roadmap transforms a wallet address into actionable Jumper points insights 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Data Layer** - LiFi Analytics API integration, wallet input, transaction fetching (REFONTE in progress)
+- [ ] **Phase 1: Foundation & Data Layer** - LiFi Analytics API integration, wallet input, transaction fetching
 - [ ] **Phase 2: Transaction Classification** - Bridge vs swap detection using chainId comparison, monthly aggregation
 - [ ] **Phase 3: Points Calculation Engine** - Configurable tier rules, XP calculation (USD values from API)
 - [ ] **Phase 4: Dashboard & Visualization** - Category breakdown, monthly history display
@@ -31,13 +31,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. App fetches all LiFi transactions via Analytics API with visible progress counter
   3. Pagination handled correctly for wallets with many transactions
   4. Transaction data includes chainIds, USD values, and status for downstream processing
-**Plans**: TBD (previous plans obsolete due to API migration)
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — TBD (needs replan)
-- [ ] 01-02-PLAN.md — TBD (needs replan)
-
-*Note: Previous Covalent-based plans (01-01 through 01-04) are obsolete. Run `/gsd:plan-phase 1` to create new plans.*
+- [ ] 01-01-PLAN.md — Core data layer (LiFi types, adapter, store)
+- [ ] 01-02-PLAN.md — Hook and UI integration
 
 ### Phase 2: Transaction Classification
 **Goal**: Users can see their LiFi transactions classified as bridges or swaps with monthly aggregation
@@ -109,7 +107,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Data Layer | 0/2 | Needs Replan (API migration) | - |
+| 1. Foundation & Data Layer | 0/2 | Planned | - |
 | 2. Transaction Classification | 0/2 | Needs Replan | - |
 | 3. Points Calculation Engine | 0/2 | Not started | - |
 | 4. Dashboard & Visualization | 0/2 | Not started | - |
@@ -118,4 +116,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 ---
 *Roadmap created: 2026-02-26*
 *API Migration: 2026-03-04 (Covalent -> LiFi Analytics)*
+*Phase 1 Replanned: 2026-03-04*
 *Coverage: 23/23 v1 requirements mapped (WALLET-03 deferred to v1.1)*
