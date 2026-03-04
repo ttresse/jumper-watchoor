@@ -16,7 +16,6 @@
       "WebFetch(domain:li.fi)",
       "WebFetch(domain:www.coingecko.com)",
       "WebFetch(domain:www.npmjs.com)",
-      "WebFetch(domain:www.covalenthq.com)",
       "WebFetch(domain:li.quest)",
       "WebFetch(domain:goldrush.mintlify.app)",
       "Bash(node /Users/ttresse/.claude/get-shit-done/bin/gsd-tools.cjs commit:*)",
@@ -27,7 +26,18 @@
       "Bash([ -f \"src/hooks/useScanWallet.ts\" ])",
       "Bash([ -f \"src/stores/scan.store.ts\" ])",
       "Bash([ -f \"jest.config.js\" ])",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash([ -f \"/Users/ttresse/Projects/freelance/jumper-watcher/src/components/dashboard/xp-total.tsx\" ])",
+      "Bash([ -f \"/Users/ttresse/Projects/freelance/jumper-watcher/src/components/dashboard/category-row.tsx\" ])",
+      "Bash([ -f \"/Users/ttresse/Projects/freelance/jumper-watcher/src/components/dashboard/month-nav.tsx\" ])",
+      "Bash([ -f \"/Users/ttresse/Projects/freelance/jumper-watcher/src/components/dashboard/dashboard-skeleton.tsx\" ])",
+      "Bash([ -f \"/Users/ttresse/Projects/freelance/jumper-watcher/src/components/dashboard/xp-dashboard.tsx\" ])",
+      "Bash([ -f \"/Users/ttresse/Projects/freelance/jumper-watcher/src/app/page.tsx\" ])",
+      "Skill(gsd:quick)",
+      "Bash(cat:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run lint:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }

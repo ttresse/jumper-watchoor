@@ -55,8 +55,7 @@ All Jumper transactions go through the **LiFi Diamond contract**: `0x1231DEB6f57
 
 ## Constraints
 
-- **Data source**: Covalent API (100+ chains, unified endpoint) — requires API key
-- **Price data**: DefiLlama API (free, no auth required)
+- **Data source**: LiFi Analytics API (https://docs.li.fi/) — no API key required
 - **LiFi contract**: Filter transactions by `to` = `0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE`
 - **Classification**: Bridge if source chain ≠ destination chain, Swap otherwise
 - **Performance**: <5 seconds for results, parallel chain requests
@@ -66,10 +65,9 @@ All Jumper transactions go through the **LiFi Diamond contract**: `0x1231DEB6f57
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Covalent for transaction indexing | Only service covering 100+ chains with unified API | — Pending |
-| DefiLlama for historical prices | Free, no rate limits, no auth | — Pending |
-| Filter by LiFi contract address | All Jumper txs go through same contract on all chains | — Pending |
-| Client-side only (no backend) | Simpler architecture, faster to ship | — Pending |
+| LiFi Analytics API for transaction data | Native API, no key required, direct access to all transfer data | ✓ Active |
+| Filter by LiFi contract address | All Jumper txs go through same contract on all chains | ✓ Active |
+| Client-side only (no backend) | Simpler architecture, faster to ship | ✓ Active |
 | Configurable points tiers | User requested ability to modify point rules | — Pending |
 
 ---
