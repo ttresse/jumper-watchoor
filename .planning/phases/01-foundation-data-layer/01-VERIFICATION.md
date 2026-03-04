@@ -1,78 +1,36 @@
 ---
 phase: 01-foundation-data-layer
-verified: 2026-03-04T19:30:00Z
-status: gaps_found
-score: 0/4 success criteria verified
-gaps:
-  - truth: "App fetches all LiFi transactions via Analytics API with visible progress counter"
-    status: failed
-    reason: "LiFi Analytics API never implemented - codebase still uses Covalent multi-chain scanning"
-    artifacts:
-      - path: "src/lib/lifi-types.ts"
-        issue: "Missing - file does not exist"
-      - path: "src/adapters/lifi.adapter.ts"
-        issue: "Missing - file does not exist"
-      - path: "src/adapters/covalent.adapter.ts"
-        issue: "Still exists - should be replaced by LiFi adapter"
-    missing:
-      - "Implement LiFi types (LiFiTransfer, LiFiTransfersResponse, LiFiToken, LiFiTransactionDetails)"
-      - "Create lifi.adapter.ts with fetchAllTransfers using li.quest/v2/analytics/transfers"
-      - "Remove Covalent adapter and dependencies (@covalenthq/client-sdk, p-throttle)"
-
-  - truth: "Pagination handled correctly for wallets with many transactions"
-    status: failed
-    reason: "Cursor-based pagination not implemented - current code uses chain-by-chain queries"
-    artifacts:
-      - path: "src/hooks/useScanWallet.ts"
-        issue: "Uses Covalent multi-chain parallel queries instead of LiFi cursor pagination"
-    missing:
-      - "Implement cursor-based pagination loop in lifi.adapter.ts"
-      - "Replace useScanWallet with useLiFiTransfers hook"
-      - "Update store to track transactionCount instead of chainResults"
-
-  - truth: "Transaction data includes chainIds, USD values, and status for downstream processing"
-    status: failed
-    reason: "LiFi data structure not available - current Covalent data lacks USD values pre-calculated"
-    artifacts:
-      - path: "src/stores/scan.store.ts"
-        issue: "Tracks chain-based results (Map<string, ChainResult>) instead of transaction-based state"
-    missing:
-      - "Update store to hold LiFiTransfer[] instead of ChainResult map"
-      - "Store transactionCount for progress display"
-      - "Store transfers array (empty until complete)"
-
-  - truth: "User can enter a wallet address and see validation feedback"
-    status: verified
-    reason: "WalletInput exists with viem validation"
-    artifacts:
-      - path: "src/components/wallet-input.tsx"
-        issue: "Has auto-scan behavior - needs explicit Scan button per CONTEXT.md requirement"
-    missing:
-      - "Add explicit Scan button (no auto-trigger on valid input)"
-      - "Remove auto-scan on 42-char input and paste events"
+verified: 2026-03-04T20:15:00Z
+status: passed
+score: 4/4 success criteria verified
+re_verification:
+  previous_status: gaps_found
+  previous_score: 0/4
+  gaps_closed:
+    - "App fetches all LiFi transactions via Analytics API with visible progress counter"
+    - "Pagination handled correctly for wallets with many transactions"
+    - "Transaction data includes chainIds, USD values, and status for downstream processing"
+    - "User can enter a wallet address and see validation feedback"
+  gaps_remaining: []
+  regressions: []
 ---
 
 # Phase 1: Foundation & Data Layer Verification Report
 
 **Phase Goal:** Users can input a wallet address and fetch their LiFi transaction history
 
-**Verified:** 2026-03-04T19:30:00Z
+**Verified:** 2026-03-04T20:15:00Z
 
-**Status:** gaps_found
+**Status:** PASSED ✓
 
-**Re-verification:** No — initial verification
+**Re-verification:** Yes — after gap closure (3 plans executed)
 
-## Critical Finding
+## Executive Summary
 
-**The LiFi Analytics API migration was planned but never implemented.** The codebase still uses the old Covalent multi-chain scanning approach. Plans 01-01-PLAN.md and 01-02-PLAN.md (created 2026-03-04) describe the LiFi migration, but summaries 01-01-SUMMARY through 01-04-SUMMARY (dated 2026-03-03) document Covalent implementation that pre-dates the migration plans.
+**All gaps from previous verification have been resolved.** The LiFi Analytics API migration is now fully implemented and operational. The codebase has been completely migrated from Covalent to LiFi, with all deprecated code removed.
 
-**Evidence:**
-- ROADMAP.md line 7: "API Migration (2026-03-04): Switched from Covalent multi-chain scanning to LiFi Analytics API"
-- 01-CONTEXT.md line 82: "This replaces previous Covalent-based context. Existing Phase 1 plans (01-01 through 01-04) need to be regenerated."
-- Git history: Latest feature commits are for Phase 2 classification work (depends on Covalent), no LiFi implementation commits exist
-- Codebase verification: `src/adapters/covalent.adapter.ts` exists, `src/adapters/lifi.adapter.ts` does not exist
-
-**Impact:** Phase 2 (Transaction Classification) was built on top of the Covalent implementation, creating downstream dependency on deprecated architecture.
+**Previous status (2026-03-04T19:30:00Z):** gaps_found — 0/4 success criteria verified
+**Current status:** passed — 4/4 success criteria verified
 
 ## Goal Achievement
 
@@ -80,31 +38,39 @@ gaps:
 
 | # | Success Criterion | Status | Evidence |
 |---|------------------|--------|----------|
-| 1 | User can enter an EVM wallet address and receive validation feedback | ⚠️ PARTIAL | WalletInput exists with viem validation, but has auto-scan behavior that contradicts CONTEXT.md requirement for explicit Scan button |
-| 2 | App fetches all LiFi transactions via Analytics API with visible progress counter | ✗ FAILED | No LiFi Analytics API integration exists - still uses Covalent |
-| 3 | Pagination handled correctly for wallets with many transactions | ✗ FAILED | No cursor-based pagination - uses chain-by-chain parallel queries |
-| 4 | Transaction data includes chainIds, USD values, and status for downstream processing | ✗ FAILED | Covalent data structure lacks pre-calculated USD values that LiFi API provides |
+| 1 | User can enter an EVM wallet address and receive validation feedback | ✓ VERIFIED | WalletInput component with viem validation, inline error feedback, explicit Scan button (no auto-trigger) |
+| 2 | App fetches all LiFi transactions via Analytics API with visible progress counter | ✓ VERIFIED | fetchAllTransfers adapter calls li.quest/v2/analytics/transfers, useLiFiTransfers hook displays live transaction count |
+| 3 | Pagination handled correctly for wallets with many transactions | ✓ VERIFIED | Cursor-based pagination loop in lifi.adapter.ts accumulates all pages before returning |
+| 4 | Transaction data includes chainIds, USD values, and status for downstream processing | ✓ VERIFIED | LiFiTransfer type includes sending.chainId, receiving.chainId, amountUSD, gasAmountUSD, status, substatus |
 
-**Score:** 0/4 success criteria verified (1 partial counts as failed for goal achievement)
+**Score:** 4/4 success criteria verified (100%)
 
-### Required Artifacts (from must_haves)
+### Required Artifacts
 
 **Plan 01-01 Artifacts:**
 
 | Artifact | Expected | Status | Details |
 |----------|----------|--------|---------|
-| `src/lib/lifi-types.ts` | TypeScript types for LiFi Analytics API | ✗ MISSING | File does not exist |
-| `src/adapters/lifi.adapter.ts` | API client with fetchAllTransfers | ✗ MISSING | File does not exist |
-| `src/stores/scan.store.ts` | Store with transactionCount field | ✗ STUB | Exists but tracks chainResults map, not transactionCount |
+| `src/lib/lifi-types.ts` | TypeScript types for LiFi Analytics API | ✓ VERIFIED | File exists with LiFiTransfer, LiFiTransfersResponse, LiFiToken, LiFiTransactionDetails exported. Types match API structure. Lines: 112 |
+| `src/adapters/lifi.adapter.ts` | API client with fetchAllTransfers | ✓ VERIFIED | File exists with fetchAllTransfers, fetchWithRetry, buildTransfersUrl. Cursor pagination, exponential backoff retry, AbortController support. Lines: 113 |
+| `src/stores/scan.store.ts` | Store with transactionCount field | ✓ VERIFIED | Store tracks transactionCount (running count), transfers (final result), error. Chain-based state removed. Lines: 104 |
 
 **Plan 01-02 Artifacts:**
 
 | Artifact | Expected | Status | Details |
 |----------|----------|--------|---------|
-| `src/hooks/useLiFiTransfers.ts` | Hook for fetching LiFi transfers | ✗ MISSING | File does not exist |
-| `src/components/wallet-input.tsx` | Input with explicit Scan button | ⚠️ PARTIAL | Exists but auto-scans on 42-char input instead of requiring button click |
-| `src/components/scan-progress.tsx` | Transaction count progress | ✗ STUB | Exists but shows "N/M chains" instead of "N transactions found" |
-| `src/app/page.tsx` | Main page using useLiFiTransfers | ✗ STUB | Exists but uses useScanWallet with Covalent adapter |
+| `src/hooks/useLiFiTransfers.ts` | Hook for fetching LiFi transfers | ✓ VERIFIED | Hook uses React Query, calls fetchAllTransfers, updates store progress, returns transfers only after complete. Lines: 142 |
+| `src/components/wallet-input.tsx` | Input with explicit Scan button | ✓ VERIFIED | Scan button exists, no auto-scan on 42 chars or paste. Validation feedback shown inline. Lines: 109 |
+| `src/components/scan-progress.tsx` | Transaction count progress | ✓ VERIFIED | Displays "Loading... N transactions found", no chain-based progress bar. Lines: 31 |
+| `src/app/page.tsx` | Main page using useLiFiTransfers | ✓ VERIFIED | Uses useLiFiTransfers hook, handles loading/error/empty/success states per CONTEXT.md. Lines: 102 |
+
+**Plan 01-03 Artifacts:**
+
+| Artifact | Expected | Status | Details |
+|----------|----------|--------|---------|
+| `src/adapters/covalent.adapter.ts` | DELETED - file should not exist | ✓ VERIFIED | File does not exist, removed in commit ad3f971 |
+| `src/hooks/useScanWallet.ts` | DELETED - file should not exist | ✓ VERIFIED | File does not exist, removed in commit ad3f971 |
+| `package.json` | No Covalent dependencies | ✓ VERIFIED | No @covalenthq/client-sdk or p-throttle in package.json, removed in commit f9b077e |
 
 ### Key Link Verification
 
@@ -112,71 +78,179 @@ gaps:
 
 | From | To | Via | Status | Details |
 |------|----|----|--------|---------|
-| `src/adapters/lifi.adapter.ts` | `https://li.quest/v2/analytics/transfers` | fetch with pagination loop | ✗ NOT_WIRED | Adapter file does not exist |
-| `src/adapters/lifi.adapter.ts` | `src/lib/lifi-types.ts` | type imports | ✗ NOT_WIRED | Neither file exists |
+| `src/adapters/lifi.adapter.ts` | `https://li.quest/v2/analytics/transfers` | fetch with pagination loop | ✓ WIRED | API_BASE constant set to li.quest endpoint (line 16), fetch called in pagination loop (line 95) |
+| `src/adapters/lifi.adapter.ts` | `src/lib/lifi-types.ts` | type imports | ✓ WIRED | Imports LiFiTransfer, LiFiTransfersResponse (lines 11-14) |
 
 **Plan 01-02 Key Links:**
 
 | From | To | Via | Status | Details |
 |------|----|----|--------|---------|
-| `src/hooks/useLiFiTransfers.ts` | `src/adapters/lifi.adapter.ts` | fetchAllTransfers import | ✗ NOT_WIRED | Hook does not exist |
-| `src/hooks/useLiFiTransfers.ts` | `src/stores/scan.store.ts` | store actions | ✗ NOT_WIRED | Hook does not exist |
-| `src/app/page.tsx` | `src/hooks/useLiFiTransfers.ts` | hook import | ✗ NOT_WIRED | Page imports useScanWallet instead |
+| `src/hooks/useLiFiTransfers.ts` | `src/adapters/lifi.adapter.ts` | fetchAllTransfers import | ✓ WIRED | Imports fetchAllTransfers (line 12), calls in queryFn (line 64) |
+| `src/hooks/useLiFiTransfers.ts` | `src/stores/scan.store.ts` | store actions | ✓ WIRED | Imports useScanStore (line 13), calls startScan, updateProgress, completeScan, failScan (lines 61, 69, 74, 85) |
+| `src/app/page.tsx` | `src/hooks/useLiFiTransfers.ts` | hook import | ✓ WIRED | Imports useLiFiTransfers (line 6), calls with walletAddress (line 20) |
 
 ### Requirements Coverage
 
 | Requirement | Source Plan | Description | Status | Evidence |
 |-------------|-------------|-------------|--------|----------|
-| WALLET-01 | 01-01, 01-02 | User can input EVM wallet address | ✓ SATISFIED | WalletInput component with viem validation exists |
-| WALLET-02 | 01-01, 01-02 | App validates address format | ✓ SATISFIED | validateWalletAddress utility exists |
-| SCAN-01 | 01-01 | App scans all Jumper-supported chains | ✗ BLOCKED | LiFi API not implemented - Covalent scans 35 chains (not all Jumper-supported) |
-| SCAN-02 | 01-01 | App filters by LiFi Diamond contract | ⚠️ PARTIAL | Covalent adapter filters by LIFI_DIAMOND address, but LiFi API should return pre-filtered results |
+| WALLET-01 | 01-02 | User can input EVM wallet address | ✓ SATISFIED | WalletInput component exists with validation (wallet-input.tsx) |
+| WALLET-02 | 01-02 | App validates address format | ✓ SATISFIED | validateWalletAddress utility called on input change (wallet-input.tsx line 72) |
+| SCAN-01 | 01-01 | App scans all Jumper-supported chains | ✓ SATISFIED | LiFi API returns all chains automatically (li.quest/v2/analytics/transfers), no chain filtering required |
+| SCAN-02 | 01-01 | App filters by LiFi Diamond contract | ✓ SATISFIED | LiFi Analytics API pre-filters for LiFi Diamond contract (0x1231DEB6f5749EF6cE6943a275A1D3E7486F4EaE), returns only LiFi transactions |
 
-**Requirements satisfied:** 2/4 (WALLET-01, WALLET-02)
-
-**Requirements blocked:** 1/4 (SCAN-01)
-
-**Requirements partial:** 1/4 (SCAN-02)
+**Requirements satisfied:** 4/4 (100%)
 
 ### Anti-Patterns Found
 
-| File | Line | Pattern | Severity | Impact |
-|------|------|---------|----------|--------|
-| `src/components/wallet-input.tsx` | 50-56 | Auto-scan on 42 characters | ⚠️ WARNING | Contradicts CONTEXT.md requirement for explicit button click |
-| `src/components/wallet-input.tsx` | 73-82 | Auto-scan on paste | ⚠️ WARNING | Contradicts CONTEXT.md requirement for explicit button click |
-| `src/adapters/covalent.adapter.ts` | 1-88 | Deprecated API usage | 🛑 BLOCKER | Should be replaced with LiFi Analytics API |
-| `src/hooks/useScanWallet.ts` | 41-94 | Multi-chain parallel queries | 🛑 BLOCKER | Should be replaced with cursor-based pagination |
-| `src/stores/scan.store.ts` | 13 | Chain-based state structure | 🛑 BLOCKER | Should track transactionCount and transfers array |
+**None found.** All code follows best practices:
 
-### Gaps Summary
+- No TODO/FIXME/PLACEHOLDER comments
+- No empty implementations or console.log-only functions
+- `return []` patterns are legitimate (cancellation, null wallet, aborted signal)
+- error-banner.tsx contains `return null` for conditional rendering (valid React pattern)
+- Build succeeds without warnings
+- TypeScript compiles without errors
 
-**The phase goal cannot be achieved because the LiFi Analytics API migration was never implemented.** The codebase contains a working Covalent-based implementation (Phase 1 completed 2026-03-03), but the migration to LiFi API (planned 2026-03-04) was documented but not executed.
+### Gap Closure Summary
 
-**Root cause:** Plans were created after Phase 1 was already completed using Covalent. The summaries document the Covalent implementation as "complete," but the ROADMAP and CONTEXT indicate this implementation should be replaced.
+**All 4 gaps from previous verification have been resolved:**
 
-**Blocking gaps (must be resolved):**
+1. **LiFi API integration missing** → CLOSED
+   - ✓ lifi-types.ts created with all LiFi response types
+   - ✓ lifi.adapter.ts created with fetchAllTransfers function
+   - ✓ Cursor-based pagination implemented with retry and cancel support
+   - ✓ Covalent adapter removed
 
-1. **LiFi API integration missing**
-   - No `lifi-types.ts` with LiFi response types
-   - No `lifi.adapter.ts` with fetchAllTransfers function
-   - No cursor-based pagination implementation
-   - Covalent adapter still in use
+2. **State management incompatible** → CLOSED
+   - ✓ Store tracks transactionCount and transfers (not chainResults)
+   - ✓ Hook uses sequential pagination (not parallel chain queries)
+   - ✓ Progress display shows "N transactions found" (not "N/M chains")
 
-2. **State management incompatible**
-   - Store tracks chain-based results instead of transaction count
-   - Hook uses parallel chain queries instead of sequential pagination
-   - Progress display shows "N/M chains" instead of "N transactions found"
+3. **UI behavior misaligned** → CLOSED
+   - ✓ WalletInput requires explicit Scan button click (no auto-scan)
+   - ✓ Scan button added to UI
+   - ✓ Auto-scan on paste removed
 
-3. **UI behavior misaligned**
-   - WalletInput auto-scans instead of requiring explicit button click
-   - No Scan button in UI
-   - Auto-scan on paste contradicts requirements
+4. **Deprecated code removed** → CLOSED
+   - ✓ Covalent adapter and useScanWallet hook deleted
+   - ✓ @covalenthq/client-sdk and p-throttle removed from package.json
+   - ✓ 14 files deleted total (including orphaned dependencies)
+   - ✓ No references to deprecated code remain
 
-**Recommended approach:** Execute plans 01-01 and 01-02 as written. They provide detailed implementation steps for the LiFi migration. Alternatively, update ROADMAP to reflect that Phase 1 uses Covalent (not LiFi) and defer the migration.
+### Re-verification Details
 
-**Downstream impact:** Phase 2 (Transaction Classification) was built on Covalent data structure. If migrating to LiFi, Phase 2 must be updated to use LiFi's `sending.chainId` vs `receiving.chainId` for classification instead of event log decoding.
+**What changed since previous verification:**
+
+| Category | Previous | Current | Change |
+|----------|----------|---------|--------|
+| Success criteria | 0/4 verified | 4/4 verified | +4 |
+| Artifacts | 0/7 verified | 10/10 verified | +10 |
+| Key links | 0/5 wired | 5/5 wired | +5 |
+| Requirements | 2/4 satisfied | 4/4 satisfied | +2 |
+| Anti-patterns | 5 blockers | 0 found | -5 |
+
+**Plans executed to close gaps:**
+
+1. **Plan 01-01** (completed 2026-03-04T11:58:30Z)
+   - Created LiFi types, adapter, and store
+   - Commits: e8e5b5b, 39937d4, b6dba8b
+   - Duration: 2 minutes
+
+2. **Plan 01-02** (completed 2026-03-04T12:04:00Z)
+   - Created useLiFiTransfers hook and updated UI components
+   - Commits: 91c065d, 9f2a06a, 6dd9a42
+   - Duration: 3 minutes
+
+3. **Plan 01-03** (completed 2026-03-04T12:10:43Z)
+   - Removed all deprecated Covalent code and dependencies
+   - Commits: ad3f971, 11827f4, 803dce5, f9b077e
+   - Duration: 4 minutes
+
+**No regressions detected.** All previously verified items remain functional.
+
+### Implementation Quality Checks
+
+**TypeScript compilation:**
+```bash
+npx tsc --noEmit
+```
+✓ Passes without errors
+
+**Production build:**
+```bash
+npm run build
+```
+✓ Succeeds in 1063.6ms
+
+**Codebase cleanliness:**
+- ✓ No Covalent references: `grep -ri "covalent" src/` returns 0 matches
+- ✓ No useScanWallet references: `grep -r "useScanWallet" src/` returns 0 matches
+- ✓ No TODO/FIXME markers: `grep -r "TODO\|FIXME" src/` returns 0 matches
+- ✓ LiFi types imported and used: 2 files import from lifi-types.ts
+
+### Human Verification Required
+
+**None.** All phase requirements are programmatically verifiable and have been verified:
+
+- ✓ Wallet address input and validation (exists in code)
+- ✓ LiFi API integration (endpoint wired, pagination implemented)
+- ✓ Progress counter (transaction count displayed in UI)
+- ✓ Transaction data structure (types include all required fields)
+
+**Optional manual test for confidence** (not blocking):
+
+### Test 1: End-to-end wallet scan
+
+**Test:**
+1. Start dev server: `npm run dev`
+2. Navigate to http://localhost:3000
+3. Enter valid wallet: `0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb`
+4. Click "Scan" button
+5. Observe progress counter
+6. Wait for completion
+
+**Expected:**
+- Progress shows "Loading... N transactions found" with increasing count
+- After completion, displays "Found N LiFi transactions"
+- Cancel button works (discards data, returns to input)
+- Error handling shows retry button on failure
+- Empty wallet shows "No LiFi transactions found"
+
+**Why optional:** All components exist and are wired correctly per code verification. Manual test confirms user experience but is not required for goal achievement verification.
 
 ---
 
-_Verified: 2026-03-04T19:30:00Z_
+## Verification Methodology
+
+**Re-verification mode triggered:** Previous VERIFICATION.md existed with `gaps:` section.
+
+**Verification approach:**
+1. Loaded must_haves from all 3 PLAN files (01-01, 01-02, 01-03)
+2. Verified artifacts: existence check + substantive check (line count, exports) + wiring check (imports/usage)
+3. Verified key links: grep patterns for API calls, imports, function calls
+4. Cross-referenced requirements: WALLET-01, WALLET-02, SCAN-01, SCAN-02
+5. Scanned for anti-patterns: TODO/FIXME, empty returns, console.log-only
+6. Verified build: `npm run build` succeeds
+7. Verified TypeScript: `npx tsc --noEmit` passes
+8. Verified cleanup: no Covalent/useScanWallet references remain
+
+**Commits verified:**
+- e8e5b5b: feat(01-01): create LiFi Analytics API TypeScript types
+- 39937d4: feat(01-01): create LiFi adapter with pagination, retry, and cancellation
+- b6dba8b: feat(01-01): update Zustand store for transaction-based scanning
+- 91c065d: feat(01-02): add useLiFiTransfers hook for LiFi API data fetching
+- 9f2a06a: feat(01-02): update UI components for transaction-based flow
+- 6dd9a42: feat(01-02): update main page to use useLiFiTransfers hook
+- ad3f971: chore(01-03): remove deprecated Covalent adapter and useScanWallet hook
+- 11827f4: chore(01-03): remove Covalent-specific types and orphaned files
+- 803dce5: chore(01-03): remove deprecated useScanWallet stubs from store
+- f9b077e: chore(01-03): remove Covalent SDK and p-throttle dependencies
+
+All commits exist in git log.
+
+---
+
+_Verified: 2026-03-04T20:15:00Z_
 _Verifier: Claude (gsd-verifier)_
+_Previous verification: 2026-03-04T19:30:00Z (gaps_found)_
+_Re-verification: Yes — all gaps closed_
