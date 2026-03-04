@@ -119,6 +119,8 @@ Recent decisions affecting current work:
 - [Quick-6]: Use formatUSD() for USD unit distances, toLocaleString() for count-based units
 - [Quick-7]: Use HTML entity &larr; for left arrow (consistent with web standards)
 - [Quick-7]: Keep bottom link for scroll-down users (two navigation points)
+- [Quick-8]: Use flex min-h-screen for footer positioning at page bottom
+- [Quick-8]: Border-top separator for visual distinction from content
 
 ### Pending Todos
 
@@ -143,11 +145,12 @@ None yet.
 | 5 | Add How It Works page explaining XP calculation | 2026-03-04 | 49935bf | [5-ajoute-une-page-permettant-d-expliquer-l](./quick/5-ajoute-une-page-permettant-d-expliquer-l/) |
 | 6 | Harmonize dollar display using $ prefix | 2026-03-04 | cba86df | [6-harmoniser-affichage-dollar-utiliser-par](./quick/6-harmoniser-affichage-dollar-utiliser-par/) |
 | 7 | Detailed XP descriptions and top back button | 2026-03-04 | 3f0bdb7 | [7-d-taille-crit-res-xp-et-ajoute-bouton-re](./quick/7-d-taille-crit-res-xp-et-ajoute-bouton-re/) |
+| 8 | Add footer with LiFi API and unofficial app disclaimers | 2026-03-04 | e52b0f9 | [8-ajouter-footer-disclaimer-donn-es-lifi-a](./quick/8-ajouter-footer-disclaimer-donn-es-lifi-a/) |
 
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed quick task 7 (Detailed XP descriptions and top back button)
+Stopped at: Completed quick task 8 (Add footer disclaimer)
 Resume file: N/A - Phase 4 complete
 
 ---
