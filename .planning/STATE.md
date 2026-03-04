@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-26)
 
 **Core value:** Show users exactly how many Jumper points they have and what actions will earn them more.
-**Current focus:** Phase 6 - Lazy Loading API (In Progress)
+**Current focus:** Phase 6 - Lazy Loading API (COMPLETE)
 
 ## Current Position
 
 Phase: 6 of 6 (Lazy Loading API)
-Plan: 2 of 3 in current phase - COMPLETE
-Status: Phase 6 plan 02 complete, continuing to plan 03
-Last activity: 2026-03-04 - Completed 06-02-PLAN.md (React Query hooks)
+Plan: 3 of 3 in current phase - COMPLETE
+Status: Phase 6 complete - all lazy loading patterns implemented
+Last activity: 2026-03-04 - Completed 06-03-PLAN.md (UI integration)
 
-Progress: [############________] 67% (2/3 plans complete)
+Progress: [####################] 100% (3/3 plans complete)
 
 ## API Migration Notice (2026-03-04)
 
@@ -58,6 +58,7 @@ Progress: [############________] 67% (2/3 plans complete)
 | Phase 04 P02 | 3 | 3 tasks | 6 files |
 | Phase 06 P01 | 2 | 3 tasks | 3 files |
 | Phase 06 P02 | 3 | 3 tasks | 3 files |
+| Phase 06 P03 | 3 min | 4 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -139,6 +140,11 @@ Recent decisions affecting current work:
 - [Phase 06-02]: prioritizeMonth uses ensureQueryData for immediate user navigation
 - [Phase 06-02]: Background prefetch continues even when priority request made
 - [Phase 06-02]: useClassifiedTransactions marked @deprecated - useMonthClassification is new pattern
+- [Phase 06-03]: useMonthPoints uses useMonthClassification for single month XP
+- [Phase 06-03]: Partial XP indicator '+' shown when background prefetch still running
+- [Phase 06-03]: Refresh button only visible for current month (index 11)
+- [Phase 06-03]: Navigation to unloaded month calls prioritizeMonth for immediate fetch
+- [Phase 06-03]: Old usePoints and useClassifiedTransactions marked @deprecated
 
 ### Pending Todos
 
@@ -170,9 +176,9 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed 06-02-PLAN.md (React Query hooks)
-Resume file: N/A - continuing to Plan 03
+Stopped at: Completed 06-03-PLAN.md (UI integration)
+Resume file: N/A - Phase 6 complete
 
 ---
-*Phase 06 in progress. React Query hooks complete.*
-*Next: 06-03-PLAN.md (UI integration and final wiring)*
+*Phase 06 complete. All lazy loading patterns implemented.*
+*Dashboard fetches 4 months initially, prefetches remaining in background.*
