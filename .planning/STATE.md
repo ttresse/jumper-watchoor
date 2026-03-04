@@ -116,6 +116,7 @@ Recent decisions affecting current work:
 - [Phase 04-02]: Category rows always show all four in fixed order: transactoor, bridgoor, swapoor, chainoor
 - [Phase 04-02]: Skeleton dimensions match actual content to prevent layout shift
 - [Phase 04-02]: Empty state shows friendly message instead of blank dashboard
+- [Quick-6]: Use formatUSD() for USD unit distances, toLocaleString() for count-based units
 
 ### Pending Todos
 
@@ -134,11 +135,12 @@ None yet.
 | 3 | Hide next tier info and add muted styling for past months | 2026-03-04 | 3e250d5 | [3-sur-les-mois-pass-s-masquer-next-tier-in](./quick/3-sur-les-mois-pass-s-masquer-next-tier-in/) |
 | 4 | Improve CategoryRow mobile layout with vertical stacking | 2026-03-04 | cfa0901 | [4-am-liorer-layout-mobile-des-category-row](./quick/4-am-liorer-layout-mobile-des-category-row/) |
 | 5 | Add How It Works page explaining XP calculation | 2026-03-04 | 49935bf | [5-ajoute-une-page-permettant-d-expliquer-l](./quick/5-ajoute-une-page-permettant-d-expliquer-l/) |
+| 6 | Harmonize dollar display using $ prefix | 2026-03-04 | cba86df | [6-harmoniser-affichage-dollar-utiliser-par](./quick/6-harmoniser-affichage-dollar-utiliser-par/) |
 
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed quick task 5 (How It Works page)
+Stopped at: Completed quick task 6 (Harmonize dollar display)
 Resume file: N/A - Phase 4 complete
 
 ---
