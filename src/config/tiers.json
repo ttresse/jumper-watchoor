@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "categories": [
+    {
+      "id": "transactoor",
+      "displayName": "Transactoor",
+      "description": "Transaction count (placeholder values - real Jumper thresholds TBD)",
+      "icon": "activity",
+      "unit": "transactions",
+      "tiers": [
+        { "name": "Grand Degen", "threshold": 50, "xp": 500 },
+        { "name": "Degen", "threshold": 30, "xp": 300 },
+        { "name": "Ape", "threshold": 20, "xp": 200 },
+        { "name": "Chad", "threshold": 10, "xp": 100 },
+        { "name": "Power User", "threshold": 5, "xp": 50 },
+        { "name": "Novice", "threshold": 1, "xp": 10 }
+      ]
+    },
+    {
+      "id": "bridgoor",
+      "displayName": "Bridgoor",
+      "description": "Bridge volume in USD (placeholder values - real Jumper thresholds TBD)",
+      "icon": "bridge",
+      "unit": "USD",
+      "tiers": [
+        { "name": "Grand Degen", "threshold": 50000, "xp": 500 },
+        { "name": "Degen", "threshold": 25000, "xp": 300 },
+        { "name": "Ape", "threshold": 10000, "xp": 200 },
+        { "name": "Chad", "threshold": 5000, "xp": 100 },
+        { "name": "Power User", "threshold": 1000, "xp": 50 },
+        { "name": "Novice", "threshold": 100, "xp": 10 }
+      ]
+    },
+    {
+      "id": "swapoor",
+      "displayName": "Swapoor",
+      "description": "Swap volume in USD (placeholder values - real Jumper thresholds TBD)",
+      "icon": "swap",
+      "unit": "USD",
+      "tiers": [
+        { "name": "Grand Degen", "threshold": 50000, "xp": 500 },
+        { "name": "Degen", "threshold": 25000, "xp": 300 },
+        { "name": "Ape", "threshold": 10000, "xp": 200 },
+        { "name": "Chad", "threshold": 5000, "xp": 100 },
+        { "name": "Power User", "threshold": 1000, "xp": 50 },
+        { "name": "Novice", "threshold": 100, "xp": 10 }
+      ]
+    },
+    {
+      "id": "chainoor",
+      "displayName": "Chainoor",
+      "description": "Unique chains used (placeholder values - real Jumper thresholds TBD)",
+      "icon": "chains",
+      "unit": "chains",
+      "tiers": [
+        { "name": "Grand Degen", "threshold": 15, "xp": 500 },
+        { "name": "Degen", "threshold": 10, "xp": 300 },
+        { "name": "Ape", "threshold": 7, "xp": 200 },
+        { "name": "Chad", "threshold": 5, "xp": 100 },
+        { "name": "Power User", "threshold": 3, "xp": 50 },
+        { "name": "Novice", "threshold": 1, "xp": 10 }
+      ]
+    }
+  ]
+}
