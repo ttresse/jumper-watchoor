@@ -51,6 +51,8 @@ function createEmptyMonth(monthKey: string): MonthlyAggregate {
     bridgeCount: 0,
     swapCount: 0,
     uniqueChains: new Set(), // New Set each time to avoid shared references
+    bridgeVolumeUSD: 0,
+    swapVolumeUSD: 0,
   };
 }
 
@@ -88,12 +90,16 @@ export function aggregateByMonth(
     // Add source chain ID (per CONTEXT.md: count source only)
     aggregate.uniqueChains.add(transfer.sending.chainId);
 
-    // Classify and increment appropriate counter
+    // Classify and increment appropriate counter + USD volume
     const type = classifyTransfer(transfer);
+    // Parse USD value with fallback to 0 for missing/invalid values (per CONTEXT.md)
+    const amountUSD = parseFloat(transfer.sending.amountUSD) || 0;
     if (type === 'bridge') {
       aggregate.bridgeCount++;
+      aggregate.bridgeVolumeUSD += amountUSD;
     } else {
       aggregate.swapCount++;
+      aggregate.swapVolumeUSD += amountUSD;
     }
   }
 

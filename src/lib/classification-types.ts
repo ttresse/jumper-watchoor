@@ -25,6 +25,10 @@ export interface MonthlyAggregate {
   swapCount: number;
   /** Unique source chain IDs used this month (per CONTEXT.md: count source only) */
   uniqueChains: Set<number>;
+  /** Sum of USD value (amountUSD) for bridge transactions this month */
+  bridgeVolumeUSD: number;
+  /** Sum of USD value (amountUSD) for swap transactions this month */
+  swapVolumeUSD: number;
 }
 
 /**
