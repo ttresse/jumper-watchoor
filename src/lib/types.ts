@@ -46,8 +46,8 @@ export interface ChainResult {
   displayName: string;
   /** Number of LiFi transactions found */
   transactionCount: number;
-  /** Transaction details */
-  transactions: ChainTransaction[];
+  /** Transaction details (includes logs for classification) */
+  transactions: ChainTransactionWithLogs[];
   /** Scan status */
   status: 'pending' | 'success' | 'error';
   /** Error message if status is 'error' */
