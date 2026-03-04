@@ -121,6 +121,9 @@ Recent decisions affecting current work:
 - [Quick-7]: Keep bottom link for scroll-down users (two navigation points)
 - [Quick-8]: Use flex min-h-screen for footer positioning at page bottom
 - [Quick-8]: Border-top separator for visual distinction from content
+- [Quick-9]: Current value uses text-base font-semibold text-foreground (prominent)
+- [Quick-9]: Next tier info uses text-xs text-muted-foreground (discrete)
+- [Quick-9]: Vertical stacking on all screen sizes for value section
 
 ### Pending Todos
 
@@ -146,11 +149,12 @@ None yet.
 | 6 | Harmonize dollar display using $ prefix | 2026-03-04 | cba86df | [6-harmoniser-affichage-dollar-utiliser-par](./quick/6-harmoniser-affichage-dollar-utiliser-par/) |
 | 7 | Detailed XP descriptions and top back button | 2026-03-04 | 3f0bdb7 | [7-d-taille-crit-res-xp-et-ajoute-bouton-re](./quick/7-d-taille-crit-res-xp-et-ajoute-bouton-re/) |
 | 8 | Add footer with LiFi API and unofficial app disclaimers | 2026-03-04 | e52b0f9 | [8-ajouter-footer-disclaimer-donn-es-lifi-a](./quick/8-ajouter-footer-disclaimer-donn-es-lifi-a/) |
+| 9 | Refonte layout CategoryRow - emphasize current value | 2026-03-04 | a870d2a | [9-refonte-layout-categoryrow-current-value](./quick/9-refonte-layout-categoryrow-current-value/) |
 
 ## Session Continuity
 
 Last session: 2026-03-04
-Stopped at: Completed quick task 8 (Add footer disclaimer)
+Stopped at: Completed quick task 9 (CategoryRow visual hierarchy)
 Resume file: N/A - Phase 4 complete
 
 ---
