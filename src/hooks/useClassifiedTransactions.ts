@@ -1,16 +1,86 @@
 'use client';
 
 /**
- * React hook for deriving classified transaction data from LiFi transfers.
+ * React hooks for classified transaction data.
  *
- * Uses useMemo to compute classification and aggregation only when transfers complete.
- * Per CONTEXT.md: classification runs after all data is loaded (not streaming).
+ * Provides two hooks:
+ * - useMonthClassification: Per-month classification (lazy loading)
+ * - useClassifiedTransactions: Full classification (deprecated, backwards compat)
+ *
+ * Per CONTEXT.md: Classification runs per-month, not waiting for all data.
  */
 
 import { useMemo } from 'react';
 import { useLiFiTransfers } from './useLiFiTransfers';
+import { useMonthTransfer } from './useMonthTransfers';
 import { aggregateByMonth, fillMonthRange } from '@/lib/classification';
-import type { ClassifiedData } from '@/lib/classification-types';
+import type { ClassifiedData, MonthlyAggregate } from '@/lib/classification-types';
+import type { LiFiTransfer } from '@/lib/lifi-types';
+
+// ============================================
+// Per-month classification (new lazy loading)
+// ============================================
+
+/**
+ * Result object returned by useMonthClassification.
+ */
+export interface UseMonthClassificationResult {
+  /** Classified data for the month, null while loading */
+  monthData: MonthlyAggregate | null;
+  /** Raw transfers for the month */
+  transfers: LiFiTransfer[];
+  /** True while fetching */
+  isLoading: boolean;
+  /** True if fetch encountered an error */
+  isError: boolean;
+  /** Error object if fetch failed */
+  error: Error | null;
+}
+
+/**
+ * Classify transfers for a single month.
+ *
+ * Uses useMonthTransfer to get transfers, then aggregates.
+ * Returns classification for that single month only.
+ *
+ * Per CONTEXT.md: Classification runs per-month, not waiting for all data.
+ *
+ * @param wallet - Wallet address to query, or null to skip
+ * @param monthKey - Month identifier in YYYY-MM format
+ * @returns Object with month classification, loading state, and error
+ */
+export function useMonthClassification(
+  wallet: string | null,
+  monthKey: string
+): UseMonthClassificationResult {
+  const { data: transfers, isLoading, isError, error } = useMonthTransfer(
+    wallet,
+    monthKey
+  );
+
+  const monthData = useMemo<MonthlyAggregate | null>(() => {
+    // Don't compute while loading
+    if (isLoading || transfers.length === 0) return null;
+
+    // Aggregate this month's transfers
+    const monthMap = aggregateByMonth(transfers);
+
+    // Get the aggregate for this month (should be exactly one entry)
+    return monthMap.get(monthKey) ?? null;
+  }, [transfers, isLoading, monthKey]);
+
+  return {
+    monthData,
+    transfers,
+    isLoading,
+    isError,
+    error,
+  };
+}
+
+// ============================================
+// Full classification (deprecated, backwards compat)
+// ============================================
 
 /**
  * Result object returned by useClassifiedTransactions.
@@ -32,6 +102,9 @@ export interface UseClassifiedTransactionsResult {
 
 /**
  * Fetch and classify LiFi transfers for a wallet address.
+ *
+ * @deprecated Use useMonthClassification for per-month lazy loading.
+ * This hook fetches all data before classification - will be removed in Plan 03.
  *
  * Derives classified data using useMemo after fetch completes.
  * Returns null for classifiedData until isComplete is true.
