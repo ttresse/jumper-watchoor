@@ -83,9 +83,6 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
   // Get the selected month key based on index
   const selectedMonthKey = allMonthKeys[monthIndex];
 
-  // Check if selected month is loaded
-  const isSelectedMonthLoaded = loadedMonthKeys.has(selectedMonthKey);
-
   // Per-month data hooks for selected month
   const { monthPoints, isLoading: isMonthPointsLoading } = useMonthPoints(
     wallet,
@@ -97,6 +94,8 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
   );
 
   // Combined loading state for selected month
+  // Note: We rely on the hook's isLoading state, not loadedMonthKeys,
+  // because loadedMonthKeys only tracks the initial 4 months, not prefetched ones.
   const isSelectedMonthLoading = isMonthPointsLoading || isMonthDataLoading;
 
   // Month navigation handlers
@@ -192,8 +191,10 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
     return <DashboardSkeleton />;
   }
 
-  // Show skeleton if selected month is not loaded yet
-  if (!isSelectedMonthLoaded || isSelectedMonthLoading) {
+  // Show skeleton while selected month is loading
+  // Note: We check isSelectedMonthLoading directly (from useMonthTransfer via hooks)
+  // rather than loadedMonthKeys.has() which only tracks initial 4 months.
+  if (isSelectedMonthLoading) {
     return (
       <div className="space-y-6">
         {/* Month navigation still visible during loading */}
