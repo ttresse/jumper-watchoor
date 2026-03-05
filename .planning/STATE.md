@@ -148,6 +148,7 @@ Recent decisions affecting current work:
 - [Quick-11]: Empty months return MonthlyAggregate with zeros (not null) to show 0 XP dashboard
 - [Quick-12]: Use allMonthKeys.length - 1 instead of hardcoded 11 for all index checks
 - [Quick-12]: Add allMonthKeys.length to useEffect dependencies for wallet reset
+- [Quick-13]: React key pattern to reset WalletInput state on "Scan a different wallet" click
 
 ### Pending Todos
 
@@ -178,11 +179,12 @@ None yet.
 | 10 | Add explanatory tooltips on category names | 2026-03-04 | 06fbef4 | [10-ajouter-tooltips-explicatifs-sur-les-4-c](./quick/10-ajouter-tooltips-explicatifs-sur-les-4-c/) |
 | 11 | Fix empty months showing "no transactions" instead of 0 XP | 2026-03-04 | d97cf20 | [11-quand-je-remonte-novembre-les-donn-es-ne](./quick/11-quand-je-remonte-novembre-les-donn-es-ne/) |
 | 12 | Extend month navigation to all months since Jan 2022 | 2026-03-04 | ddb4eba | [12-fais-en-sorte-qu-on-puisse-remonter-plus](./quick/12-fais-en-sorte-qu-on-puisse-remonter-plus/) |
+| 13 | Reset wallet input when clicking "Scan a different wallet" | 2026-03-05 | f35dd18 | [13-reset-input-when-clicking-scan-a-differe](./quick/13-reset-input-when-clicking-scan-a-differe/) |
 
 ## Session Continuity
 
-Last session: 2026-03-04
-Stopped at: Completed quick-12 (extend month navigation)
+Last session: 2026-03-05
+Stopped at: Completed quick-13 (reset wallet input on scan different)
 Resume file: N/A - Quick task complete
 
 ---
