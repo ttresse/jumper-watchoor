@@ -13,7 +13,7 @@
  * - Partial XP display with "+" indicator
  */
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useInitialMonthLoad } from '@/hooks/useMonthTransfers';
 import { usePrefetchManager } from '@/hooks/usePrefetchManager';
 import { useMonthPoints } from '@/hooks/usePoints';
@@ -133,15 +133,21 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
   // XP shown is for the selected month only
   const isPartialXP = false;
 
+  // Refresh animation state - 1 second spin duration for visual feedback
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   // Refresh handler for current month only
-  const handleRefresh = () => {
-    if (isCurrentMonth && wallet) {
+  const handleRefresh = useCallback(() => {
+    if (isCurrentMonth && wallet && !isRefreshing) {
+      setIsRefreshing(true);
       // Invalidate only current month's query to trigger refetch
       queryClient.invalidateQueries({
         queryKey: ['lifi-transfers', wallet, currentMonthKey],
       });
+      // Visual feedback for 1 second
+      setTimeout(() => setIsRefreshing(false), 1000);
     }
-  };
+  }, [isCurrentMonth, wallet, isRefreshing, queryClient, currentMonthKey]);
 
   // Compute volume and next tier info for each category
   const categoryData = useMemo(() => {
@@ -287,8 +293,15 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
       {/* Refresh button - only for current month per CONTEXT.md */}
       {isCurrentMonth && (
         <div className="flex justify-center">
-          <Button variant="outline" size="sm" onClick={handleRefresh}>
-            <RefreshCw className="h-4 w-4 mr-2" />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+          >
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`}
+            />
             Refresh
           </Button>
         </div>
