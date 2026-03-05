@@ -11,6 +11,12 @@ interface WalletInputProps {
   disabled?: boolean;
 }
 
+/**
+ * Minimum address length to start validation.
+ * 25 chars is the minimum for Bitcoin legacy addresses.
+ */
+const MIN_VALIDATION_LENGTH = 25;
+
 export function WalletInput({ onValidAddress, disabled }: WalletInputProps) {
   const [input, setInput] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -53,17 +59,21 @@ export function WalletInput({ onValidAddress, disabled }: WalletInputProps) {
     const value = e.target.value;
     setInput(value);
 
-    // Clear error while typing, then validate
+    // Clear error while typing
     setError(null);
 
-    // Validate on each change (for button disabled state)
-    if (value.length >= 42) {
+    // Validate on each change once minimum length reached (for button disabled state)
+    if (value.length >= MIN_VALIDATION_LENGTH) {
       validateInput(value);
     } else {
       setIsValidAddress(false);
-      if (value.length > 42) {
-        setError('Address too long');
-      }
+    }
+  };
+
+  // Validate on blur for better UX with various address lengths
+  const handleBlur = () => {
+    if (input.length >= MIN_VALIDATION_LENGTH) {
+      validateInput(input);
     }
   };
 
@@ -74,6 +84,9 @@ export function WalletInput({ onValidAddress, disabled }: WalletInputProps) {
       onValidAddress(result.normalizedAddress);
     } else if (result.error) {
       setError(result.error);
+    } else {
+      // Generic error for ambiguous failures
+      setError('Invalid address. Supported: EVM (0x...), Solana, Bitcoin (bc1...)');
     }
   }, [input, onValidAddress]);
 
@@ -83,7 +96,8 @@ export function WalletInput({ onValidAddress, disabled }: WalletInputProps) {
         <Input
           value={input}
           onChange={handleChange}
-          placeholder="0x..."
+          onBlur={handleBlur}
+          placeholder="Enter wallet address"
           className="font-mono text-base h-12 flex-1"
           disabled={disabled}
           aria-label="Wallet address"
