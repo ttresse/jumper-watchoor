@@ -279,14 +279,23 @@ export function validateWalletAddress(input: string): ValidationResult {
     return { isValid: false, normalizedAddress: null, error: null };
   }
 
+  // Detect address type and validate
+  const lowerTrimmed = trimmed.toLowerCase();
+
+  // ENS names are not supported - provide helpful error
+  if (lowerTrimmed.endsWith('.eth')) {
+    return {
+      isValid: false,
+      normalizedAddress: null,
+      error: 'ENS names are not supported. Please enter the resolved wallet address.',
+    };
+  }
+
   // If too short (< 25), user is still typing
   // 25 is the minimum for Bitcoin legacy addresses
   if (trimmed.length < 25) {
     return { isValid: false, normalizedAddress: null, error: null };
   }
-
-  // Detect address type and validate
-  const lowerTrimmed = trimmed.toLowerCase();
 
   // EVM: starts with 0x
   if (trimmed.startsWith('0x')) {
