@@ -149,6 +149,8 @@ Recent decisions affecting current work:
 - [Quick-12]: Use allMonthKeys.length - 1 instead of hardcoded 11 for all index checks
 - [Quick-12]: Add allMonthKeys.length to useEffect dependencies for wallet reset
 - [Quick-13]: React key pattern to reset WalletInput state on "Scan a different wallet" click
+- [Quick-14]: Use useCallback for handleRefresh to properly track dependencies (isRefreshing guard)
+- [Quick-14]: Guard against re-clicks in handler logic (!isRefreshing) in addition to button disabled state
 
 ### Pending Todos
 
@@ -180,11 +182,12 @@ None yet.
 | 11 | Fix empty months showing "no transactions" instead of 0 XP | 2026-03-04 | d97cf20 | [11-quand-je-remonte-novembre-les-donn-es-ne](./quick/11-quand-je-remonte-novembre-les-donn-es-ne/) |
 | 12 | Extend month navigation to all months since Jan 2022 | 2026-03-04 | ddb4eba | [12-fais-en-sorte-qu-on-puisse-remonter-plus](./quick/12-fais-en-sorte-qu-on-puisse-remonter-plus/) |
 | 13 | Reset wallet input when clicking "Scan a different wallet" | 2026-03-05 | f35dd18 | [13-reset-input-when-clicking-scan-a-differe](./quick/13-reset-input-when-clicking-scan-a-differe/) |
+| 14 | Add spinning animation on refresh button click | 2026-03-05 | d5739eb | [14-ajoute-un-effet-visuel-plus-long-quand-o](./quick/14-ajoute-un-effet-visuel-plus-long-quand-o/) |
 
 ## Session Continuity
 
 Last session: 2026-03-05
-Stopped at: Completed quick-13 (reset wallet input on scan different)
+Stopped at: Completed quick-14 (refresh button spinning animation)
 Resume file: N/A - Quick task complete
 
 ---
