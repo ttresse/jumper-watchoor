@@ -6,10 +6,12 @@ import { WalletInput } from '@/components/wallet-input';
 import { ScanProgress } from '@/components/scan-progress';
 import { XPDashboard } from '@/components/dashboard/xp-dashboard';
 import { useLiFiTransfers } from '@/hooks/useLiFiTransfers';
+import { useScanStore } from '@/stores/scan.store';
 
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [resetKey, setResetKey] = useState(0);
+  const clearLastWallet = useScanStore((state) => state.clearLastWallet);
 
   const { transactionCount, isLoading, isComplete, error, cancel } =
     useLiFiTransfers(walletAddress);
@@ -27,6 +29,8 @@ export default function Home() {
 
   const handleReset = () => {
     setWalletAddress(null);
+    // Clear lastWallet from store so WalletInput doesn't pre-fill on remount
+    clearLastWallet();
     // Increment resetKey to force WalletInput remount and clear internal state
     setResetKey((k) => k + 1);
   };
