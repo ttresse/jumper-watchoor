@@ -9,6 +9,7 @@ import { useLiFiTransfers } from '@/hooks/useLiFiTransfers';
 
 export default function Home() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [resetKey, setResetKey] = useState(0);
 
   const { transactionCount, isLoading, isComplete, error, cancel } =
     useLiFiTransfers(walletAddress);
@@ -26,6 +27,8 @@ export default function Home() {
 
   const handleReset = () => {
     setWalletAddress(null);
+    // Increment resetKey to force WalletInput remount and clear internal state
+    setResetKey((k) => k + 1);
   };
 
   return (
@@ -50,8 +53,9 @@ export default function Home() {
           )}
         </div>
 
-        {/* Wallet Input */}
+        {/* Wallet Input - key forces remount on reset to clear internal state */}
         <WalletInput
+          key={resetKey}
           onValidAddress={handleValidAddress}
           disabled={isLoading}
         />
