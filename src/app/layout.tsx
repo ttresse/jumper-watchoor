@@ -28,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="talentapp:project_verification" content="9f87cd056126d1da5141575ad0378367c58678dc89df7fa0f21a4049e280dd4b3644a9d4b7d9b32711ae81863ed31fe99ea032ac55f3815052911586e38a8629" />
         <Script
           defer
           src="https://cloud.umami.is/script.js"
