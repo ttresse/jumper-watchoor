@@ -17,16 +17,42 @@ import { getMonthBoundaries } from '@/lib/month-utils';
 const API_BASE = 'https://li.quest/v2/analytics/transfers';
 
 /**
- * Retry a function with exponential backoff.
+ * Get a user-friendly error message based on HTTP status code.
+ *
+ * @param status - HTTP status code
+ * @returns User-friendly error message
+ */
+function getErrorMessage(status: number): string {
+  switch (status) {
+    case 500:
+    case 502:
+    case 503:
+    case 504:
+      return 'LiFi server is temporarily unavailable. Please try again later.';
+    case 429:
+      return 'Too many requests. Please wait a moment before retrying.';
+    case 404:
+      return 'Wallet not found or no transactions available.';
+    case 400:
+      return 'Invalid wallet address format.';
+    default:
+      return `API error (${status}). Please try again.`;
+  }
+}
+
+/**
+ * Retry a function with fixed delay between attempts.
  *
  * @param fn - Async function to retry
  * @param maxRetries - Maximum retry attempts (default: 3)
+ * @param delayMs - Delay between retries in ms (default: 3000)
  * @returns Result of successful function call
  * @throws Last error after all retries exhausted
  */
 async function fetchWithRetry<T>(
   fn: () => Promise<T>,
-  maxRetries: number = 3
+  maxRetries: number = 3,
+  delayMs: number = 3000
 ): Promise<T> {
   let lastError: Error | undefined;
 
@@ -36,8 +62,8 @@ async function fetchWithRetry<T>(
     } catch (error) {
       lastError = error as Error;
       if (attempt < maxRetries - 1) {
-        // Exponential backoff: 1s, 2s, 4s
-        await new Promise((r) => setTimeout(r, 1000 * Math.pow(2, attempt)));
+        // Fixed 3 second delay between retries
+        await new Promise((r) => setTimeout(r, delayMs));
       }
     }
   }
@@ -101,7 +127,7 @@ export async function fetchAllTransfers(
       const response = await fetch(url, { signal });
 
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        throw new Error(getErrorMessage(response.status));
       }
 
       return response.json() as Promise<LiFiTransfersResponse>;
@@ -179,7 +205,7 @@ export async function fetchMonthTransfers(
       const response = await fetch(url, { signal });
 
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        throw new Error(getErrorMessage(response.status));
       }
 
       return response.json() as Promise<LiFiTransfersResponse>;

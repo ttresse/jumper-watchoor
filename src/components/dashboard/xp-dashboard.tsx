@@ -26,6 +26,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { XPTotal } from './xp-total';
 import { CategoryRow } from './category-row';
+import { ChainList } from './chain-list';
 import { MonthNav } from './month-nav';
 import { DashboardSkeleton } from './dashboard-skeleton';
 
@@ -135,11 +136,36 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
 
   // Refresh animation state - 1 second spin duration for visual feedback
   const [isRefreshing, setIsRefreshing] = useState(false);
+  // Cooldown state - 1 minute (60000ms) between refreshes
+  // Initialize to now so cooldown applies immediately after first search
+  const [lastRefreshTime, setLastRefreshTime] = useState<number>(() => Date.now());
+  const [isOnCooldown, setIsOnCooldown] = useState(true);
+
+  // Reset cooldown when wallet changes (new search)
+  useEffect(() => {
+    setLastRefreshTime(Date.now());
+    setIsOnCooldown(true);
+  }, [wallet]);
+
+  // Check and update cooldown status
+  useEffect(() => {
+    if (lastRefreshTime === 0) return;
+
+    const checkCooldown = () => {
+      const elapsed = Date.now() - lastRefreshTime;
+      setIsOnCooldown(elapsed < 60000); // 1 minute cooldown
+    };
+
+    checkCooldown();
+    const interval = setInterval(checkCooldown, 1000);
+    return () => clearInterval(interval);
+  }, [lastRefreshTime]);
 
   // Refresh handler for current month only
   const handleRefresh = useCallback(() => {
-    if (isCurrentMonth && wallet && !isRefreshing) {
+    if (isCurrentMonth && wallet && !isRefreshing && !isOnCooldown) {
       setIsRefreshing(true);
+      setLastRefreshTime(Date.now());
       // Invalidate only current month's query to trigger refetch
       queryClient.invalidateQueries({
         queryKey: ['lifi-transfers', wallet, currentMonthKey],
@@ -147,7 +173,12 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
       // Visual feedback for 1 second
       setTimeout(() => setIsRefreshing(false), 1000);
     }
-  }, [isCurrentMonth, wallet, isRefreshing, queryClient, currentMonthKey]);
+  }, [isCurrentMonth, wallet, isRefreshing, isOnCooldown, queryClient, currentMonthKey]);
+
+  // Truncate wallet address for display (0x1234...abcd)
+  const truncatedWallet = wallet
+    ? `${wallet.slice(0, 6)}...${wallet.slice(-4)}`
+    : null;
 
   // Compute volume and next tier info for each category
   const categoryData = useMemo(() => {
@@ -258,6 +289,13 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
 
   return (
     <div className="space-y-6">
+      {/* Wallet address display */}
+      {truncatedWallet && (
+        <p className="text-center text-sm text-muted-foreground font-mono">
+          {truncatedWallet}
+        </p>
+      )}
+
       {/* Month navigation at top */}
       <MonthNav
         monthKey={monthPoints.month}
@@ -278,26 +316,34 @@ export function XPDashboard({ wallet }: XPDashboardProps) {
       >
         {categoryData.map((data) =>
           data ? (
-            <CategoryRow
-              key={data.category.categoryId}
-              category={data.category}
-              volume={data.volume}
-              volumeUnit={data.volumeUnit ?? undefined}
-              nextTierInfo={data.nextTierInfo}
-              isCurrentMonth={isCurrentMonth}
-            />
+            <div key={data.category.categoryId}>
+              <CategoryRow
+                category={data.category}
+                volume={data.volume}
+                volumeUnit={data.volumeUnit ?? undefined}
+                nextTierInfo={data.nextTierInfo}
+                isCurrentMonth={isCurrentMonth}
+              />
+              {data.category.categoryId === 'chainoor' && monthAggregate && (
+                <ChainList
+                  uniqueChains={monthAggregate.uniqueChains}
+                  isCurrentMonth={isCurrentMonth}
+                />
+              )}
+            </div>
           ) : null
         )}
       </div>
 
       {/* Refresh button - only for current month per CONTEXT.md */}
+      {/* 1 minute invisible cooldown between refreshes */}
       {isCurrentMonth && (
         <div className="flex justify-center">
           <Button
             variant="outline"
             size="sm"
             onClick={handleRefresh}
-            disabled={isRefreshing}
+            disabled={isRefreshing || isOnCooldown}
           >
             <RefreshCw
               className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`}

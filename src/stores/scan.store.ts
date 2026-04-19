@@ -13,6 +13,7 @@ interface ScanState {
   transactionCount: number;  // Running count during load (for progress display)
   transfers: LiFiTransfer[]; // Final result (empty until complete)
   error: string | null;      // Error message if failed
+  cooldownUntil: number | null; // Timestamp when cooldown ends (10s after error)
 
   // Actions
   setLastWallet: (wallet: string) => void;
@@ -23,6 +24,7 @@ interface ScanState {
   cancelScan: () => void;
   reset: () => void;
   clearLastWallet: () => void;
+  clearCooldown: () => void;
 }
 
 export const useScanStore = create<ScanState>()(
@@ -36,6 +38,7 @@ export const useScanStore = create<ScanState>()(
       transactionCount: 0,
       transfers: [],
       error: null,
+      cooldownUntil: null,
 
       // Actions
       setLastWallet: (wallet) => set({ lastWallet: wallet }),
@@ -62,6 +65,7 @@ export const useScanStore = create<ScanState>()(
       failScan: (error) => set({
         error,
         isScanning: false,
+        cooldownUntil: Date.now() + 10000, // 10 second cooldown after error
       }),
 
       cancelScan: () => set({
@@ -76,9 +80,12 @@ export const useScanStore = create<ScanState>()(
         transactionCount: 0,
         transfers: [],
         error: null,
+        cooldownUntil: null,
       }),
 
       clearLastWallet: () => set({ lastWallet: null }),
+
+      clearCooldown: () => set({ cooldownUntil: null }),
     }),
     {
       name: 'jumper-scan-store',

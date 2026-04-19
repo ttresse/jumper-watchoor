@@ -13,11 +13,16 @@ export default function Home() {
   const [resetKey, setResetKey] = useState(0);
   const clearLastWallet = useScanStore((state) => state.clearLastWallet);
 
-  const { transactionCount, isLoading, isComplete, error, cancel } =
+  const { transactionCount, isLoading, isComplete, error, cancel, retry } =
     useLiFiTransfers(walletAddress);
 
   const handleValidAddress = (address: string) => {
-    setWalletAddress(address);
+    // If same wallet and there was an error, retry instead of just setting address
+    if (address === walletAddress && error) {
+      retry();
+    } else {
+      setWalletAddress(address);
+    }
   };
 
   const handleCancel = () => {
@@ -57,12 +62,14 @@ export default function Home() {
           )}
         </div>
 
-        {/* Wallet Input - key forces remount on reset to clear internal state */}
-        <WalletInput
-          key={resetKey}
-          onValidAddress={handleValidAddress}
-          disabled={isLoading}
-        />
+        {/* Wallet Input - hidden when dashboard is displayed (use Refresh or "Scan different wallet" instead) */}
+        {!(isComplete && !error && walletAddress) && (
+          <WalletInput
+            key={resetKey}
+            onValidAddress={handleValidAddress}
+            disabled={isLoading}
+          />
+        )}
 
         {/* Scanning Progress */}
         {isLoading && (

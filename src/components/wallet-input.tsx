@@ -21,8 +21,32 @@ export function WalletInput({ onValidAddress, disabled }: WalletInputProps) {
   const [input, setInput] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isValidAddress, setIsValidAddress] = useState(false);
-  const { lastWallet } = useScanStore();
+  const { lastWallet, cooldownUntil, clearCooldown } = useScanStore();
   const [hasPreFilled, setHasPreFilled] = useState(false);
+  const [cooldownRemaining, setCooldownRemaining] = useState<number>(0);
+
+  // Handle cooldown timer after API error
+  useEffect(() => {
+    if (!cooldownUntil) {
+      setCooldownRemaining(0);
+      return;
+    }
+
+    const updateRemaining = () => {
+      const remaining = Math.max(0, Math.ceil((cooldownUntil - Date.now()) / 1000));
+      setCooldownRemaining(remaining);
+      if (remaining <= 0) {
+        clearCooldown();
+      }
+    };
+
+    // Update immediately
+    updateRemaining();
+
+    // Then update every second
+    const interval = setInterval(updateRemaining, 1000);
+    return () => clearInterval(interval);
+  }, [cooldownUntil, clearCooldown]);
 
   // Pre-fill last wallet on mount (per CONTEXT.md)
   useEffect(() => {
@@ -105,10 +129,10 @@ export function WalletInput({ onValidAddress, disabled }: WalletInputProps) {
         />
         <Button
           onClick={handleScan}
-          disabled={disabled || !isValidAddress}
+          disabled={disabled || !isValidAddress || cooldownRemaining > 0}
           className="h-12"
         >
-          Scan
+          {cooldownRemaining > 0 ? `Scan (${cooldownRemaining}s)` : 'Scan'}
         </Button>
       </div>
       {/* Inline validation feedback per CONTEXT.md */}
